@@ -949,6 +949,13 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
     }
 
+    var wechat = function(){
+        return $resource(CONFIG.baseUrl + ':path/:route',{path:'wechat'},{
+            settingConfig:{method:'GET', params:{route: 'settingConfig'}, timeout: 100000},
+            getUserInfo:{method:'GET', params:{route: 'getUserInfo'}, timeout: 100000}
+        })
+    }
+
     serve.abort = function ($scope) {
         abort.resolve();
         $interval(function () {
@@ -967,6 +974,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             serve.Account = Account();
             serve.Message = Message();
             serve.Communication = Communication();
+            serve.wechat = wechat();
         }, 0, 1);
     };
     serve.Dict = Dict();
@@ -983,6 +991,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.Account = Account();
     serve.Message = Message();
     serve.Communication = Communication();
+    serve.wechat = wechat();
     return serve;
 }])
 
@@ -1928,7 +1937,41 @@ angular.module('kidney.services', ['ionic','ngResource'])
     return self;
 }])
 
+.factory('wechat', ['$q', 'Data', function($q, Data){
+    var self = this;
+    //params->{
+            //  url:'patient_class'
+           // }
+    self.settingConfig = function(params){
+        var deferred = $q.defer();
+        Data.wechat.settingConfig(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->{
+            //  code:'3'
+            // }
+    self.getUserInfo = function(params){
+        var deferred = $q.defer();
+        Data.wechat.getUserInfo(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
 
+    return self;
+}])
 
 
 

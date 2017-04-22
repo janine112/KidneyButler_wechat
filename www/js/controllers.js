@@ -1,9 +1,27 @@
 angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','ionic-datepicker','kidney.directives'])//,'ngRoute'
 //登录--PXY
-.controller('SignInCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','JM', function($scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,JM) {
+.controller('SignInCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','JM', '$location','wechat',function($scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,JM,$location,wechat) {
   $scope.barwidth="width:0%";
   // Storage.set("personalinfobackstate","logOn");
-
+  // alert($location.absUrl())
+  var temp = $location.absUrl().split('=')
+  // alert(temp)
+  var code = temp[1].split('#')[0]
+  // alert(code)
+  // if (code != null )
+  // {
+  //   // alert(0)
+  //   wechat.getUserInfo({code:code}).then(function(data){ 
+  //     // alert(1)
+  //     wechatData = data.results
+  //     console.log(wechatData)
+  //     alert(wechatData.openid)
+  //     alert(wechatData.nickname)
+  //   },function(err){
+  //     console.log(err)
+  //     // alert(2);
+  //   })
+  // }
 
   //-------------test测试-------------
     // $scope.test = function(){
@@ -974,12 +992,60 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 //主页面--PXY
-.controller('GoToMessageCtrl', ['$scope','$timeout','$state', function($scope, $timeout,$state) {
+.controller('GoToMessageCtrl', ['$scope','$timeout','$state', '$location','wechat','$window',function($scope, $timeout,$state,$location,wechat,$window) {
+  $scope.QRscan = function(){
+    // alert(1)
+    var config = "";
+    wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+      // alert(data.results.timestamp)
+      config = data.results;
+      config.jsApiList = ['scanQRCode']
+      // alert(config.jsApiList)
+      // alert(config.debug)
+      wx.config({
+        debug:true,
+        appId:config.appId,
+        timestamp:config.timestamp,
+        nonceStr:config.nonceStr,
+        signature:config.signature,
+        jsApiList:config.jsApiList
+      })
+      wx.ready(function(){
+        wx.checkJsApi({
+            jsApiList: ['scanQRCode'],
+            success: function(res) {
+                wx.scanQRCode({
+                  needResult:1,
+                  scanType: ['qrCode','barCode'],
+                  success: function(res) {
+                    var result = res.resultStr;
+                    if (result.indexOf('weixin') != -1)
+                    {
+                      alert(result)
+                      $window.location.href = 'http://mp.weixin.qq.com/mp/profile_ext?action=home&_biz=MzA4MTExMjM3Mg==&scene=110#wechat_redirect'
+                    }
+                    else
+                    {
+                      alert(result)
+                    } 
+                  }
+                })
+            }
+        });
+      })
+      wx.err(function(res){
+        alert(res.errMsg)
+      })
 
+    },function(err){
+
+    })
+  }
   $scope.GoToMessage = function(){
     $state.go('messages');
   }
   
+
 }])
 
 
