@@ -2140,7 +2140,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     .then(function(res){
       //res.path_resized
       //图片路径
-      $scope.myAvatar="http://121.43.107.106:8052/"+temp_name+'?'+new Date().getTime();
+      $scope.myAvatar="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
       console.log($scope.myAvatar)
       // $state.reload("tab.mine")
       Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
@@ -2242,44 +2242,44 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     };
     $scope.isShow=true;
     $scope.takePicture = function() {
-     var config = "";
-    wechat.settingConfig({url:$location.absUrl()}).then(function(data){
-      // alert(data.results.timestamp)
-      config = data.results;
-      config.jsApiList = ['chooseImage','uploadImage']
-      // alert(config.jsApiList)
-      // alert(config.debug)
-      wx.config({
-        debug:true,
-        appId:config.appId,
-        timestamp:config.timestamp,
-        nonceStr:config.nonceStr,
-        signature:config.signature,
-        jsApiList:config.jsApiList
-      })
-      wx.ready(function(){
-        wx.checkJsApi({
-            jsApiList: ['chooseImage','uploadImage'],
-            success: function(res) {
-                wx.chooseImage({
-                  count:1,
-                  sizeType: ['original','compressed'],
-                  sourceType: ['camera'],
-                  success: function(res) {
-                      var serverId = res.serverId; // 返回图片的服务器端ID
-                      photo_upload_display(serverId);
-                  }
-                })
-            }
-        });
-      })
+      var config = "";
+      wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+        // alert(data.results.timestamp)
+        config = data.results;
+        config.jsApiList = ['chooseImage','uploadImage']
+        // alert(config.jsApiList)
+        // alert(config.debug)
+        wx.config({
+          debug:true,
+          appId:config.appId,
+          timestamp:config.timestamp,
+          nonceStr:config.nonceStr,
+          signature:config.signature,
+          jsApiList:config.jsApiList
+        })
+        wx.ready(function(){
+          wx.checkJsApi({
+              jsApiList: ['chooseImage','uploadImage'],
+              success: function(res) {
+                  wx.chooseImage({
+                    count:1,
+                    sizeType: ['original','compressed'],
+                    sourceType: ['camera'],
+                    success: function(res) {
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        photo_upload_display(serverId);
+                    }
+                  })
+              }
+          });
+        })
       wx.error(function(res){
         alert(res.errMsg)
       })
 
-    },function(err){
+      },function(err){
 
-    })
+      })
     }; // function结束
 
 
@@ -2735,9 +2735,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //健康信息--PXY
+/健康信息--PXY
 .controller('HealthInfoCtrl', ['$scope','$timeout','$state','$ionicHistory','$ionicPopup','HealthInfo','Storage','Health','Dict',function($scope, $timeout,$state,$ionicHistory,$ionicPopup,HealthInfo,Storage,Health,Dict) {
   $scope.barwidth="width:0%";
   var patientId = Storage.get('UID')
+
   $scope.Goback = function(){
     $state.go('tab.mine')
   }
@@ -2775,64 +2777,73 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       console.log(err);
     }
   )
-  $scope.DeleteHealth = function(item){
-    //console.log(number);
-     //  confirm 对话框
-    
-    var confirmPopup = $ionicPopup.confirm({
+
+
+  $scope.gotoHealthDetail=function(ele,editId){
+    console.log(ele)
+    console.log(ele.target)
+    if(ele.target.nodeName=="I"){
+      var confirmPopup = $ionicPopup.confirm({
       title: '删除提示',
       template: '记录删除后将无法恢复，确认删除？',
       cancelText:'取消',
       okText:'删除'
-    });
-    confirmPopup.then(function(res) {
-      if(res) 
-        {
-          Health.deleteHealth({userId:patientId,insertTime:item.acture}).then(
-            function(data)
-            {
-              if (data.results == 0)
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) 
+          {
+            Health.deleteHealth({userId:patientId,insertTime:item.acture}).then(
+              function(data)
               {
-                for (var i = 0; i < $scope.items.length; i++){
-                  if (item.acture == $scope.items[i].acture)
-                  {
-                    $scope.items.splice(i,1)
-                    break;
+                if (data.results == 0)
+                {
+                  for (var i = 0; i < $scope.items.length; i++){
+                    if (item.acture == $scope.items[i].acture)
+                    {
+                      $scope.items.splice(i,1)
+                      break;
+                    }
                   }
                 }
+                
+                console.log($scope.items)
+              },
+              function(err)
+              {
+                console.log(err);
               }
-              
-              console.log($scope.items)
-            },
-            function(err)
-            {
-              console.log(err);
+            )
+            //20140421 zxf
+            var healthinfotimes=angular.fromJson(Storage.get('consulthealthinfo'))
+            for(var i=0;i<healthinfotimes.length;i++){
+              if(healthinfotimes[i].time==item.acture){
+                healthinfotimes.splice(i, 1)
+                break;
+              }
             }
-          )
-          //20140421 zxf
-          var healthinfotimes=angular.fromJson(Storage.get('consulthealthinfo'))
-          for(var i=0;i<healthinfotimes.length;i++){
-            if(healthinfotimes[i].time==item.acture){
-              healthinfotimes.splice(i, 1)
-              break;
-            }
-          }
-          Storage.set('consulthealthinfo',angular.toJson(healthinfotimes))
-          // HealthInfo.remove(number);
-          // $scope.items = HealthInfo.getall();
-        } 
-      });
+            Storage.set('consulthealthinfo',angular.toJson(healthinfotimes))
+            // HealthInfo.remove(number);
+            // $scope.items = HealthInfo.getall();
+          } 
+        });
+    }else{
+      $state.go('tab.myHealthInfoDetail',{id:editId});
+    }
+    
   }
+
 
   $scope.newHealth = function(){
     $state.go('tab.myHealthInfoDetail',{id:null});
+
   }
 
-  $scope.EditHealth = function(editId){
-    console.log("健康信息");
-    console.log(editId);
-    $state.go('tab.myHealthInfoDetail',{id:editId});
-  }
+  // $scope.EditHealth = function(editId){
+  //   console.log("健康信息");
+  //   console.log(editId);
+  //   $state.go('tab.myHealthInfoDetail',{id:editId});
+  // }
 
 
   
@@ -2840,11 +2851,30 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //健康详情--PXY
-.controller('HealthDetailCtrl', ['$scope','$state','$ionicHistory','$ionicPopup','$stateParams','$ionicPopover','$ionicModal','$ionicScrollDelegate','HealthInfo','$ionicLoading','$timeout','Dict','Health','Storage','Camera',function($scope, $state,$ionicHistory,$ionicPopup,$stateParams,$ionicPopover,$ionicModal,$ionicScrollDelegate,HealthInfo,$ionicLoading,$timeout,Dict,Health,Storage,Camera) {
+.controller('HealthDetailCtrl', ['$scope','$state','$ionicHistory','$ionicPopup','$stateParams','$ionicPopover','$ionicModal','$ionicScrollDelegate','HealthInfo','$ionicLoading','$timeout','Dict','Health','Storage','Camera','wechat',function($scope, $state,$ionicHistory,$ionicPopup,$stateParams,$ionicPopover,$ionicModal,$ionicScrollDelegate,HealthInfo,$ionicLoading,$timeout,Dict,Health,Storage,Camera,wechat) {
   $scope.barwidth="width:0%";
   var patientId = Storage.get('UID')
+
+  
+
   $scope.Goback = function(){
-    $ionicHistory.goBack();
+        if($scope.canEdit==true){
+            $scope.canEdit = false;
+        }else{
+            if($ionicHistory.backTitle()==null){
+                $state.go('tab.myHealthInfo');
+            }else{
+                $ionicHistory.goBack();
+            }
+            console.log(123);
+            console.log($ionicHistory.backTitle());
+            
+        }
+        
+    }
+
+    $scope.edit = function(){
+        $scope.canEdit = true;
   }
   $scope.$on('$ionicView.enter', function() {
     $scope.healthinfoimgurl = '';
@@ -2880,6 +2910,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       //判断是修改还是新增
       if($stateParams.id!=null && $stateParams!=""){
         //修改
+        $scope.canEdit = false;
         var info = $stateParams.id;
         console.log(info)
         Health.getHealthDetail({userId:patientId,insertTime:info.acture}).then(
@@ -2890,9 +2921,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               $scope.health.label = data.results.label
               if ($scope.health.label != null && $scope.health.label != "")
               {
-                $scope.health.label = searchObj($scope.health.label,$scope.labels)
+                $scope.health.label = searchObj($scope.health.label,$scope.labels);
+                console.log( $scope.health.label);
               }
-              $scope.health.date = data.results.time
+              $scope.health.date = data.results.time.substr(0,10)
               $scope.health.text = data.results.description
               if (data.results.url != ""&&data.results.url!=null)
               {
@@ -2908,6 +2940,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             console.log(err);
           }
         )
+      }else{
+        $scope.canEdit = true;
       }
       console.log($scope.labels);
     },
@@ -2949,7 +2983,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               function(data)
               {
                 console.log(data.results);
-                console.log(data.results.insertTime)
+                console.log(data.results.insertTime);
+                $scope.canEdit= false;
                 var healthinfoToconsult=[]
                 //从咨询过来的需要返回对应的健康信息
                 if($ionicHistory.backView()!=null&&$ionicHistory.backView().stateName=='tab.consultquestion2'){
@@ -2978,7 +3013,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               function(data)
               {
                 console.log(data.results);
-                $ionicHistory.goBack()
+                $scope.canEdit= false;
+                // $ionicHistory.goBack()
               },
               function(err)
               {
@@ -3043,15 +3079,15 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   };
  
  // 上传照片并将照片读入页面-------------------------
-  var photo_upload_display = function(imgURI){
+  var photo_upload_display = function(serverId){
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" + new Date().getTime() + "healthinfo.jpg";
     console.log(temp_photoaddress)
-    Camera.uploadPicture(imgURI, temp_photoaddress)
+    Camera.uploadPicture({serverId:serverId,name:temp_photoaddress})
     .then(function(res){
       var data=angular.fromJson(res)
       //图片路径
-      $scope.health.imgurl.push("http://121.43.107.106:8052/"+String(data.path_resized))
+      $scope.health.imgurl.push("http://121.43.107.106:8052/uploads/photos"+temp_photoaddress)
       // $state.reload("tab.mine")
       // Storage.set('localhealthinfoimg',angular.toJson($scope.health.imgurl));
       console.log($scope.health.imgurl)
@@ -3097,15 +3133,51 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
    $scope.closePopover();
   };      
   $scope.choosePhotos = function() {
-  Camera.getPictureFromPhotos('gallery').then(function(data) {
-      // data里存的是图像的地址
-      // console.log(data);
-      var imgURI = data; 
-      photo_upload_display(imgURI);
-    }, function(err) {
-      // console.err(err);
-      var imgURI = undefined;
-    });// 从相册获取照片结束
+    var config = "";
+    wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+      // alert(data.results.timestamp)
+      config = data.results;
+      config.jsApiList = ['chooseImage','uploadImage']
+      // alert(config.jsApiList)
+      // alert(config.debug)
+      wx.config({
+        debug:true,
+        appId:config.appId,
+        timestamp:config.timestamp,
+        nonceStr:config.nonceStr,
+        signature:config.signature,
+        jsApiList:config.jsApiList
+      })
+      wx.ready(function(){
+        wx.checkJsApi({
+            jsApiList: ['chooseImage','uploadImage'],
+            success: function(res) {
+                wx.chooseImage({
+                  count:1,
+                  sizeType: ['original','compressed'],
+                  sourceType: ['album'],
+                  success: function(res) {
+                    var localIds = res.localIds;
+                    wx.uploadImage({
+                       localId: localIds[0],
+                       isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                            photo_upload_display(serverId);
+                        }
+                    })
+                  }
+                })
+            }
+        });
+      })
+      wx.error(function(res){
+        alert(res.errMsg)
+      })
+
+    },function(err){
+
+    })
   }; // function结束
 
 
@@ -3117,14 +3189,45 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   };
   $scope.isShow=true;
   $scope.takePicture = function() {
-   Camera.getPicture('cam').then(function(data) {
-      var imgURI = data;
-      photo_upload_display(imgURI);
-    }, function(err) {
-        // console.err(err);
-        var imgURI = undefined;
-    })// 照相结束
-  }; // function结束
+      var config = "";
+      wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+        // alert(data.results.timestamp)
+        config = data.results;
+        config.jsApiList = ['chooseImage','uploadImage']
+        // alert(config.jsApiList)
+        // alert(config.debug)
+        wx.config({
+          debug:true,
+          appId:config.appId,
+          timestamp:config.timestamp,
+          nonceStr:config.nonceStr,
+          signature:config.signature,
+          jsApiList:config.jsApiList
+        })
+        wx.ready(function(){
+          wx.checkJsApi({
+              jsApiList: ['chooseImage','uploadImage'],
+              success: function(res) {
+                  wx.chooseImage({
+                    count:1,
+                    sizeType: ['original','compressed'],
+                    sourceType: ['camera'],
+                    success: function(res) {
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        photo_upload_display(serverId);
+                    }
+                  })
+              }
+          });
+        })
+      wx.error(function(res){
+        alert(res.errMsg)
+      })
+
+      },function(err){
+
+      })
+    }; // function结束
 
 
 
