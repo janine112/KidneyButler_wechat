@@ -2136,7 +2136,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     var temp_photoaddress = Storage.get("UID") + "_" +  "myAvatar.jpg";
     console.log(temp_photoaddress)
     var temp_name = 'resized' + Storage.get("UID") + "_" +  "myAvatar.jpg";
-    wechat.download(serverId, temp_name)
+    wechat.download({serverId:serverId, name:temp_name})
     .then(function(res){
       //res.path_resized
       //图片路径
@@ -2259,18 +2259,25 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         })
         wx.ready(function(){
           wx.checkJsApi({
-              jsApiList: ['chooseImage','uploadImage'],
-              success: function(res) {
-                  wx.chooseImage({
-                    count:1,
-                    sizeType: ['original','compressed'],
-                    sourceType: ['camera'],
-                    success: function(res) {
-                        var serverId = res.serverId; // 返回图片的服务器端ID
-                        photo_upload_display(serverId);
-                    }
-                  })
-              }
+          jsApiList: ['chooseImage','uploadImage'],
+          success: function(res) {
+              wx.chooseImage({
+                count:1,
+                sizeType: ['original','compressed'],
+                sourceType: ['camera'],
+                success: function(res) {
+                    var localIds = res.localIds;
+                    wx.uploadImage({
+                       localId: localIds[0],
+                       isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                            photo_upload_display(serverId);
+                        }
+                    })
+                }
+              })
+          }
           });
         })
       wx.error(function(res){
@@ -2735,7 +2742,6 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //健康信息--PXY
-/健康信息--PXY
 .controller('HealthInfoCtrl', ['$scope','$timeout','$state','$ionicHistory','$ionicPopup','HealthInfo','Storage','Health','Dict',function($scope, $timeout,$state,$ionicHistory,$ionicPopup,HealthInfo,Storage,Health,Dict) {
   $scope.barwidth="width:0%";
   var patientId = Storage.get('UID')
@@ -3083,7 +3089,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" + new Date().getTime() + "healthinfo.jpg";
     console.log(temp_photoaddress)
-    Camera.uploadPicture({serverId:serverId,name:temp_photoaddress})
+    wechat.download({serverId:serverId,name:temp_photoaddress})
     .then(function(res){
       var data=angular.fromJson(res)
       //图片路径
@@ -3213,8 +3219,15 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     sizeType: ['original','compressed'],
                     sourceType: ['camera'],
                     success: function(res) {
-                        var serverId = res.serverId; // 返回图片的服务器端ID
-                        photo_upload_display(serverId);
+                        var localIds = res.localIds;
+                        wx.uploadImage({
+                           localId: localIds[0],
+                           isShowProgressTips: 1, // 默认为1，显示进度提示
+                            success: function (res) {
+                                var serverId = res.serverId; // 返回图片的服务器端ID
+                                photo_upload_display(serverId);
+                            }
+                        })
                     }
                   })
               }
