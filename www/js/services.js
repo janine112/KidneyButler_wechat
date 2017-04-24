@@ -963,7 +963,8 @@ angular.module('kidney.services', ['ionic','ngResource'])
     var wechat = function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'wechat'},{
             settingConfig:{method:'GET', params:{route: 'settingConfig'}, timeout: 100000},
-            getUserInfo:{method:'GET', params:{route: 'getUserInfo'}, timeout: 100000}
+            getUserInfo:{method:'GET', params:{route: 'getUserInfo'}, timeout: 100000},
+            download:{method:'GET', params:{route: 'download'}, timeout: 100000}
         })
     }
 
@@ -1971,6 +1972,22 @@ angular.module('kidney.services', ['ionic','ngResource'])
     self.getUserInfo = function(params){
         var deferred = $q.defer();
         Data.wechat.getUserInfo(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->{
+            //  serverId:
+            //  name:
+            // }
+    self.download = function(params){
+        var deferred = $q.defer();
+        Data.wechat.download(
             params,
             function(data, headers){
                 deferred.resolve(data);

@@ -2131,16 +2131,16 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   }
  
  // 上传照片并将照片读入页面-------------------------
-  var photo_upload_display = function(imgURI){
+  var photo_upload_display = function(serverId){
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" +  "myAvatar.jpg";
     console.log(temp_photoaddress)
-    Camera.uploadPicture(imgURI, temp_photoaddress)
+    var temp_name = 'resized' + Storage.get("UID") + "_" +  "myAvatar.jpg";
+    wechat.download(serverId, temp_name)
     .then(function(res){
-      var data=angular.fromJson(res)
       //res.path_resized
       //图片路径
-      $scope.myAvatar="http://121.43.107.106:8052/"+String(data.path_resized)+'?'+new Date().getTime();
+      $scope.myAvatar="http://121.43.107.106:8052/"+temp_name+'?'+new Date().getTime();
       console.log($scope.myAvatar)
       // $state.reload("tab.mine")
       Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
@@ -2217,7 +2217,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                        isShowProgressTips: 1, // 默认为1，显示进度提示
                         success: function (res) {
                             var serverId = res.serverId; // 返回图片的服务器端ID
-                            
+                            photo_upload_display(serverId);
                         }
                     })
                   }
@@ -2266,7 +2266,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   sizeType: ['original','compressed'],
                   sourceType: ['camera'],
                   success: function(res) {
-                    
+                      var serverId = res.serverId; // 返回图片的服务器端ID
+                      photo_upload_display(serverId);
                   }
                 })
             }
