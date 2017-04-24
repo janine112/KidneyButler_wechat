@@ -660,7 +660,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     }
 }])
 //获取图片，拍照or相册，见CONFIG.cameraOptions。return promise。xjz
-.factory('Camera', ['$q','$cordovaCamera','$cordovaFileTransfer','CONFIG','fs',function($q,$cordovaCamera,$cordovaFileTransfer,CONFIG,fs) { 
+.factory('Camera', ['$q','$cordovaCamera','$cordovaFileTransfer','CONFIG','fs','Upload',function($q,$cordovaCamera,$cordovaFileTransfer,CONFIG,fs,Upload) { 
   return {
     getPicture: function(type){
       console.log(type);
@@ -722,22 +722,33 @@ angular.module('kidney.services', ['ionic','ngResource'])
             };
             // var q = $q.defer();
             //console.log("jinlaile");
-            $cordovaFileTransfer.upload(uri,imgURI,options)
-              .then( function(r){
-                console.log("Code = " + r.responseCode);
-                console.log("Response = " + r.response);
-                console.log("Sent = " + r.bytesSent);
-                // var result = "上传成功";
-                resolve(r.response);        
-              }, function(error){
-                console.log(error);
-                alert("An error has occurred: Code = " + error.code);
-                console.log("upload error source " + error.source);
-                console.log("upload error target " + error.target);
-                reject(error);          
-              }, function (progress) {
-                console.log(progress);
-              })
+            // $cordovaFileTransfer.upload(uri,imgURI,options)
+            //   .then( function(r){
+            //     console.log("Code = " + r.responseCode);
+            //     console.log("Response = " + r.response);
+            //     console.log("Sent = " + r.bytesSent);
+            //     // var result = "上传成功";
+            //     resolve(r.response);        
+            //   }, function(error){
+            //     console.log(error);
+            //     alert("An error has occurred: Code = " + error.code);
+            //     console.log("upload error source " + error.source);
+            //     console.log("upload error target " + error.target);
+            //     reject(error);          
+            //   }, function (progress) {
+            //     console.log(progress);
+            //   })
+            Upload.upload({
+              url: uri,
+              data: {file:imgURI,options:options}
+            }).then(function (resp) {
+                console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+            }, function (resp) {
+                console.log('Error status: ' + resp.status);
+            }, function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+            });
         })
     }
   }

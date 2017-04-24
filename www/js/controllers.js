@@ -6,7 +6,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   // alert($location.absUrl())
   var temp = $location.absUrl().split('=')
   // alert(temp)
-  var code = temp[1].split('#')[0]
+  // var code = temp[1].split('#')[0]
   // alert(code)
   // if (code != null )
   // {
@@ -1033,7 +1033,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             }
         });
       })
-      wx.err(function(res){
+      wx.error(function(res){
         alert(res.errMsg)
       })
 
@@ -2037,7 +2037,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 //我的 页面--PXY
 //我的 页面--PXY
-.controller('MineCtrl', ['$scope','$ionicHistory','$state','$ionicPopup','$resource','Storage','CONFIG','$ionicLoading','$ionicPopover','Camera', 'Patient','Upload',function($scope, $ionicHistory, $state, $ionicPopup, $resource, Storage, CONFIG, $ionicLoading, $ionicPopover, Camera,Patient,Upload) {
+.controller('MineCtrl', ['$scope','$ionicHistory','$state','$ionicPopup','$resource','Storage','CONFIG','$ionicLoading','$ionicPopover','Camera', 'Patient','Upload','wechat','$location',function($scope, $ionicHistory, $state, $ionicPopup, $resource, Storage, CONFIG, $ionicLoading, $ionicPopover, Camera,Patient,Upload,wechat,$location) {
   $scope.barwidth="width:0%";
   // Storage.set("personalinfobackstate","mine")
   
@@ -2104,12 +2104,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   }
   $scope.myAvatar = ""
   //根据用户ID查询用户头像
-  var Picturepath=Storage.get("myAvatarpath")
-  if(Picturepath==""||Picturepath==null){
-    $scope.myAvatar="img/DefaultAvatar.jpg"
-  }else{
-    $scope.myAvatar=Picturepath;
-  }
+  Patient.getPatientDetail({userId:Storage.get("UID")}).then(function(res){
+    console.log(Storage.get("UID"))
+    // console.log(res.results)
+    console.log(res.results.photoUrl)
+    // console.log(angular.fromJson(res.results))
+    if(res.results.photoUrl==undefined||res.results.photoUrl==""){
+      $scope.myAvatar="img/DefaultAvatar.jpg"
+    }else{
+      $scope.myAvatar=res.results.photoUrl;
+    }
+  })
  
   // 上传头像的点击事件----------------------------
   $scope.onClickCamera = function($event){
@@ -2138,7 +2143,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       $scope.myAvatar="http://121.43.107.106:8052/"+String(data.path_resized)+'?'+new Date().getTime();
       console.log($scope.myAvatar)
       // $state.reload("tab.mine")
-      Storage.set('myAvatarpath',$scope.myAvatar);
+      Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
+        console.log(r);
+      })
     },function(err){
       console.log(err);
       reject(err);
@@ -2180,16 +2187,52 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
    $scope.closePopover();
   };      
   $scope.choosePhotos = function() {
-    Camera.getPictureFromPhotos('gallery').then(function(data) {
-        // data里存的是图像的地址
-        // console.log(data);
-        var imgURI = data; 
-        photo_upload_display(imgURI);
-      }, function(err) {
-        // console.err(err);
-        var imgURI = undefined;
-      });// 从相册获取照片结束
-    }; // function结束
+    var config = "";
+    wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+      // alert(data.results.timestamp)
+      config = data.results;
+      config.jsApiList = ['chooseImage','uploadImage']
+      // alert(config.jsApiList)
+      // alert(config.debug)
+      wx.config({
+        debug:true,
+        appId:config.appId,
+        timestamp:config.timestamp,
+        nonceStr:config.nonceStr,
+        signature:config.signature,
+        jsApiList:config.jsApiList
+      })
+      wx.ready(function(){
+        wx.checkJsApi({
+            jsApiList: ['chooseImage','uploadImage'],
+            success: function(res) {
+                wx.chooseImage({
+                  count:1,
+                  sizeType: ['original','compressed'],
+                  sourceType: ['album'],
+                  success: function(res) {
+                    var localIds = res.localIds;
+                    wx.uploadImage({
+                       localId: localIds[0],
+                       isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                            
+                        }
+                    })
+                  }
+                })
+            }
+        });
+      })
+      wx.error(function(res){
+        alert(res.errMsg)
+      })
+
+    },function(err){
+
+    })
+  }; // function结束
 
     // 照相机的点击事件----------------------------------
     $scope.getPhoto = function() {
@@ -2199,13 +2242,43 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     };
     $scope.isShow=true;
     $scope.takePicture = function() {
-     Camera.getPicture('cam').then(function(data) {
-      console.log(data)
-      photo_upload_display(data);
-      }, function(err) {
-          // console.err(err);
-          var imgURI = undefined;
-      })// 照相结束
+     var config = "";
+    wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+      // alert(data.results.timestamp)
+      config = data.results;
+      config.jsApiList = ['chooseImage','uploadImage']
+      // alert(config.jsApiList)
+      // alert(config.debug)
+      wx.config({
+        debug:true,
+        appId:config.appId,
+        timestamp:config.timestamp,
+        nonceStr:config.nonceStr,
+        signature:config.signature,
+        jsApiList:config.jsApiList
+      })
+      wx.ready(function(){
+        wx.checkJsApi({
+            jsApiList: ['chooseImage','uploadImage'],
+            success: function(res) {
+                wx.chooseImage({
+                  count:1,
+                  sizeType: ['original','compressed'],
+                  sourceType: ['camera'],
+                  success: function(res) {
+                    
+                  }
+                })
+            }
+        });
+      })
+      wx.error(function(res){
+        alert(res.errMsg)
+      })
+
+    },function(err){
+
+    })
     }; // function结束
 
 

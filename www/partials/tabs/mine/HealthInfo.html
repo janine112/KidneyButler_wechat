@@ -14,7 +14,7 @@
   <ion-content padding="true" style="">
 
     <ion-list>
-      <ion-item ng-repeat="item in items">
+      <ion-item ng-repeat="item in items" ng-click="gotoHealthDetail($event,item)">
         <div class="row">
           <div class="col-25">
           <div ng-repeat = "img in item.url">
@@ -27,14 +27,14 @@
               <p style="text-align:right">{{item.time}}</p>
             </div>
             <div>
-              <p style="margin-left:3%">{{item.description}}</p>
+              <p>{{item.description}}</p>
             </div>
           </div>
         </div>  
         
         <div style="text-align: right">
-          <button class="button button-clear" style="color:#666" ng-click="DeleteHealth(item)"><i class="icon ion-trash-a"></i></button>
-          <button class="button button-clear" style="color:#666" ng-click="EditHealth(item)"><i class="icon ion-edit"></i></button>
+          <button class="button button-clear" style="color:#666"><i class="icon ion-trash-a"></i></button>
+          <!-- <button class="button button-clear" style="color:#666" ng-click="EditHealth(item)"><i class="icon ion-edit"></i></button> -->
         </div>
 
       </ion-item>

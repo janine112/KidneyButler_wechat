@@ -4,12 +4,90 @@
       <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="left" >
          <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-chevron-left"></i>返回</button>
       </ion-nav-buttons>
+
+      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right">
+            <button class="button button-clear"  ng-if="!canEdit"  ng-click="edit() "><i class="icon ion-edit"></i></button>
+        </ion-nav-buttons>
       
     </ion-nav-bar>
 
 
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
-  <ion-content padding="true" style="">
+  <ion-content padding="true" >
+    <div ng-if="!canEdit">
+  <ion-list>
+    <label  class="item item-input item-select">
+        <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>类别</div>
+        <p style="text-align:right;width:50%">{{health.label.name}}</p>
+
+    </label>
+
+    <label class="item item-input">
+        <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>时间日期</span>
+            <p style="text-align:right;width:50%">{{health.date}}</p>
+    </label>
+
+
+
+    <label class="item item-input">
+          <span class="input-label" ><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>文字描述</span>
+          <p style="text-align:right;width:50%">{{health.text}}</p>
+    </label>
+
+      <!-- <div class="col col-20" ng-repeat="filepath in health.imgurl track by $index">
+          <img ng-src="{{filepath}}" ng-repeat="filepath in health.imgurl track by $index" name="Photo" ng-click="showoriginal(filepath)"  style="height:30%; width:30%"  /><i class="icon ion-close-circled" style="width: 10%;float: right" ng-click="deleteimg($index)"></i>
+      </div> -->
+
+    <ion-item style="border:none; text-align:center; margin-top:30px" >
+         <div  ng-repeat="filepath in health.imgurl track by $index">
+          <img ng-src="{{filepath}}"  name="Photo"  style="height:30%; width:30%"  /><!-- <i class="icon ion-close-circled" style="width: 10%;float: right" ng-click="deleteimg($index)"></i> -->
+      </div>
+        <!--  <div>
+           <button class="button button-clear" style="color:#666" ng-click="onClickCamera($event)" ><i class="icon ion-camera"></i>上传照片</button>
+         </div> -->
+         
+    </ion-item>
+    <!-- 上传照片的弹出框 -->
+      <!-- <script id="my-popover.html" type="text/ng-template">
+        <ion-popover-view>
+          <ion-header-bar class="bar-calm">
+              <h1 class="title">上传头像</h1>
+          </ion-header-bar>
+        <ion-content>
+          <ion-list> 
+            <div class = "padding">
+              <button class="button button-block button-primary " ng-click="getPhoto()"><i class="icon ion-camera"></i>
+                  拍照
+              </button>
+            
+              <button class="button button-block button-primary " ng-click="onClickCameraPhotos()"><i class="icon ion-image"></i>
+                  相册
+              </button>
+             
+            </div>
+          </ion-list>
+        </ion-content>
+      </ion-popover-view>
+    </script> -->
+    <!-- 上传照片的弹出框 -->
+  </ion-list>
+  </div>
+
+
+
+  
+
+  
+
+    
+    
+    
+    
+
+
+           
+
+  <div ng-if="canEdit">
 
   <ion-list>
     <label  class="item item-input item-select">
@@ -81,7 +159,7 @@
     
 
 
-           
+   </div>        
   </ion-content>
           
 </ion-view>
