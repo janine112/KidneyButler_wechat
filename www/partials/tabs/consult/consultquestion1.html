@@ -53,7 +53,7 @@
 
         <ionic-datepicker input-obj="datepickerObject2" class="item item-input" ng-if="showSurgicalTime">
         <span class="input-label"><!-- <i class="icon ion-asterisk" style="color:red;font-size:6px"> --></i>手术日期</span>
-        <input  ng-model="BasicInfo.operationTime"  type="text">
+        <input  ng-model="BasicInfo.operationTime" dateformat type="text">
         </ionic-datepicker>
 
       <label class="item item-input">
@@ -70,7 +70,7 @@
 
       <ionic-datepicker input-obj="datepickerObject3" class="item item-input">
         <span class="input-label" style="margin-left:8px ">出生日期</span>
-        <input  ng-model="BasicInfo.birthday"  type="text">
+        <input  ng-model="BasicInfo.birthday" dateformat type="text">
       </ionic-datepicker>
 
       <label class="item item-input">

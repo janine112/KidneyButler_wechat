@@ -24,7 +24,7 @@
 
     <label class="item item-input">
         <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>时间日期</span>
-            <p style="text-align:right;width:50%">{{health.date}}</p>
+            <p style="text-align:right;width:50%">{{health.date|dateFormat:"YYYY-MM-DD"}}</p>
     </label>
 
 
@@ -99,7 +99,7 @@
 
     <ionic-datepicker input-obj="datepickerObject4" class="item item-input">
         <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>时间日期</span>
-        <input  ng-model="health.date"  type="text">
+        <input  ng-model="health.date"  dateformat type="text">
     </ionic-datepicker>
 
     <label class="item item-input">

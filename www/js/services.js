@@ -964,7 +964,17 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'wechat'},{
             settingConfig:{method:'GET', params:{route: 'settingConfig'}, timeout: 100000},
             getUserInfo:{method:'GET', params:{route: 'getUserInfo'}, timeout: 100000},
-            download:{method:'GET', params:{route: 'download'}, timeout: 100000}
+            download:{method:'GET', params:{route: 'download'}, timeout: 100000},
+            addOrder:{method:'GET', params:{route: 'addOrder'}, timeout: 100000},
+            messageTemplate:{method:'GET', params:{route: 'messageTemplate'}, timeout: 100000}
+        })
+    }
+
+    var order = function(){
+        return $resource(CONFIG.baseUrl + ':path/:route',{path:'order'},{
+            insertOrder:{method:'POST', params:{route: 'insertOrder'}, timeout: 100000},
+            updateOrder:{method:'POST', params:{route: 'updateOrder'}, timeout: 100000},
+            getOrder:{method:'GET', params:{route: 'getOrder'}, timeout: 100000}
         })
     }
 
@@ -987,6 +997,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             serve.Message = Message();
             serve.Communication = Communication();
             serve.wechat = wechat();
+            serve.order = order();
         }, 0, 1);
     };
     serve.Dict = Dict();
@@ -1004,6 +1015,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.Message = Message();
     serve.Communication = Communication();
     serve.wechat = wechat();
+    serve.order = order();
     return serve;
 }])
 
@@ -1997,12 +2009,86 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
+    //params->{
+            //  code:微信授权得到的code
+            //  out_trade_no:通过insertOrder得到的订单号
+            // }
+    self.addOrder = function(params){
+        var deferred = $q.defer();
+        Data.wechat.addOrder(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->{
+            //  serverId:
+            //  name:
+            // }
+    self.messageTemplate = function(params){
+        var deferred = $q.defer();
+        Data.wechat.messageTemplate(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
 
     return self;
 }])
 
 
-
+.factory('order', ['$q', 'Data', function($q, Data){
+    var self = this;
+    //params->0:{userId:'doc01'}
+    self.insertOrder = function(params){
+        var deferred = $q.defer();
+        Data.order.insertOrder(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->
+    self.updateOrder = function(params){
+        var deferred = $q.defer();
+        Data.order.updateOrder(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->
+    self.getOrder = function(params){
+        var deferred = $q.defer();
+        Data.order.getOrder(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    return self;
+}])
 
 
 
