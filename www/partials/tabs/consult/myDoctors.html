@@ -13,7 +13,7 @@
     </div>
     
     <ion-list>
-      <ion-item class="item-thumbnail-left" ng-click="getDoctorDetail($event,doctor.userId)">
+      <ion-item class="item-thumbnail-left" ng-click="getDoctorDetail($event,doctor.userId)" ng-if="hasDoctor">
         <img ng-src="{{doctor.photoUrl  || 'img/doctor3.PNG'}}">
         <span>{{doctor.name}}</span>
         <span style="float: right">{{doctor.department}}</span>
