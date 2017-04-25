@@ -1,8 +1,7 @@
 
     <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
-      <ion-nav-buttons side="left">
-            <a class="button button-icon icon ion-qr-scanner" ng-click="QRscan()"></a>
-        </ion-nav-buttons>
+      <ion-nav-back-button class="button-icon ion-arrow-left-c">
+      </ion-nav-back-button>
       <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right" >
          <button class="button button-clear" ng-click="GoToMessage() " head-red-point='true'><i class="icon ion-email"></i></button>
       </ion-nav-buttons>
@@ -14,7 +13,7 @@
         <ion-nav-view name="tab-tasks"></ion-nav-view>
       </ion-tab>
 
-      <ion-tab title="咨询" icon-off="ion-chatbubbles" icon-on="ion-chatbubbles" href="#/tab/myDoctors">
+      <ion-tab title="咨询" icon-off="ion-chatbubbles" icon-on="ion-chatbubbles" ng-click="gotomyDoctors()">
         <ion-nav-view name="tab-consult"></ion-nav-view>
       </ion-tab>
 
@@ -22,7 +21,7 @@
         <ion-nav-view name="tab-forum"></ion-nav-view>
       </ion-tab>
 
-      <ion-tab title="我的" icon-off="ion-ios-body" icon-on="ion-ios-body" href="#/tab/mine" ><!-- badge=unreadMessageSum badge-style="tabs-calm" -->
+      <ion-tab title="我的" icon-off="ion-ios-body" icon-on="ion-ios-body" ng-click="gotomine()" ><!-- badge=unreadMessageSum badge-style="tabs-calm" -->
         <ion-nav-view name="tab-mine"></ion-nav-view>
       </ion-tab>
 

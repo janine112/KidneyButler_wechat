@@ -647,7 +647,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1900, 1, 1),   //Optional
+    from: new Date(1999, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       DiagnosisdatePickerCallback(val);
@@ -684,7 +684,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1900, 1, 1),   //Optional
+    from: new Date(1999, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       OperationdatePickerCallback(val);
@@ -992,7 +992,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 //主页面--PXY
-.controller('GoToMessageCtrl', ['$scope','$timeout','$state', '$location','wechat','$window',function($scope, $timeout,$state,$location,wechat,$window) {
+.controller('GoToMessageCtrl', ['$scope','$timeout','$state', '$location','wechat','$window','Patient',function($scope, $timeout,$state,$location,wechat,$window,Patient) {
   $scope.QRscan = function(){
     // alert(1)
     var config = "";
@@ -1019,15 +1019,20 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   scanType: ['qrCode','barCode'],
                   success: function(res) {
                     var result = res.resultStr;
-                    if (result.indexOf('weixin') != -1)
-                    {
-                      alert(result)
-                      $window.location.href = 'http://mp.weixin.qq.com/mp/profile_ext?action=home&_biz=MzA4MTExMjM3Mg==&scene=110#wechat_redirect'
-                    }
-                    else
-                    {
-                      alert(result)
-                    } 
+                    Patient.bindingMyDoctor({"patientId":Storage.get("UID"),"doctorId":result}).then(function(res){
+                      if(res.result=="修改成功"){
+                        $ionicPopup.alert({
+                         title: '绑定成功！'
+                        }).then(function(res) {
+                          $state.go('tab.myDoctors');
+                        });
+                      }else if(res.result=="不存在的医生ID！"){
+                        $ionicPopup.alert({
+                         title: '不存在的医生ID！'
+                        })
+                      }
+                   },function(){                    
+                   })
                   }
                 })
             }
@@ -1045,6 +1050,13 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     $state.go('messages');
   }
   
+  $scope.gotomine=function(){
+    $state.go('tab.mine');
+  }
+
+  $scope.gotomyDoctors=function(){
+    $state.go('tab.myDoctors')
+  }
 
 }])
 
@@ -2292,7 +2304,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 }])
 //咨询记录--PXY
-.controller('ConsultRecordCtrl', ['Patient','Storage','$scope','$timeout','$state','$ionicHistory','$ionicPopover','Counsels',function(Patient,Storage,$scope, $timeout,$state,$ionicHistory,$ionicPopover,Counsels) {
+.controller('ConsultRecordCtrl', ['Patient','Storage','$scope','$timeout','$state','$ionicHistory','$ionicPopover','Counsels','$ionicPopup',function(Patient,Storage,$scope, $timeout,$state,$ionicHistory,$ionicPopover,Counsels,$ionicPopup) {
   $scope.barwidth="width:0%";
 
   $scope.Goback = function(){
@@ -2300,8 +2312,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   }
   //根据患者ID查询其咨询记录,对response的长度加一定限制
 
-    // var patientID = Storage.get('UID');
-    var patientID = 'p01';
+    var patientID = Storage.get('UID');
+    console.log(patientID)
+    // var patientID = 'p01';
 
 
     //过滤重复的医生 顺序从后往前，保证最新的一次咨询不会被过滤掉
@@ -2326,6 +2339,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
             items = new Array();
+            console.log(FilteredDoctors);
             for(x in FilteredDoctors){
                 var doctor = FilteredDoctors[x];
                 console.log(doctor);
@@ -2799,13 +2813,13 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       confirmPopup.then(function(res) {
         if(res) 
           {
-            Health.deleteHealth({userId:patientId,insertTime:item.acture}).then(
+            Health.deleteHealth({userId:patientId,insertTime:editId.acture}).then(
               function(data)
               {
                 if (data.results == 0)
                 {
                   for (var i = 0; i < $scope.items.length; i++){
-                    if (item.acture == $scope.items[i].acture)
+                    if (editId.acture == $scope.items[i].acture)
                     {
                       $scope.items.splice(i,1)
                       break;
@@ -2823,7 +2837,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             //20140421 zxf
             var healthinfotimes=angular.fromJson(Storage.get('consulthealthinfo'))
             for(var i=0;i<healthinfotimes.length;i++){
-              if(healthinfotimes[i].time==item.acture){
+              if(healthinfotimes[i].time==editId.acture){
                 healthinfotimes.splice(i, 1)
                 break;
               }
@@ -2881,16 +2895,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
     $scope.edit = function(){
         $scope.canEdit = true;
+        $scope.healthinfoimgurl = '';
+        $ionicModal.fromTemplateUrl('partials/tabs/consult/msg/healthinfoimag.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+          }).then(function(modal) {
+            $scope.modal = modal;
+          });
   }
-  $scope.$on('$ionicView.enter', function() {
-    $scope.healthinfoimgurl = '';
-    $ionicModal.fromTemplateUrl('partials/tabs/consult/msg/healthinfoimag.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-      }).then(function(modal) {
-        $scope.modal = modal;
-      });
-  })
+  // $scope.$on('$ionicView.enter', function() {
+    
+  // })
 
     //从字典中搜索选中的对象。
   var searchObj = function(code,array){
@@ -3072,7 +3087,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1900, 1, 1),   //Optional
+    from: new Date(1999, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       datePickerCallback(val);
@@ -3107,7 +3122,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       // ionicPopover functions 弹出框的预定义
         //--------------------------------------------
         // .fromTemplateUrl() method
-  $ionicPopover.fromTemplateUrl('my-popover.html', {
+  $ionicPopover.fromTemplateUrl('my-popover1.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(popover) {
@@ -4048,24 +4063,20 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
   Patient.getMyDoctors({userId:Storage.get('UID')}).then(
     function(data){
-        console.log(data.results.doctors);
-        if(data.results.doctors!=null&&data.results.doctors!=""){
-            var arr = data.results.doctors;
-             for(var i =arr.length-1; i>=0; i--){
-                if(arr[i].invalidFlag==0){
-                    $scope.hasDoctor = true;
 
-                    $scope.doctor = arr[i].doctorId;
-                    console.log($scope.doctor);
-                    break;
-                }
-            }
-        }else{
-            $scope.hasDoctor = false;
-            $ionicLoading.show({ 
-                template: '没有绑定的医生', duration: 1000 
-                });
-            }
+
+        console.log(data.results.doctorId);
+        if(data.results.doctorId==undefined){
+          console.log(111)
+          $scope.hasDoctor = false;
+          $ionicLoading.show({ 
+              template: '没有绑定的医生', duration: 1000 
+          });
+        }
+        else{
+          $scope.hasDoctor = true;
+          $scope.doctor = data.results.doctorId;
+        }
         
 
     },function(err){
@@ -4171,7 +4182,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //修改密码--PXY
-.controller('changePasswordCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory','User', function($scope, $timeout,$state,Storage,$ionicHistory,User) {
+.controller('changePasswordCtrl', ['$scope','$timeout','$state','$ionicPopup','Storage','$ionicHistory','User', function($scope, $timeout,$state,$ionicPopup,Storage,$ionicHistory,User) {
    
   $scope.Goback = function(){
     $ionicHistory.goBack();
@@ -4231,8 +4242,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
           console.log(succ)
           if(succ.mesg=="password reset success!")
           {
-            $scope.logStatus2 ="修改密码成功！";
-            $state.go('tab.mine');
+            $ionicPopup.alert({
+             title: '修改密码成功！'
+            }).then(function(res) {
+               $scope.logStatus2 ="修改密码成功！";
+              $state.go('tab.mine');
+            });
           }
         },function(err)
         {
@@ -4542,13 +4557,13 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       confirmPopup.then(function(res) {
         if(res) 
           {
-            Health.deleteHealth({userId:patientId,insertTime:item.acture}).then(
+            Health.deleteHealth({userId:patientId,insertTime:editId.acture}).then(
               function(data)
               {
                 if (data.results == 0)
                 {
                   for (var i = 0; i < $scope.items.length; i++){
-                    if (item.acture == $scope.items[i].acture)
+                    if (editId.acture == $scope.items[i].acture)
                     {
                       $scope.items.splice(i,1)
                       break;
@@ -4566,7 +4581,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             //20140421 zxf
             var healthinfotimes=angular.fromJson(Storage.get('consulthealthinfo'))
             for(var i=0;i<healthinfotimes.length;i++){
-              if(healthinfotimes[i].time==item.acture){
+              if(healthinfotimes[i].time==editId.acture){
                 healthinfotimes.splice(i, 1)
                 break;
               }
@@ -4869,7 +4884,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1900, 1, 1),   //Optional
+    from: new Date(1999, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       DiagnosisdatePickerCallback(val);
@@ -4906,7 +4921,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1900, 1, 1),   //Optional
+    from: new Date(1999, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       OperationdatePickerCallback(val);
@@ -4982,7 +4997,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1900, 1, 1),   //Optional
+    from: new Date(1999, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       FirstDiseaseTimedatePickerCallback(val);
