@@ -30,18 +30,45 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           // alert(1)
           wechatData = data.results
           console.log(wechatData)
-          alert(wechatData.openid)
-          alert(wechatData.nickname)
-          User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data){ 
-            
-          },function(err){
-            console.log(err)
-            // alert(2);
-          })
-        },function(err){
-          console.log(err)
-          // alert(2);
-        })
+          // alert(wechatData.openid)
+          // alert(wechatData.nickname)
+          User.logIn({username:wechatData.openid,password:wechatData.openid,role:"patient"}).then(function(data){
+                if(data.results==1){
+                    $state.go('phonevalid')
+                }
+                else if(data.results.mesg=="login success!"){
+
+                    // $scope.logStatus = "登录成功！";
+                    $ionicHistory.clearCache();
+                    $ionicHistory.clearHistory();
+                    Storage.set('TOKEN',data.results.token);//token作用目前还不明确
+                    Storage.set('isSignIn',"Yes");
+                    Storage.set('UID',data.results.userId);
+                    User.getAgree({userId:data.results.userId}).then(function(res){
+                        if(res.results.agreement=="0"){
+                            $timeout(function(){$state.go('tab.tasklist');},500);
+                        }else{
+                            $timeout(function(){$state.go('agreement',{last:'signin'});},500);
+                        }
+                    },function(err){
+                        console.log(err);
+                    })
+                    
+
+                }
+
+            },function(err){
+                if(err.results==null && err.status==0){
+                    $scope.logStatus = "网络错误！";
+                    return;
+                }
+                if(err.status==404){
+                    $scope.logStatus = "连接服务器失败！";
+                    return;
+                }
+
+            });
+        });
     }
 
     $rootScope.conversation = {
