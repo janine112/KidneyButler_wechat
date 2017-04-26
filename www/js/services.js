@@ -910,7 +910,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getAgree:{method:'GET', params:{route: 'getUserAgreement',userId:'@userId'}, timeout: 100000},
             updateAgree:{method:'POST', params:{route: 'updateUserAgreement'}, timeout: 100000},
             getUserIDbyOpenId:{method:'GET', params:{route: 'getUserIDbyOpenId'}, timeout: 100000},
-            setOpenId:{method:'GET', params:{route: 'setOpenId'}, timeout: 100000}
+            setOpenId:{method:'POST', params:{route: 'setOpenId'}, timeout: 100000}
         });
     }
 
@@ -1401,7 +1401,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     }
-    
+
     return self;
 }])
 

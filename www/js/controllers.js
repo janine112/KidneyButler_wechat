@@ -347,7 +347,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     $scope.logStatus ="密码太短了！";
 
                 }else{
-                     if(setPassState=='register' || setPassState=='register'){
+                     if(setPassState=='register' || setPassState=='wechat'){
                       //结果分为连接超时或者注册成功
                       $rootScope.password=setPassword.newPass;
                       Storage.set('PASSWORD',setPassword.newPass);
