@@ -17,29 +17,29 @@ angular.module('kidney.directives', ['kidney.services'])
         controller:function($scope){
             var type='';
             $scope.getTemplateUrl = function(){
-                if($scope.msg.contentType=='custom'){
-                    // type=$scope.msg.content.contentStringMap.type;
-                    // $scope.customMsgUrl=JSON.parse($scope.msg.content.contentStringMap.picurl);
-                    // $scope.customMsg=JSON.parse($scope.customMsg);
-                    // console.log($scope.customMsgUrl);
-                    
+                type=$scope.msg.contentType;
+                if(type=='image'){
+                    if($scope.msg.content['src_thumb']!='')
+                        $scope.msg.content.thumb = $scope.base+$scope.msg.content['src_thumb'];
+                }else if(type=='custom'){
                     type=$scope.msg.content.contentStringMap.type;
                     if(type=='card'){
-                      try{
+                        try{
                             $scope.counsel=JSON.parse($scope.msg.content.contentStringMap.counsel);
                             $scope.picurl=picArr;
                         }catch(e){
                             
                         }
-                      // console.log(JSON.parse($scope.msg.content.contentStringMap));
                     }
-                    return 'partials/tabs/consult/msg/'+ type+'.html';
+                    // return 'templates/msg/'+ type+'.html';
                 }
-                $scope.avatarSrc=CONFIG.imgThumbUrl+msg.fromName+'_myAvatar.jpg';
-                // type=$scope.msg.contentType=='custom'?$scope.msg.content.contentStringMap.type:$scope.msg.contentType;
-                type=$scope.msg.contentType;
-                return 'partials/tabs/consult/msg/'+type+'.html';
+                return 'partials/tabs/consult/msg/'+ type+'.html';
             }
+                // $scope.avatarSrc=CONFIG.imgThumbUrl+msg.fromName+'_myAvatar.jpg';
+                // type=$scope.msg.contentType=='custom'?$scope.msg.content.contentStringMap.type:$scope.msg.contentType;
+                // type=$scope.msg.contentType;
+                // return 'partials/tabs/consult/msg/'+type+'.html';
+            // }
             
             $scope.emitEvent = function(code){
               $scope.$emit(code,arguments);
