@@ -5,13 +5,19 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.directives','kidney.filters','ngCordova','ngFileUpload'])
 
-.run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM,$location,wechat) {
+.run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM,$location,wechat,User) {
   $ionicPlatform.ready(function() {
+    
+    var isSignIN=Storage.get("isSignIN");
+    if(isSignIN=='YES'){
+      $state.go('tab.tasklist');
+    }
+
     var temp = $location.absUrl().split('=')
     // alert(temp)
     if (angular.isDefined(temp[1]) == true)
     {
-        var code = temp[1].split('&')[0]
+        var code = temp[1].split('#')[0]
     }
     if (angular.isDefined(temp[2]) == true)
     {
@@ -26,15 +32,16 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           console.log(wechatData)
           alert(wechatData.openid)
           alert(wechatData.nickname)
+          User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data){ 
+            
+          },function(err){
+            console.log(err)
+            // alert(2);
+          })
         },function(err){
           console.log(err)
           // alert(2);
         })
-    }
-
-    var isSignIN=Storage.get("isSignIN");
-    if(isSignIN=='YES'){
-      $state.go('tab.tasklist');
     }
 
     $rootScope.conversation = {

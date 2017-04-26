@@ -909,7 +909,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             verifySMS:{method:'GET', params:{route: 'verifySMS',mobile:'@mobile',smsType:'@smsType',smsCode:'@smsCode'}, timeout: 100000},
             getAgree:{method:'GET', params:{route: 'getUserAgreement',userId:'@userId'}, timeout: 100000},
             updateAgree:{method:'POST', params:{route: 'updateUserAgreement'}, timeout: 100000},
-
+            getUserIDbyOpenId:{method:'GET', params:{route: 'getUserIDbyOpenId'}, timeout: 100000}
         });
     }
 
@@ -1372,7 +1372,20 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return deferred.promise;
     }
 
-
+    
+    //params->{openId:"U201703310032"}
+    self.getUserIDbyOpenId = function(params){
+        var deferred = $q.defer();
+        Data.User.getUserIDbyOpenId(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    }
     
     return self;
 }])
