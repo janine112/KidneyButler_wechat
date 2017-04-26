@@ -285,7 +285,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         Storage.set('USERNAME',Verify.Phone);
                         if (isregisted == true)
                         {
-                          User.setOpenId({phoneNo:Verify.Phone,openid:Storage.get('openid')}).then(function(data){
+                          User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                               if(data.msg == "success!")
                               {
                                 $state.go('tab.tasklist');
