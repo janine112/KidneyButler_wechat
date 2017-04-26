@@ -294,7 +294,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                               $scope.logStatus = "连接超时！";
                           })
                         }
-                        $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType,phoneNumber:Verify.Phone});},500);
+                        else
+                        {
+                          $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType,phoneNumber:Verify.Phone});},500);
+                        }
                     }else{
                         $scope.logStatus = data.mesg;
                         return;
