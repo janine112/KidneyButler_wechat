@@ -30,11 +30,12 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           // alert(1)
           wechatData = data.results
           console.log(wechatData)
+          Storage.set('openid',wechatData.openid)
           // alert(wechatData.openid)
           // alert(wechatData.nickname)
           User.logIn({username:wechatData.openid,password:wechatData.openid,role:"patient"}).then(function(data){
                 if(data.results==1){
-                    $state.go('phonevalid')
+                    $state.go('phonevalid',{phonevalidType:"wechat"})
                 }
                 else if(data.results.mesg=="login success!"){
 

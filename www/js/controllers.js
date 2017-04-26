@@ -204,7 +204,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 
-
+    var isregisted = false;
     //点击获取验证码
     $scope.getcode=function(Verify){
         $scope.logStatus='';
@@ -243,6 +243,19 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 $scope.logStatus="连接超时！";
             });
         }
+        else if($stateParams.phonevalidType=='wechat'){
+            User.getUserId({phoneNo:Verify.Phone}).then(function(data){
+                if(data.results == 0){
+                    $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
+                    isregisted = true
+                    sendSMS(Verify.Phone);
+                }else if(data.results == 1){
+                    sendSMS(Verify.Phone);
+                }
+            },function(){
+                $scope.logStatus="连接超时！";
+            });
+        }
     }
 
     //判断验证码和手机号是否正确
@@ -255,29 +268,40 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             //手机正则表达式验证
             if(phoneReg.test(Verify.Phone)){ 
                 //测试用
-                if(Verify.Code==5566){
-                    $scope.logStatus = "验证成功";
-                    Storage.set('USERNAME',Verify.Phone);
-                    if($stateParams.phonevalidType == 'register'){
-                        $timeout(function(){$state.go('agreement',{last:'register'});},500);
-                    }else{
-                       $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType});},500); 
-                    }
-                    
-                }else{$scope.logStatus = "验证码错误";}
-                // var verifyPromise =  User.verifySMS({mobile:Verify.Phone,smsType:1,smsCode:Verify.Code});
-                // verifyPromise.then(function(data){
-                //     if(data.results==0){
-                //         $scope.logStatus = "验证成功";
-                //         Storage.set('USERNAME',Verify.Phone);
-                //         $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType,phoneNumber:Verify.Phone});},500);
+                // if(Verify.Code==5566){
+                //     $scope.logStatus = "验证成功";
+                //     Storage.set('USERNAME',Verify.Phone);
+                //     if($stateParams.phonevalidType == 'register'){
+                //         $timeout(function(){$state.go('agreement',{last:'register'});},500);
                 //     }else{
-                //         $scope.logStatus = data.mesg;
-                //         return;
+                //        $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType});},500); 
                 //     }
-                // },function(){
-                //     $scope.logStatus = "连接超时！";
-                // })
+                    
+                // }else{$scope.logStatus = "验证码错误";}
+                var verifyPromise =  User.verifySMS({mobile:Verify.Phone,smsType:1,smsCode:Verify.Code});
+                verifyPromise.then(function(data){
+                    if(data.results==0){
+                        $scope.logStatus = "验证成功";
+                        Storage.set('USERNAME',Verify.Phone);
+                        if (isregisted == true)
+                        {
+                          User.setOpenId({phoneNo:Verify.Phone,openid:Storage.get('openid')}).then(function(data){
+                              if(data.msg == "success!")
+                              {
+                                $state.go('tab.tasklist');
+                              }
+                          },function(){
+                              $scope.logStatus = "连接超时！";
+                          })
+                        }
+                        $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType,phoneNumber:Verify.Phone});},500);
+                    }else{
+                        $scope.logStatus = data.mesg;
+                        return;
+                    }
+                },function(){
+                    $scope.logStatus = "连接超时！";
+                })
             }
             else{$scope.logStatus="手机号验证失败！";}
       
@@ -323,7 +347,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     $scope.logStatus ="密码太短了！";
 
                 }else{
-                     if(setPassState=='register'){
+                     if(setPassState=='register' || setPassState=='register'){
                       //结果分为连接超时或者注册成功
                       $rootScope.password=setPassword.newPass;
                       Storage.set('PASSWORD',setPassword.newPass);
@@ -913,7 +937,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                                     VitalSign.insertVitalSign({patientId:patientId, type: "Weight",code: "Weight_1", date:now.substr(0,10),datatime:now,datavalue:$scope.User.weight,unit:"kg"}).then(function(data){
                                                         $scope.User.weight = data.results;
                                                         console.log($scope.User);
-                                                        
+                                                        if (angular.isDefined(Storage.get('openid')) == true)
+                                                        {
+                                                          User.setOpenId({phoneNo:Verify.Phone,openid:Storage.get('openid')}).then(function(data){
+                                                              if(data.msg == "success!")
+                                                              {
+                                                                $state.go('tab.tasklist');
+                                                              }
+                                                          },function(){
+                                                              $scope.logStatus = "连接超时！";
+                                                          })
+                                                        }
                                                         $state.go('tab.tasklist');
                                                     },function(err){
                                                         $ionicLoading.show({
