@@ -2011,7 +2011,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     };
     //params->{
             //  code:微信授权得到的code
-            //  out_trade_no:通过insertOrder得到的订单号
+            //  orderno:通过insertOrder得到的订单号
             // }
     self.addOrder = function(params){
         var deferred = $q.defer();
@@ -2048,7 +2048,16 @@ angular.module('kidney.services', ['ionic','ngResource'])
 
 .factory('order', ['$q', 'Data', function($q, Data){
     var self = this;
-    //params->0:{userId:'doc01'}
+    //params->0:{
+                //   userId:'doc01',
+                //   money:100,
+                //   goodsInfo:{
+                //     class:'01',
+                //     name:'咨询',
+                //     notes:'测试'
+                //   },
+                //   paystatus:0
+                // }
     self.insertOrder = function(params){
         var deferred = $q.defer();
         Data.order.insertOrder(

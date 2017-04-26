@@ -5,9 +5,32 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.directives','kidney.filters','ngCordova','ngFileUpload'])
 
-.run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM) {
+.run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM,$location,wechat) {
   $ionicPlatform.ready(function() {
-
+    var temp = $location.absUrl().split('=')
+    // alert(temp)
+    if (angular.isDefined(temp[1]) == true)
+    {
+        var code = temp[1].split('&')[0]
+    }
+    if (angular.isDefined(temp[2]) == true)
+    {
+        var state = temp[2].split('#')[0]
+    }
+    var wechatData = ""
+    if (angular.isDefined(code) == true)
+    {
+        wechat.getUserInfo({code:code}).then(function(data){ 
+          // alert(1)
+          wechatData = data.results
+          console.log(wechatData)
+          alert(wechatData.openid)
+          alert(wechatData.nickname)
+        },function(err){
+          console.log(err)
+          // alert(2);
+        })
+    }
 
     var isSignIN=Storage.get("isSignIN");
     if(isSignIN=='YES'){
