@@ -47,9 +47,9 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                     Storage.set('UID',data.results.userId);
                     User.getAgree({userId:data.results.userId}).then(function(res){
                         if(res.results.agreement=="0"){
-                            $timeout(function(){$state.go('tab.tasklist');},500);
+                            $state.go('tab.tasklist');
                         }else{
-                            $timeout(function(){$state.go('agreement',{last:'signin'});},500);
+                            $state.go('agreement',{last:'signin'});
                         }
                     },function(err){
                         console.log(err);
