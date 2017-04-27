@@ -22,10 +22,10 @@ angular.module('kidney.directives', ['kidney.services'])
                     if($scope.msg.content['src_thumb']!='')
                         $scope.msg.content.thumb = $scope.base+$scope.msg.content['src_thumb'];
                 }else if(type=='custom'){
-                    type=$scope.msg.content.contentStringMap.type;
+                    type=$scope.msg.content.type;
                     if(type=='card'){
                         try{
-                            $scope.counsel=JSON.parse($scope.msg.content.contentStringMap.counsel);
+                            $scope.counsel=JSON.parse($scope.msg.content.counsel);
                             $scope.picurl=picArr;
                         }catch(e){
                             

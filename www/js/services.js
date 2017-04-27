@@ -954,10 +954,12 @@ angular.module('kidney.services', ['ionic','ngResource'])
 
     var Communication =function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'communication'},{
+            getCommunication:{method:'GET', params:{route: 'getCommunication'}, timeout: 100000},
             getCounselReport:{method:'GET', params:{route: 'getCounselReport'}, timeout: 100000},
             getTeam:{method:'GET', params:{route: 'getTeam'}, timeout: 100000},
             insertMember:{method:'POST', params:{route: 'insertMember'}, timeout: 100000},
-            removeMember:{method:'POST', params:{route: 'removeMember'}, timeout: 100000}
+            removeMember:{method:'POST', params:{route: 'removeMember'}, timeout: 100000},
+
         });
     }
 
@@ -1838,6 +1840,21 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return deferred.promise;
     };
 
+    //params-> messageType=2&id2=teamOrConsultation&limit=1&skip=0
+    //         messageType=1&id1=doc&id2=pat&limit=1&skip=0
+    self.getCommunication = function(params){
+        var deferred = $q.defer();
+        Data.Communication.getCommunication(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    
     //params->0:{
             //      teamId:'teampost2',
             //      membersuserId:'id1',

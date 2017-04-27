@@ -2505,7 +2505,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //聊天 XJZ 
-.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q', function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q) {
+.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication', function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication) {
     $scope.input = {
         text: ''
     }
@@ -2527,7 +2527,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             helpDivHeight: 60,
             hidePanel: true,
             moreMsgs:true,
-            UID:Storage.get('UID')
+            UID:Storage.get('UID'),
+            chatId:$state.params.chatId
         }
         // if($state.params.type=='0') $scope.params.hidePanel=false;
         // if (window.JMessage) {
@@ -2542,15 +2543,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         $rootScope.conversation.id = $state.params.chatId;
         Patient.getPatientDetail({ userId: $scope.params.UID })
         .then(function(response) {
-            socket = io.connect('ws://121.43.107.106:4050/chat');
+            // socket = io.connect('ws://121.43.107.106:4050/chat');
             socket.emit('newUser',{user_name:response.results.name,user_id:$scope.params.UID});
             socket.on('err',function(data){
-                console.log(data)
-                // $rootScope.$broadcast('receiveMessage',data);
-            });
-            socket.on('onlineCount',function(data){
-                console.info('onlineCount');
-                console.log(data);
+                console.error(data)
                 // $rootScope.$broadcast('receiveMessage',data);
             });
             socket.on('getMsg',function(data){
@@ -2567,18 +2563,34 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 console.info('messageRes');
                 console.log(data);
                 if (data.msg.targetType == 'single' && data.msg.targetID == $state.params.chatId) {
-                    setTimeout(function(){
+                    // setTimeout(function(){
                         $scope.$apply(function(){
                             $scope.pushMsg(data.msg);
                         });
-                    },200)
+                    // },200)
                 }
                 // $rootScope.$broadcast('messageResponse',data);
             });
 
         }, function(err) {
 
-        })
+        });
+        wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
+            config = data.results;
+            config.jsApiList = ['startRecord','stopRecord','playVoice','chooseImage','uploadVoice', 'uploadImage']
+            wx.config({
+                debug: false,
+                appId: config.appId,
+                timestamp: config.timestamp,
+                nonceStr: config.nonceStr,
+                signature: config.signature,
+                jsApiList: config.jsApiList
+            })
+            wx.error(function(res) {
+                console.error(res);
+                alert(res.errMsg)
+            })
+        }); 
         imgModalInit();
     })
     // function msgsRender(first,last){
@@ -2595,7 +2607,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 messageType:'1',
                 id1:Storage.get('UID'),
                 id2:$scope.params.chatId,
-                skip:$scope.params.chatId,
+                skip:$scope.params.msgCount,
                 limit:num
             }
             Communication.getCommunication(q)
@@ -2618,8 +2630,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                             res[i].diff = (res[i].createTimeInMillis - res[i + 1].createTimeInMillis) > 300000 ? true : false;
                             $scope.msgs.unshift(res[i]);
                         }
+                        res[i].direct = res[i].fromName==$scope.params.UID?'send':'receive';
+                        res[i].diff = true;
                         $scope.msgs.unshift(res[i]);
-                        $scope.msgs[0].diff = true;
                     // });
                 }
                 console.log($scope.msgs);
@@ -2633,11 +2646,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     }
 
     //receiving new massage
-    $scope.$on('receiveMessage', function(event, msg) {
-        if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
-            viewUpdate(5);
-        }
-    });
+    // $scope.$on('receiveMessage', function(event, msg) {
+    //     if (msg.targetType == 'single' && msg.fromName == $state.params.chatId) {
+    //         viewUpdate(5);
+    //     }
+    // });
 
     $scope.DisplayMore = function() {
         $scope.getMsg(15).then(function(data){
@@ -2753,7 +2766,6 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 msg.direct = msg.fromName==$scope.params.UID?'send':'receive';
                 $scope.msgs[pos]=msg;
             // });
-            alert(JSON.stringify(msg));
         }
         // $scope.msgs=$scope.msgs;
     }
@@ -2773,6 +2785,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         }else{
             $scope.msgs.push(msg);
         }
+        toBottom(true,100);
+        // $scope.$apply(function(){
+            // $scope.msgs.push(msg);
+
+        // });
+        // $scope.msgs=$scope.msgs;
     }
     function msgGen(content,type,local){
         var data={};
@@ -2819,10 +2837,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     }
     function sendmsg(content,type){
         var msgJson=msgGen(content,type);
-        if(type=='text'){
-            $scope.pushMsg(msgJson);
+        // if(type=='text'){
+            // $scope.pushMsg(msgJson);
             // toBottom(true);
-        }
+        // }
         socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
         toBottom(true);
     }
@@ -2836,10 +2854,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         viewUpdate(10);
     }
     $scope.submitMsg = function() {
-            window.JMessage.sendSingleTextMessage($state.params.chatId, $scope.input.text, CONFIG.crossKey,onSendSuccess, onSendErr);
-            $scope.input.text = '';
-            viewUpdate(5, true);
-            // window.JMessage.getHistoryMessages("single",$state.params.chatId,"",0,3,addNewSend,null);
+            sendmsg($scope.input.text,'text');
+        $scope.input.text = '';
             
         }
         //get image
@@ -2914,11 +2930,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         // $ionicScrollDelegate.scrollBottom();
     })
     $scope.$on('$ionicView.leave', function() {
+        socket.off('messageRes');
+        socket.off('getMsg');
+        socket.off('err');
+        socket.emit('disconnect');
         $scope.msgs = [];
         if($scope.modal)$scope.modal.remove();
         $rootScope.conversation.type = null;
         $rootScope.conversation.id = '';
-        if(window.JMessage) window.JMessage.exitConversation();
     })
 }])
 
@@ -5258,6 +5277,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     var temp = {
       "patientId":patientId,
       "doctorId":DoctorId, 
+      "type":'1',
       "hospital":$scope.Questionare.LastHospital, 
       "visitDate":$scope.Questionare.LastVisitDate,
       "diagnosis":"", 
@@ -5307,10 +5327,15 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             }
           // temp.consultId=data.results.counselId;
           // temp.type='card';
-            socket = io.connect('ws://121.43.107.106:4050/chat');
+            // socket = io.connect('ws://121.43.107.106:4050/chat');
             socket.emit('newUser',{user_name:$scope.BasicInfo.name,user_id:patientId});
-            socket.emit('message',{msg:msgJson,to:patientId});
-            socket.close();
+            socket.emit('message',{msg:msgJson,to:DoctorId});
+            socket.on('messageRes',function(data){
+              socket.off('messageRes');
+              socket.emit('disconnect');
+              $state.go('tab.consult-chat',{chatId:DoctorId});
+            })
+            // socket.close();
 
           
         }
