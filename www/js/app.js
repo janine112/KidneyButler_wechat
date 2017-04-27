@@ -332,6 +332,17 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         }
          
     })
+    .state('tab.DiagnosisInfo', {
+        url: '/mine/DiagnosisInfo',
+        views: {
+          'tab-mine': {
+            templateUrl: 'partials/tabs/mine/diagnosisInfo.html',
+            controller: 'DiagnosisCtrl'
+          }
+
+        }
+         
+    })
     .state('tab.myConsultRecord', {
         url: '/mine/ConsultRecord',
         views: {

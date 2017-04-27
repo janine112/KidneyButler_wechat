@@ -1,0 +1,57 @@
+<ion-view cache-view="false" title="诊断信息" >
+
+  <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
+      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="left" >
+         <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-chevron-left"></i>返回</button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+
+
+  <ion-content padding="true" style="">
+
+    <ion-list>
+      <ion-item ng-repeat="diagnosis in Diags" class="item-text-wrap" ng-click="">
+        <div class="row">
+            <h2 class="col" style="color: #181544;font-weight: bold">{{diagnosis.doctor.name}}</h2>
+            <p class="col" style="color: #181544;font-size:12px;text-align:right">{{diagnosis.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
+        </div>
+
+        
+        <div class="row">
+            <div class="input-label">肾病类型</div>
+            <p style="text-align:right;width:50%">{{diagnosis.name}}</p>
+        </div>
+
+        <div class="row" ng-if="showProgress(diagnosis.name)">
+            <div class="input-label" >疾病进程</div>
+            <p style="text-align:right;width:50%">{{diagnosis.progress||"未诊断"}}</p>
+        </div>
+
+        <div class="row" ng-if="showSurgicalTime(diagnosis.name)">
+
+            <div class="input-label">{{timename(diagnosis.name)}}</div>
+            <p style="text-align:right;width:50%">{{diagnosis.operationTime|dateFormat:"YYYY-MM-DD"||"未诊断"}}</p>
+        </div>
+
+        <div class="row">
+            <div class="input-label" >是否高血压</div>
+            <p style="text-align:right;width:50%">{{diagnosis.hypertension||"未诊断"}}</p>
+        </div>
+
+        <div class="row">
+            <div class="input-label" >诊断内容</div>
+            <p style="text-align:right;width:50%">{{diagnosis.content||"未诊断"}}</p>
+        </div>
+
+        
+      </ion-item>
+    </ion-list>
+    
+    
+    
+
+
+           
+  </ion-content>
+          
+</ion-view>
