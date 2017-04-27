@@ -283,11 +283,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 // if(Verify.Code==5566){
                 //     $scope.logStatus = "验证成功";
                 //     Storage.set('USERNAME',Verify.Phone);
-                //     if($stateParams.phonevalidType == 'register'){
-                //         $timeout(function(){$state.go('agreement',{last:'register'});},500);
-                //     }else{
-                //        $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType});},500); 
-                //     }
+                    // if($stateParams.phonevalidType == 'register'){
+                    //     $timeout(function(){$state.go('agreement',{last:'register'});},500);
+                    // }else{
+                    //    $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType});},500); 
+                    // }
                     
                 // }else{$scope.logStatus = "验证码错误";}
                 var verifyPromise =  User.verifySMS({mobile:Verify.Phone,smsType:1,smsCode:Verify.Code});
@@ -295,20 +295,28 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     if(data.results==0){
                         $scope.logStatus = "验证成功";
                         Storage.set('USERNAME',Verify.Phone);
-                        if (isregisted == true)
-                        {
-                          User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
-                              if(data.msg == "success!")
-                              {
-                                $state.go('tab.tasklist');
-                              }
-                          },function(){
-                              $scope.logStatus = "连接超时！";
-                          })
+                        if($stateParams.phonevalidType == 'register'){
+                            $state.go('agreement',{last:'register'});
                         }
-                        else
-                        {
-                          $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType,phoneNumber:Verify.Phone});},500);
+                        else if ($stateParams.phonevalidType == 'wechat'){
+                            if (isregisted == true)
+                            {
+                              User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
+                                  if(data.msg == "success!")
+                                  {
+                                    $state.go('tab.tasklist');
+                                  }
+                              },function(){
+                                  $scope.logStatus = "连接超时！";
+                              })
+                            }
+                            else
+                            {
+                              $state.go('agreement',{last:'register'});
+                            }
+                        }
+                        else{
+                            $state.go('setpassword',{phonevalidType:$stateParams.phonevalidType});
                         }
                     }else{
                         $scope.logStatus = data.mesg;
