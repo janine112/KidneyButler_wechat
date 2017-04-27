@@ -1065,7 +1065,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       // alert(config.jsApiList)
       // alert(config.debug)
       wx.config({
-        debug:true,
+        debug:false,
         appId:config.appId,
         timestamp:config.timestamp,
         nonceStr:config.nonceStr,
@@ -2647,7 +2647,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       // alert(config.jsApiList)
       // alert(config.debug)
       wx.config({
-        debug:true,
+        debug:false,
         appId:config.appId,
         timestamp:config.timestamp,
         nonceStr:config.nonceStr,
@@ -2702,7 +2702,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         // alert(config.jsApiList)
         // alert(config.debug)
         wx.config({
-          debug:true,
+          debug:false,
           appId:config.appId,
           timestamp:config.timestamp,
           nonceStr:config.nonceStr,
@@ -3728,7 +3728,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       // alert(config.jsApiList)
       // alert(config.debug)
       wx.config({
-        debug:true,
+        debug:false,
         appId:config.appId,
         timestamp:config.timestamp,
         nonceStr:config.nonceStr,
@@ -3784,7 +3784,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         // alert(config.jsApiList)
         // alert(config.debug)
         wx.config({
-          debug:true,
+          debug:false,
           appId:config.appId,
           timestamp:config.timestamp,
           nonceStr:config.nonceStr,
