@@ -155,7 +155,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //手机号码验证--PXY
-.controller('phonevalidCtrl', ['$scope','$state','$interval', '$stateParams','Storage','User','$timeout', function($scope, $state,$interval,$stateParams,Storage,User,$timeout) {
+.controller('phonevalidCtrl', ['$scope','$state','$interval', '$stateParams','Storage','User','$timeout', 'Patient',function($scope, $state,$interval,$stateParams,Storage,User,$timeout,Patient) {
   $scope.barwidth="width:0%";
   // Storage.set("personalinfobackstate","register")
   
@@ -246,6 +246,18 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         else if($stateParams.phonevalidType=='wechat'){
             User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                 if(data.results == 0){
+                    Patient.getPatientDetail({userId:data.UserId}).then(function(data){
+                        if(data.results == null){
+                            $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或转移到肾病守护者进行操作";
+                            return;
+                        }else {
+                            $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
+                            isregisted = true
+                            sendSMS(Verify.Phone);
+                        }
+                    },function(){
+                        $scope.logStatus="连接超时！";
+                    });
                     $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
                     isregisted = true
                     sendSMS(Verify.Phone);
@@ -936,29 +948,50 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                                 if(data.result=="插入成功"){
                                                     var now = new Date()
                                                     now =  $filter("date")(now, "yyyy-MM-dd HH:mm:ss")
-
-                                                    VitalSign.insertVitalSign({patientId:patientId, type: "Weight",code: "Weight_1", date:now.substr(0,10),datatime:now,datavalue:$scope.User.weight,unit:"kg"}).then(function(data){
-                                                        $scope.User.weight = data.results;
-                                                        console.log($scope.User);
-                                                        if (angular.isDefined(Storage.get('openid')) == true)
-                                                        {
-                                                          User.setOpenId({phoneNo:Verify.Phone,openid:Storage.get('openid')}).then(function(data){
-                                                              if(data.msg == "success!")
-                                                              {
-                                                                $state.go('tab.tasklist');
-                                                              }
-                                                          },function(){
-                                                              $scope.logStatus = "连接超时！";
-                                                          })
-                                                        }
-                                                        $state.go('tab.tasklist');
-                                                    },function(err){
-                                                        $ionicLoading.show({
-                                                            template: '注册失败',
-                                                            duration:1000
+                                                    if (angular.isDefined(Storage.get('openid')) == true)
+                                                    {
+                                                      User.setOpenId({phoneNo:Storage.get('USERNAME'),openId:Storage.get('openid')}).then(function(data){
+                                                          if(data.msg == "success!")
+                                                          {
+                                                            if (angular.isDefined($scope.User.weight) == true)
+                                                            {
+                                                              VitalSign.insertVitalSign({patientId:patientId, type: "Weight",code: "Weight_1", date:now.substr(0,10),datatime:now,datavalue:$scope.User.weight,unit:"kg"}).then(function(data){
+                                                                  $scope.User.weight = data.results;
+                                                                  console.log($scope.User);
+                                                                  
+                                                                  $state.go('tab.tasklist');
+                                                              },function(err){
+                                                                  $ionicLoading.show({
+                                                                      template: '注册失败',
+                                                                      duration:1000
+                                                                  });
+                                                                  console.log("插入体重"+err);
+                                                              });
+                                                            }
+                                                            else{
+                                                              $state.go('tab.tasklist');
+                                                            }
+                                                          }
+                                                      },function(){
+                                                          $scope.logStatus = "连接超时！";
+                                                      })
+                                                    }
+                                                    else
+                                                    {
+                                                        VitalSign.insertVitalSign({patientId:patientId, type: "Weight",code: "Weight_1", date:now.substr(0,10),datatime:now,datavalue:$scope.User.weight,unit:"kg"}).then(function(data){
+                                                            $scope.User.weight = data.results;
+                                                            console.log($scope.User);
+                                                            
+                                                            $state.go('tab.tasklist');
+                                                        },function(err){
+                                                            $ionicLoading.show({
+                                                                template: '注册失败',
+                                                                duration:1000
+                                                            });
+                                                            console.log("插入体重"+err);
                                                         });
-                                                        console.log("插入体重"+err);
-                                                    });
+                                                    }
+                                                    
                                                     
                                                 }
                                             },function(err){
@@ -1054,7 +1087,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 //主页面--PXY
-.controller('GoToMessageCtrl', ['$scope','$timeout','$state', '$location','wechat','$window','Patient',function($scope, $timeout,$state,$location,wechat,$window,Patient) {
+.controller('GoToMessageCtrl', ['$scope','$timeout','$state', '$location','wechat','$window','Patient','Storage','$ionicPopup','$window',function($scope, $timeout,$state,$location,wechat,$window,Patient,Storage,$ionicPopup,$window) {
   $scope.QRscan = function(){
     // alert(1)
     var config = "";
@@ -1084,9 +1117,16 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     Patient.bindingMyDoctor({"patientId":Storage.get("UID"),"doctorId":result}).then(function(res){
                       if(res.result=="修改成功"){
                         $ionicPopup.alert({
-                         title: '绑定成功！'
+                         title: '绑定成功'
                         }).then(function(res) {
-                          $state.go('tab.myDoctors');
+                          if ($location.absUrl().indexOf('myDoctors') != -1)
+                          {
+                            $window.location.reload();
+                          }
+                          else
+                          {
+                            $state.go('tab.myDoctors');
+                          }
                         });
                       }else if(res.result=="不存在的医生ID！"){
                         $ionicPopup.alert({
@@ -3163,7 +3203,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         }else{
             $scope.msgs.push(msg);
         }
-        toBottom(true,100);
+        toBottom(true,250);
         // $scope.$apply(function(){
             // $scope.msgs.push(msg);
 
@@ -3193,7 +3233,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             contentType:type,
             fromName:$scope.params.UID,
             fromUser:{
-                avatarPath:''
+                avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
             targetID:$scope.params.chatId,
             targetName:'',
@@ -5686,7 +5726,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 contentType:'custom',
                 fromName:patientId,
                 fromUser:{
-                    avatarPath:''
+                    avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+patientId+'_myAvatar.jpg'
                 },
                 targetID:DoctorId,
                 targetName:'',
@@ -5696,6 +5736,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 content:{
                     counsel:data.results,
                     type:'card',
+                    counselId:data.results.counselId,
                     patientId:patientId,
                     patientName:$scope.BasicInfo.name,
                     doctorId:DoctorId,

@@ -8,10 +8,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
 .run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM,$location,wechat,User) {
   $ionicPlatform.ready(function() {
     socket = io.connect('ws://121.43.107.106:4050/chat');
-    var isSignIN=Storage.get("isSignIN");
-    if(isSignIN=='YES'){
-      $state.go('tab.tasklist');
-    }
+    
 
     var temp = $location.absUrl().split('=')
     // alert(temp)
@@ -72,6 +69,11 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         });
     }
 
+    var isSignIN=Storage.get("isSignIN");
+    if(isSignIN=='YES'){
+      $state.go('tab.tasklist');
+    }
+    
     $rootScope.conversation = {
             type: null,
             id: ''

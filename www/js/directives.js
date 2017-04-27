@@ -25,7 +25,7 @@ angular.module('kidney.directives', ['kidney.services'])
                     type=$scope.msg.content.type;
                     if(type=='card'){
                         try{
-                            $scope.counsel=JSON.parse($scope.msg.content.counsel);
+                            $scope.counsel=$scope.msg.content.counsel;
                             $scope.picurl=picArr;
                         }catch(e){
                             
