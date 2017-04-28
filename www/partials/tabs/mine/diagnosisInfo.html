@@ -13,34 +13,37 @@
       <ion-item ng-repeat="diagnosis in Diags" class="item-text-wrap" ng-click="">
         <div class="row">
             <h2 class="col" style="color: #181544;font-weight: bold">{{diagnosis.doctor.name}}</h2>
-            <p class="col" style="color: #181544;font-size:12px;text-align:right">{{diagnosis.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
+            <p class="col" style="color: #181544;font-size:12px;text-align:right">{{diagnosis.time|dateFormat:"YYYY-MM-DD"}}</p>
         </div>
-
-        
+  
         <div class="row">
-            <div class="input-label">肾病类型</div>
-            <p style="text-align:right;width:50%">{{diagnosis.name}}</p>
+            <div class="col">肾病类型</div>
+            <select class="col" ng-disabled="true" ng-model="diagnosis.name" ng-options=" Disease.typeName for Disease in Diseases track by Disease.type" style="width:100%" >
+            <!-- <p style="text-align:right;width:50%">{{diagnosis.name}}</p> -->
         </div>
 
-        <div class="row" ng-if="showProgress(diagnosis.name)">
-            <div class="input-label" >疾病进程</div>
-            <p style="text-align:right;width:50%">{{diagnosis.progress||"未诊断"}}</p>
+        <div class="row" ng-if="diagnosis.showProgress">
+            <div class="col">疾病进程</div>
+            <select class="col" ng-disabled="true" ng-model="diagnosis.progress" ng-options=" DiseaseDetail.name for DiseaseDetail in diagnosis.DiseaseDetails track by DiseaseDetail.code" style="width:100%">
+            </select>
         </div>
 
-        <div class="row" ng-if="showSurgicalTime(diagnosis.name)">
+        <div class="row" ng-if="diagnosis.showSurgicalTime">
 
-            <div class="input-label">{{timename(diagnosis.name)}}</div>
-            <p style="text-align:right;width:50%">{{diagnosis.operationTime|dateFormat:"YYYY-MM-DD"||"未诊断"}}</p>
-        </div>
-
-        <div class="row">
-            <div class="input-label" >是否高血压</div>
-            <p style="text-align:right;width:50%">{{diagnosis.hypertension||"未诊断"}}</p>
+            <div class="col">{{diagnosis.timename}}</div>
+            <p class="col" style="text-align:right;width:50%">{{diagnosis.operationTime|dateFormat:"YYYY-MM-DD"||"未诊断"}}</p>
         </div>
 
         <div class="row">
-            <div class="input-label" >诊断内容</div>
-            <p style="text-align:right;width:50%">{{diagnosis.content||"未诊断"}}</p>
+            <div  class="col" >是否高血压</div>
+            <!-- <p style="text-align:right;width:50%">{{diagnosis.hypertension||"未诊断"}}</p> -->
+            <select  class="col" ng-disabled="true" ng-model="diagnosis.hypertension" ng-options="Hyper.Name for Hyper in Hypers track by Hyper.Type" style="width:100%">
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="col" >诊断内容</div>
+            <p class="col" style="text-align:right;width:50%">{{diagnosis.content||"未诊断"}}</p>
         </div>
 
         
@@ -54,4 +57,4 @@
            
   </ion-content>
           
-</ion-view>
+</ion-view>s

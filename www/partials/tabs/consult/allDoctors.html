@@ -12,13 +12,13 @@
         <select class="col" ng-model="Province.province" ng-options="Province.name for Province in Provinces track by Province.province" style="width:40%" ng-change="getCity(Province.province)"> 
           <option selected value="">省份</option>    
         </select>
-        <select class="col" ng-model="City.city" ng-options="City.name for City in Cities track by City.city" style="width:40%" ng-change="getDistrict(Province.province,City.city)"> 
+        <select class="col" ng-model="City.city" ng-options="City.name for City in Cities track by City.city" style="width:40%" ng-change="getHospital(Province.province,City.city)"> 
           <option selected value="">城市</option>     
         </select>
-        <select class="col" ng-model="District.district" ng-options="District.name for District in Districts track by District.district" style="width:40%" ng-change="getHospital(Province.province,City.city,District.district)">     
+       <!--  <select class="col" ng-model="District.district" ng-options="District.name for District in Districts track by District.district" style="width:40%" ng-change="getHospital(Province.province,City.city,District.district)">     
           <option selected value="">区县</option> 
-        </select>
-        <select class="col" ng-model="Hospital.hostipalCode" ng-options="Hospital.hospitalName for Hospital in Hospitals track by Hospital.hostipalCode" style="width:40%" ng-change="getDoctorByHospital(Hospital.hostipalCode)">     
+        </select> -->
+        <select class="col" ng-model="Hospital.hospitalName" ng-options="Hospital.hospitalName for Hospital in Hospitals" style="width:40%" ng-change="getDoctorByHospital(Hospital.hospitalName)">     
           <option selected value="">医院</option> 
         </select>
       </div>
@@ -28,7 +28,7 @@
       <label class="item-input" style="width:100%">        
         <span class="item-input-wrapper" style="margin-right:16px">  
           <i class="icon ion-ios-search placeholder-icon"></i>  
-            <input type="search" placeholder="请输入搜索医生姓名" ng-model="searchCont.t" ng-change="search()">  
+            <input type="search" placeholder="请输入搜索医生全名" ng-model="searchCont.t" ng-change="search()">  
             <i class="icon ion-close-circled placeholder-icon" style="vertical-align: middle;"  on-tap="clearSearch()" ng-if="searchCont.t.length"></i>  
         </span>  
       </label>
