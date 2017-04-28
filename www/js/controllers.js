@@ -5425,8 +5425,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
           function(data)
           {
             var n = data.results.length - 1
-            var m = data.results[n].data.length - 1
-            $scope.BasicInfo.weight = data.results[n].data[m]?data.results[n].data[m].value:"";
+            if (n != -1)
+            {
+              var m = data.results[n].data.length - 1
+              $scope.BasicInfo.weight = data.results[n].data[m]?data.results[n].data[m].value:"";
+            }
+            
             // console.log($scope.BasicInfo)
           },
           function(err)
