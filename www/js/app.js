@@ -69,10 +69,10 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         });
     }
 
-    var isSignIN=Storage.get("isSignIN");
-    if(isSignIN=='YES'){
-      $state.go('tab.tasklist');
-    }
+    // var isSignIN=Storage.get("isSignIN");
+    // if(isSignIN=='YES'){
+    //   $state.go('tab.tasklist');
+    // }
     
     $rootScope.conversation = {
             type: null,

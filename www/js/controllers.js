@@ -5648,35 +5648,56 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     $scope.BasicInfo.class = $scope.BasicInfo.class.type
     var now = new Date()
     now =  $filter("date")(now, "yyyy-MM-dd HH:mm:ss")
-    VitalSign.insertVitalSign({patientId:patientId, type: "Weight",code: "Weight_1", date:now.substr(0,10),datatime:now,datavalue:$scope.BasicInfo.weight,unit:"kg"}).then(
-      function(data)
-      {
-        if(data.result == "修改成功" || data.result == "新建或修改成功")
+    if ($scope.BasicInfo.weight != "")
+    {
+      VitalSign.insertVitalSign({patientId:patientId, type: "Weight",code: "Weight_1", date:now.substr(0,10),datatime:now,datavalue:$scope.BasicInfo.weight,unit:"kg"}).then(
+        function(data)
         {
-          $scope.BasicInfo.weight = data.results
-          Patient.editPatientDetail($scope.BasicInfo).then(
-            function(data)
-            {
-              if(data.result == "修改成功" || data.result == "新建或修改成功")
+          if(data.result == "修改成功" || data.result == "新建或修改成功")
+          {
+            $scope.BasicInfo.weight = data.results
+            Patient.editPatientDetail($scope.BasicInfo).then(
+              function(data)
               {
-                console.log(data.results)
-                $state.go("tab.consultquestion2",{DoctorId:DoctorId})
+                if(data.result == "修改成功" || data.result == "新建或修改成功")
+                {
+                  console.log(data.results)
+                  $state.go("tab.consultquestion2",{DoctorId:DoctorId})
+                }
+              },
+              function(err)
+              {
+                console.log(err);
               }
-            },
-            function(err)
-            {
-              console.log(err);
-            }
-          )
-          console.log($scope.BasicInfo)
+            )
+            console.log($scope.BasicInfo)
+          }
+          
+        },
+        function(err)
+        {
+          console.log(err);
         }
-        
-      },
-      function(err)
-      {
-        console.log(err);
-      }
-    )
+      )
+    }
+    else
+    {
+      Patient.editPatientDetail($scope.BasicInfo).then(
+        function(data)
+        {
+          if(data.result == "修改成功" || data.result == "新建或修改成功")
+          {
+            console.log(data.results)
+            $state.go("tab.consultquestion2",{DoctorId:DoctorId})
+          }
+        },
+        function(err)
+        {
+          console.log(err);
+        }
+      )
+    }
+    
   }
   
   $scope.SKip = function(){
