@@ -6005,3 +6005,86 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     }
     console.log($scope.payFor)
 }])
+
+//诊断信息
+.controller('DiagnosisCtrl', ['$scope','$ionicHistory','$state','$ionicPopup','$resource','Storage','CONFIG','$ionicLoading','$ionicPopover','Camera', 'Patient','Upload',function($scope, $ionicHistory, $state, $ionicPopup, $resource, Storage, CONFIG, $ionicLoading, $ionicPopover, Camera,Patient,Upload) {
+    $scope.Goback = function(){
+      $state.go('tab.mine');
+    }
+    $scope.showProgress = function(diseaseType){
+        switch(diseaseType)
+        {
+            case "CKD1-2期": case "CKD3-4期":
+                return true;
+                break;
+            default:
+                return false;
+                break;
+
+        }
+    }
+
+    $scope.showSurgicalTime = function(diseaseType){
+        switch(diseaseType)
+        {
+            case "肾移植": case "血透": case "腹透":
+                return true;
+                break;
+            default:
+                return false;
+                break;
+
+        }
+    }
+
+
+
+    $scope.timename = function(diseaseType){
+        switch(diseaseType)
+        {
+            case "肾移植":
+                return "手术日期";
+                break;
+            case "血透":
+                return "插管日期";
+                break;
+            case "腹透":
+                return "开始日期";
+                break;
+            default:
+                break;
+        }
+    }
+    //过滤重复的医生诊断 顺序从后往前，保证最新的一次诊断不会被过滤掉
+    var FilterDiagnosis = function(arr){
+        var result =[];
+        var hash ={};
+        for(var i =arr.length-1; i>=0; i--){
+            var elem = arr[i].doctor.userId;
+            if(!hash[elem]){
+                result.push(arr[i]);
+                hash[elem] = true;
+            }
+        }
+        return result;
+    }
+
+    Patient.getPatientDetail({userId:Storage.get('UID')}).then(//userId:Storage.get('UID')
+        function(data){
+            if(data.results){
+                var allDiags = data.results.diagnosisInfo;
+                console.log(allDiags);
+                var DoctorDiags = FilterDiagnosis(allDiags);
+                $scope.Diags = DoctorDiags;
+
+            }else{
+                $ionicLoading.show({
+                template:'暂时没有医生诊断！',
+                duration:1000
+        });
+            }
+        },function(err){
+            console.log(err);
+        })
+
+}])
