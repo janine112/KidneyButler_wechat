@@ -5254,6 +5254,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     // Storage.set('consultcacheinfo',angular.toJson([]));
     var temp = {
       "patientId":patientId,
+      "type":'1',
       "doctorId":DoctorId, 
       "hospital":$scope.Questionare.LastHospital, 
       "visitDate":$scope.Questionare.LastVisitDate,
