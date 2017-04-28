@@ -32,7 +32,15 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           // alert(wechatData.nickname)
           User.logIn({username:wechatData.openid,password:wechatData.openid,role:"patient"}).then(function(data){
                 if(data.results==1){
+                  if(data.msg == "No authority!")
+                  {
+                    alert("您没有权限登陆肾事管家，如您是医生，请登录肾病守护者")
+                    $state.go('signin')
+                  }
+                  else
+                  {
                     $state.go('phonevalid',{phonevalidType:"wechat"})
+                  }
                 }
                 else if(data.results.mesg=="login success!"){
 
