@@ -2895,7 +2895,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         });
                         question.then(function(res){
                             if(res){
-                                $state.go("tab.consult-chat");
+                                $state.go("tab.consult-chat",{chatId:doctorId});
                             }
                         })
                     },function(err)
@@ -2913,7 +2913,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     });
                     question.then(function(res){
                         if(res){
-                            $state.go("tab.consult-chat");
+                            $state.go("tab.consult-chat",{chatId:doctorId});
                         }
 
                     })
@@ -3090,7 +3090,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         $scope.zoomMin = 1;
         $scope.imageUrl = '';
         $scope.sound = {};
-        $ionicModal.fromTemplateUrl('templates/msg/imageViewer.html', {
+        $ionicModal.fromTemplateUrl('partials/tabs/consult/msg/imageViewer.html', {
             scope: $scope
         }).then(function(modal) {
             $scope.modal = modal;
