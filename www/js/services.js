@@ -5,6 +5,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     appKey: 'fe7b9ba069b80316653274e4',
     crossKey: 'cf32b94444c4eaacef86903e',
     baseUrl: 'http://121.43.107.106:4050/',
+    mediaUrl: 'http://121.43.107.106:8052/',
     imgThumbUrl: 'http://121.43.107.106:8052/uploads/photos/resize',
     imgLargeUrl: 'http://121.43.107.106:8052/uploads/photos/',
     cameraOptions: {
@@ -854,15 +855,21 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'tasks'},{
             changeTaskstatus:{method:'GET', params:{route: 'status'}, timeout: 100000},
             changeTasktime:{method:'GET', params:{route: 'time'}, timeout: 100000},
-            insertTask:{method:'POST', params:{route: 'insertTaskModel'}, timeout: 100000}
-
+            insertTask:{method:'POST', params:{route: 'insertTaskModel'}, timeout: 100000},
+            getUserTask:{method:'GET', params:{route: 'getUserTask'}, timeout: 100000},
+            updateUserTask:{method:'POST', params:{route: 'updateUserTask'}, timeout: 100000}
         });
     };
 
     var Compliance = function(){
-        return $resource(CONFIG.baseUrl + ':path',{path:'compliance'},{
-            postcompliance:{method:'POST', params:{}, timeout: 100000},
+        return $resource(CONFIG.baseUrl + ':path',{path:'compliance'},{            
             getcompliance:{method:'GET', params:{}, timeout: 100000}
+        });
+    };
+
+    var Compliance1 = function(){
+        return $resource(CONFIG.baseUrl + ':path/:route',{path:'compliance'},{
+            postcompliance:{method:'POST', params:{route:'update'}, timeout: 100000}
         });
     };
 
@@ -910,7 +917,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getAgree:{method:'GET', params:{route: 'getUserAgreement',userId:'@userId'}, timeout: 100000},
             updateAgree:{method:'POST', params:{route: 'updateUserAgreement'}, timeout: 100000},
             getUserIDbyOpenId:{method:'GET', params:{route: 'getUserIDbyOpenId'}, timeout: 100000},
-            setOpenId:{method:'GET', params:{route: 'setOpenId'}, timeout: 100000}
+            setOpenId:{method:'POST', params:{route: 'setOpenId'}, timeout: 100000}
         });
     }
 
@@ -954,10 +961,12 @@ angular.module('kidney.services', ['ionic','ngResource'])
 
     var Communication =function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'communication'},{
+            getCommunication:{method:'GET', params:{route: 'getCommunication'}, timeout: 100000},
             getCounselReport:{method:'GET', params:{route: 'getCounselReport'}, timeout: 100000},
             getTeam:{method:'GET', params:{route: 'getTeam'}, timeout: 100000},
             insertMember:{method:'POST', params:{route: 'insertMember'}, timeout: 100000},
-            removeMember:{method:'POST', params:{route: 'removeMember'}, timeout: 100000}
+            removeMember:{method:'POST', params:{route: 'removeMember'}, timeout: 100000},
+
         });
     }
 
@@ -987,6 +996,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             serve.Task1 = Task1();
             serve.Task2 = Task2();
             serve.Compliance = Compliance();
+            serve.Compliance1 = Compliance1();
             serve.Counsels = Counsels();
             serve.Patient = Patient();
             serve.Doctor = Doctor();
@@ -1005,6 +1015,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.Task1 = Task1();
     serve.Task2 = Task2();
     serve.Compliance = Compliance();
+    serve.Compliance1 = Compliance1();
     serve.Counsels = Counsels();
     serve.Patient = Patient();
     serve.Doctor = Doctor();
@@ -1176,6 +1187,33 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
+
+    self.getUserTask = function(params){
+        var deferred = $q.defer();
+        Data.Task2.getUserTask(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+
+    self.updateUserTask = function(params){
+        var deferred = $q.defer();
+        Data.Task2.updateUserTask(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    
     return self;
 }])
 
@@ -1191,7 +1229,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
            // }
     self.postcompliance = function(params){
         var deferred = $q.defer();
-        Data.Compliance.postcompliance(
+        Data.Compliance1.postcompliance(
             params,
             function(data, headers){
                 deferred.resolve(data);
@@ -1401,7 +1439,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     }
-    
+
     return self;
 }])
 
@@ -1838,6 +1876,21 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return deferred.promise;
     };
 
+    //params-> messageType=2&id2=teamOrConsultation&limit=1&skip=0
+    //         messageType=1&id1=doc&id2=pat&limit=1&skip=0
+    self.getCommunication = function(params){
+        var deferred = $q.defer();
+        Data.Communication.getCommunication(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    
     //params->0:{
             //      teamId:'teampost2',
             //      membersuserId:'id1',

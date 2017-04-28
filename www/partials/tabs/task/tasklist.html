@@ -2,29 +2,55 @@
 <ion-view view-title='任务'>
 <ion-nav-buttons side="primary">
 <!-- class="icon ion-qr-scanner" -->
+        <!-- <a class="button icon-left ion-qr-scanner button-clear" ng-click="scanbarcode()"></a>  -->
         <a class="button icon-left ion-ios-refresh-empty button-clear" ng-click="Refresh()"></a> 
     </ion-nav-buttons>
     
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
     <ion-content class="padding">
+        <div style="text-align: center;"><a href="#/insurance">肾病保险服务</a></div>
         <div class="list">
             <a class="item" style="font-size:20px;text-align:center;font-weight:bold;background-color:rgba(44, 62, 149, 0.1);">
-                测量
+                今日任务
                 <a class="item item-icon-right" ng-repeat="item in Tasks.Measure">
-                    {{item.Name}} 
-                    <p>{{item.Freq}}</p>
-                    <p>{{item.instruction}}</p> 
+                    {{item.Name}}<span style="font-size:12px;color:#9E9E9E" ng-if="item.Unit != '' ">({{item.Unit}})</span>                     
+                    <p>{{item.Freq}}</p>                                     
+                    <p>{{item.instruction}}</p>                  
+                    <div ng-if = "item.TimesFlag" class="statusList"> 　　
+                        <div class="scheduleGray"></div>　
+                        <div class="scheduleGreen" style="width:{{item.Progress}}"></div>                       
+                    </div> 
+                    <br/>
+                    <p>{{item.content}}</p>                                                    
                     <i ng-if = "!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click = "showPopup(item, 'input')"></i>
                     <i ng-if = "item.Flag" class="icon ion-ios-checkmark-empty"></i> 
                 </a>              
             </a>
             <a class="item" style="font-size:20px;text-align:center;font-weight:bold;background-color:rgba(44, 62, 149, 0.1);">
-                其他 <button ng-click = "openModal()">查看医生排班</button>
+                其他任务 <button ng-click = "openModal()">查看医生排班</button>
+                <a class = "item item-icon-right" ng-if="HemoBtnFlag">
+                    您还未设定血透排班时间
+                    <i class='icon'><button ng-click = "GotoSet()">设置</button></i>
+                </a>
+                <a class="item item-icon-right" ng-repeat = "item in Tasks.Hemo">
+                     {{item.Name}}
+                     <p>{{item.Freq}}</p>
+                     <p>提醒时间：{{item.startTime}}</p>
+                     <p>执行时间：{{item.endTime}}</p>
+                     <div class="statusList"> 　　
+                        <div class="scheduleGray"></div>　
+                        <div class="scheduleGreen" style="width:{{item.Progress}}"></div>                       
+                    </div> 
+                    <i ng-if = "!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click = "showPopup(item, 'textarea')"></i>
+                    <i ng-if = "item.Flag" class="icon ion-ios-checkmark-empty"></i> 
+                </a>
                 <a class="item item-icon-right" ng-repeat = "item in Tasks.Other">
                     {{item.Name}}
-                    <p>{{item.Freq}}</p> 
-                    <p>任务时间：{{item.startTime}}</p>
-                    <p>{{item.instruction}}</p>                  
+                    <p ng-if="item.frequencyTimes != 0">{{item.Freq}}</p> 
+                    <p ng-if="item.frequencyTimes != 0">任务时间：{{item.startTime}}</p>
+                    <p ng-if="item.frequencyTimes == 0">{{item.instruction}}</p> 
+                    <p ng-if = "item.DoneFlag">上次执行：{{item.endTime}}</p>
+                    <p>{{item.content}}</p>                
                     <i ng-if = "!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click = "showPopup(item, 'textarea')"></i>
                     <i ng-if = "item.Flag" class="icon ion-ios-checkmark-empty"></i>                 
                 </a>                        
@@ -36,40 +62,53 @@
     <script id="templates/modal.html" type="text/ng-template">
       <ion-modal-view>      
         <ion-content class="padding">
-          <table style="border: solid 1px rgba(82, 83, 84, 0.3);width:100%;cellpadding:20;margin-top:50%;">
-          <caption>医生排班表</caption>
-            <tr style="border: solid 1px rgba(82, 83, 84, 0.3);height:30px;">
-                <th colspan="2"></th>
-                <td style="background-color:rgba(76, 175, 80, 0.39)"></td>
-                <td>正常</td>
-                <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                <td>停诊</td>
-                <th colspan="2"></th>
-            </tr>
-            <tr style="border: solid 1px rgba(82, 83, 84, 0.3);height:30px;">
-                <td></td><td ng-repeat="item in Docweek">{{item}}</td>
-            </tr>
-            <tr style="border: solid 1px rgba(82, 83, 84, 0.3); height:30px;">
-                <td>上午</td>
-                <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                <td style="background-color:rgba(76, 175, 80, 0.39)"></td>
-                <td style="background-color:rgba(76, 175, 80, 0.39)"></td>
-                <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                <td style="background-color:rgba(76, 175, 80, 0.39)"></td>
-                <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                <td style="background-color:rgba(76, 175, 80, 0.39)"></td>
-            </tr>
-            <tr style="border: solid 1px rgba(82, 83, 84, 0.3);height:30px;">
-                <td>下午</td>
-                <td style="background-color:rgba(76, 175, 80, 0.39)"></td>
-                <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                <td style="background-color:rgba(76, 175, 80, 0.39)"></td>
-                <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                <td style="background-color:rgba(76, 175, 80, 0.39)"></td>
-                <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-            </tr>                   
-        </table>
+        <p style="padding-left:4px;">医生排班表</p>
+          <div class="row">
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green"><span style="opacity:0">上午</span></div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">一</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">二</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">三</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">四</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">五</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">六</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-right:solid;border-color: green">日</div>
+                </div>
+                <div class="row" disabled = "true">
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">上午</div>
+                    <div class="col" ng-style="HemoTbl[0]" style="border-left:solid;border-top:solid;border-color: green;"></div>
+                    <div class="col" ng-style="HemoTbl[1]" style="border-left:solid;border-top:solid;border-color: green;"></div>
+                    <div class="col" ng-style="HemoTbl[2]" style="border-left:solid;border-top:solid;border-color: green"></div>
+                    <div class="col" ng-style="HemoTbl[3]" style="border-left:solid;border-top:solid;border-color: green"></div>
+                    <div class="col" ng-style="HemoTbl[4]" style="border-left:solid;border-top:solid;border-color: green;"></div>
+                    <div class="col" ng-style="HemoTbl[5]" style="border-left:solid;border-top:solid;border-color: green"></div>
+                    <div class="col" ng-style="HemoTbl[6]" style="border-left:solid;border-top:solid;border-right: solid;border-color: green"></div>
+                </div>
+                <div class="row" disabled = "true">
+                    <div class="col" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green;">下午</div>
+                    <div class="col" ng-style="HemoTbl[7]" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                    <div class="col" ng-style="HemoTbl[8]" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                    <div class="col" ng-style="HemoTbl[9]" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green;"></div>
+                    <div class="col" ng-style="HemoTbl[10]" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                    <div class="col" ng-style="HemoTbl[11]" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                    <div class="col" ng-style="HemoTbl[12]" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                    <div class="col" ng-style="HemoTbl[13]" style="border-left:solid;border-top:solid;border-bottom: solid;border-right: solid;border-color: green"></div>
+                </div>
+                <div class="row" style="padding:0px;">
+                    <div class='col'>
+                        <div style="width: 20px;height: 20px;background-color: red;border: solid;border-color: green"></div>
+                    </div>
+                    <div class='col'>
+                        
+                        <div >工作</div>
+                    </div>
+                    <div class='col'>
+                        <div style="width: 20px;height: 20px;background-color: white;border: solid;border-color: green"></div>
+                    </div>
+                    <div class='col'>
+                        
+                        <div>停诊</div>
+                    </div>
+                </div>
         <button class="button button-full button-positive" ng-click="modal.hide()">返回</button>
         </ion-content>
       </ion-modal-view>

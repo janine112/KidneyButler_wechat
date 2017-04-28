@@ -5,80 +5,85 @@
       </ion-nav-buttons>     
     </ion-nav-bar>
     <ion-content class="padding">
-        <p>测量</p>
+        <p>今日任务</p>
         <div class="list">           
             <a class="item item-icon-right" ng-repeat="item in Tasks.Measure">
                 {{item.Name}}                            
                 <p>{{item.Freq}}</p>
                 <p>{{item.content}}</p>            
-            </a>
-            <!-- <a class="item item-icon-right" ng-repeat="item in fillTask">
-                {{item.Name}}                     
-                <p>{{item.Frequency}}</p>
-                <p>{{item.Discription}}</p>               
-            </a>   -->                                                      
+            </a>                                                            
         </div>
+        <p>其他任务</p>
         <button ng-click = "EnableEdit()">编辑</button>
-       <!--  <p>请选择任务执行时间</p> -->
-        <div class="list">          
-            <a class="item item-icon-right">
-                复诊
-                <p>{{Tasks.ReturnVisit.Freq}}</p>
+        <div ng-if="Tasks.Hemo.Flag">
+                
+            <div class="item" id="Hemo"> <!-- 设定锚点 -->
+                 请设定血透次数&nbsp;&nbsp;&nbsp;&nbsp;
+                 一周
+                <select ng-model = "Tasks.Hemo.times" ng-options = "item for item in HemoTimesOptions" disabled="true"></select>                   
+                次 
+               <!--  <h2>{{Tasks.Hemo.instruction}}（{{Tasks.Hemo.Freq}}）</h2> -->
+                <div class="row">
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green"><span style="opacity:0">上午</span></div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">一</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">二</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">三</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">四</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">五</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">六</div>
+                    <div class="col" style="border-left:solid;border-top:solid;border-right:solid;border-color: green">日</div>
+                </div>
+                <div class="row" disabled = "true">
+                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">上午</div>
+                    <div class="col" ng-click="HemoSelect(0)" ng-style="HemoTbl[0].style" style="border-left:solid;border-top:solid;border-color: green;"></div>
+                    <div class="col" ng-click="HemoSelect(1)" ng-style="HemoTbl[1].style" style="border-left:solid;border-top:solid;border-color: green;"></div>
+                    <div class="col" ng-click="HemoSelect(2)" ng-style="HemoTbl[2].style" style="border-left:solid;border-top:solid;border-color: green"></div>
+                    <div class="col" ng-click="HemoSelect(3)" ng-style="HemoTbl[3].style" style="border-left:solid;border-top:solid;border-color: green"></div>
+                    <div class="col" ng-click="HemoSelect(4)" ng-style="HemoTbl[4].style" style="border-left:solid;border-top:solid;border-color: green;"></div>
+                    <div class="col" ng-click="HemoSelect(5)" ng-style="HemoTbl[5].style" style="border-left:solid;border-top:solid;border-color: green"></div>
+                    <div class="col" ng-click="HemoSelect(6)" ng-style="HemoTbl[6].style" style="border-left:solid;border-top:solid;border-right: solid;border-color: green"></div>
+                </div>
+                <div class="row" disabled = "true">
+                    <div class="col" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green;">下午</div>
+                    <div class="col" ng-click="HemoSelect(7)" ng-style="HemoTbl[7].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                    <div class="col" ng-click="HemoSelect(8)" ng-style="HemoTbl[8].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                    <div class="col" ng-click="HemoSelect(9)" ng-style="HemoTbl[9].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green;"></div>
+                    <div class="col" ng-click="HemoSelect(10)" ng-style="HemoTbl[10].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                    <div class="col" ng-click="HemoSelect(11)" ng-style="HemoTbl[11].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                    <div class="col" ng-click="HemoSelect(12)" ng-style="HemoTbl[12].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                    <div class="col" ng-click="HemoSelect(13)" ng-style="HemoTbl[13].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-right: solid;border-color: green"></div>
+                </div>
+                <p style="padding-left:4px;">点击选择血透时间</p>
+                <div class="row" style="padding:0px;">
+                    <div class='col'>
+                        <div style="width: 20px;height: 20px;background-color: red;border: solid;border-color: green"></div>
+                    </div>
+                    <div class='col'>
+                        
+                        <div >选中</div>
+                    </div>
+                    <div class='col'>
+                        <div style="width: 20px;height: 20px;background-color: white;border: solid;border-color: green"></div>
+                    </div>
+                    <div class='col'>
+                        
+                        <div>空闲</div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="list">                  
+            <a class="item item-icon-right" ng-repeat="item in Tasks.Other">
+                {{item.Name}}
+                <p>{{item.Freq}}</p>
+                <p>{{item.content}}</p>
                 <i class="icon ion-android-calendar">
-                    <select ng-model="Tasks.ReturnVisit.SelectedDay" disabled="true">
-                        <option ng-repeat="day in Tasks.ReturnVisit.Days">{{day}}</option>
+                    <select ng-model="item.SelectedDay" disabled="true">
+                        <option ng-repeat="day in item.Days">{{day}}</option>
                     </select>                   
                 </i>
             </a> 
-
-            <a class="item item-icon-right">
-                化验
-                <p>{{Tasks.LabTest.Freq}}</p>
-                <i class="icon ion-android-calendar">
-                    <select ng-model="Tasks.LabTest.SelectedDay" disabled="true">
-                        <option ng-repeat="day in Tasks.LabTest.Days">{{day}}</option>
-                    </select>                   
-                </i>
-            </a> 
-            <a class="item item-icon-right">
-                特殊评估
-                <p>{{Tasks.SpecialEvaluate.Freq}}</p>
-                <p>{{Tasks.SpecialEvaluate.instruction}}</p>
-                <i class="icon ion-android-calendar">
-                    <select ng-model="Tasks.SpecialEvaluate.SelectedDay" disabled="true">
-                        <option ng-repeat="day in Tasks.SpecialEvaluate.Days">{{day}}</option>
-                    </select>                   
-                </i>
-            </a> 
-                                 
-            <a class="item" ng-if="false">
-                <table style="border: solid 1px rgba(82, 83, 84, 0.3);width:100%;cellpadding:20;">                   
-                    <tr style="border: solid 1px rgba(82, 83, 84, 0.3);height:30px;">
-                        <td></td><td ng-repeat="item in SimpleWeek">{{item}}</td>
-                    </tr>
-                    <tr style="border: solid 1px rgba(82, 83, 84, 0.3); height:30px;">
-                        <td>上午</td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                        <td style="background-color:rgb(71, 184, 6)"></td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                    </tr>
-                    <tr style="border: solid 1px rgba(82, 83, 84, 0.3);height:30px;">
-                        <td>下午</td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                        <td style="background-color:rgb(71, 184, 6)"></td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                        <td style="background-color:rgba(128, 128, 128, 0.27)"></td>
-                    </tr>                   
-                </table>
-            </a>  
-
+                                        
             <!-- <a class="item item-icon-right">
                 腹透方案              
                 <i class="icon ion-android-calendar">
@@ -88,13 +93,8 @@
                     </select>                   
                 </i>
             </a>     -->      
-        </div>
-        <!-- <p>当前日期：{{Test}}</p>
-        <p ng-repeat = "item in tasks">{{item.TaskTime}}</p> -->
-        <!-- <div class="content padding has-header"> -->
-        <button class="button button-block button-positive"  ng-click="SetDate()">确定</button>
-        <!-- </div> -->
-        
+        </div>     
+        <button class="button button-block button-positive"  ng-click="SetDate()">确定</button>               
     </ion-content>
 </ion-view>
 

@@ -7,11 +7,8 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
 
 .run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM,$location,wechat,User) {
   $ionicPlatform.ready(function() {
+    socket = io.connect('ws://121.43.107.106:4050/chat');
     
-    var isSignIN=Storage.get("isSignIN");
-    if(isSignIN=='YES'){
-      $state.go('tab.tasklist');
-    }
 
     var temp = $location.absUrl().split('=')
     // alert(temp)
@@ -35,7 +32,15 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           // alert(wechatData.nickname)
           User.logIn({username:wechatData.openid,password:wechatData.openid,role:"patient"}).then(function(data){
                 if(data.results==1){
+                  if(data.msg == "No authority!")
+                  {
+                    alert("您没有权限登陆肾事管家，如您是医生，请登录肾病守护者")
+                    $state.go('signin')
+                  }
+                  else
+                  {
                     $state.go('phonevalid',{phonevalidType:"wechat"})
+                  }
                 }
                 else if(data.results.mesg=="login success!"){
 
@@ -47,9 +52,9 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                     Storage.set('UID',data.results.userId);
                     User.getAgree({userId:data.results.userId}).then(function(res){
                         if(res.results.agreement=="0"){
-                            $timeout(function(){$state.go('tab.tasklist');},500);
+                            $state.go('tab.tasklist');
                         }else{
-                            $timeout(function(){$state.go('agreement',{last:'signin'});},500);
+                            $state.go('agreement',{last:'signin'});
                         }
                     },function(err){
                         console.log(err);
@@ -72,6 +77,11 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         });
     }
 
+    // var isSignIN=Storage.get("isSignIN");
+    // if(isSignIN=='YES'){
+    //   $state.go('tab.tasklist');
+    // }
+    
     $rootScope.conversation = {
             type: null,
             id: ''
@@ -327,6 +337,17 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           'tab-mine': {
             templateUrl: 'partials/tabs/mine/mine.html',
             controller: 'MineCtrl'
+          }
+
+        }
+         
+    })
+    .state('tab.DiagnosisInfo', {
+        url: '/mine/DiagnosisInfo',
+        views: {
+          'tab-mine': {
+            templateUrl: 'partials/tabs/mine/diagnosisInfo.html',
+            controller: 'DiagnosisCtrl'
           }
 
         }
