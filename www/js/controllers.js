@@ -2546,6 +2546,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   $scope.GoUserDetail = function(){
     $state.go('userdetail',{last:'mine'});
   }
+  $scope.GoDiagnosiInfo = function(){
+    $state.go('tab.DiagnosisInfo');
+  }
   $scope.GoConsultRecord = function(){
     $state.go('tab.myConsultRecord');
   }
