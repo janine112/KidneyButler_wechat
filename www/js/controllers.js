@@ -928,10 +928,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                 params    :{
                                     'regsubmit':'yes',
                                     'formhash':'',
-                                    'D2T9s9':Storage.get('USERNAME'),
-                                    'O9Wi2H':Storage.get('USERNAME'),
-                                    'hWhtcM':Storage.get('USERNAME'),
-                                    'qSMA7S':Storage.get('USERNAME')+'@qq.com'
+                                    'username':Storage.get('USERNAME'),
+                                    'password':Storage.get('USERNAME'),
+                                    'password2':Storage.get('USERNAME'),
+                                    'email':Storage.get('USERNAME')+'@qq.com'
                                 },  // pass in data as strings
                                 headers : {
                                     'Content-Type': 'application/x-www-form-urlencoded',

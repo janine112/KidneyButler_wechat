@@ -2180,5 +2180,22 @@ angular.module('kidney.services', ['ionic','ngResource'])
     return self;
 }])
 
-
+.factory('arrTool',function(){
+    return {
+        indexOf:function(arr,key,val,binary){
+            if(binary){
+                //已排序，二分,用于消息
+                // var first=0,last=arr.length,mid=(first+last)/2;
+                // while(arr[mid][key]!=val){
+                //     if(arr[mid])
+                // }
+            }else{
+                for(var i=0, len=arr.length;i<len;i++){
+                    if(arr[i][key]==val) return i;
+                }
+                return -1;
+            }
+        }
+    }
+})
 
