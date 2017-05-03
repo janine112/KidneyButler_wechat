@@ -1175,18 +1175,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //任务列表--GL
-.controller('tasklistCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory', '$ionicPopup', '$ionicModal', 'Compliance', '$window', 'Task', 'Patient', function($scope, $timeout,$state,Storage,$ionicHistory,$ionicPopup,$ionicModal,Compliance, $window, Task, Patient) {
+.controller('tasklistCtrl', ['$scope','$timeout','$state','$cordovaBarcodeScanner','Storage','$ionicHistory', '$ionicPopup', '$ionicModal', 'Compliance', '$window', 'Task', 'Patient', function($scope, $timeout,$state,$cordovaBarcodeScanner,Storage,$ionicHistory,$ionicPopup,$ionicModal,Compliance, $window, Task, Patient) {
   
   //初始化
     $scope.barwidth="width:0%";
-    var UserId = Storage.get('UID');//U201511120002
-    //UserId = "Test09"; //测试id------
+    var UserId = Storage.get('UID');
+    //UserId = "Test10"; //测试id------
     $scope.Tasks = {}; //任务
     $scope.HemoBtnFlag = false; //血透排班设置标志
     var NextTime = "";
     $scope.$on('$ionicView.enter', function() {      
-          GetTasks();
-          //ChangeLongFir();
+        GetTasks();      
     });  
   
   //获取对应任务模板
@@ -1348,27 +1347,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                InitialHemoTask(newTask);
             }               
             else
-            {
-               //更改任务下次执行时间
-              /*var CompRes = CompareTime(newTask.startTime, newTask.frequencyTimes, newTask.frequencyUnits, newTask.times);
-              if(CompRes.Date != "")
-              {
-                  newTask.startTime = CompRes.Date;
-                  item = {
-                          "userId":UserId, 
-                          "type":newTask.type, 
-                          "code":newTask.code, 
-                          "instruction":newTask.instruction, 
-                          "content":newTask.content, 
-                          "startTime":CompRes.Date, 
-                          "endTime":newTask.endTime, 
-                          "times":newTask.times,
-                          "timesUnits":newTask.timesUnits, 
-                          "frequencyTimes":newTask.frequencyTimes, 
-                          "frequencyUnits":newTask.frequencyUnits
-                        };     
-                  UpdateUserTask(item);  
-              }*/
+            {             
               newTask.type = task.type;
               newTask.Name = NameMatch(newTask.type);
               newTask.Freq = newTask.frequencyTimes + newTask.frequencyUnits + newTask.times + newTask.timesUnits;
@@ -1612,19 +1591,20 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   //范围匹配
    function RangeMatch(code)
    {
-      var res = "";
+      var res = {};
       var Tbl = [
-                 {Code:'Temperature', Range:"35,42"},
-                 {Code:'Weight', Range:"0,300"},
-                 {Code:'BloodPressure', Range:"90,140"},
-                 {Code:'Vol', Range:"0,5000"},
-                 {Code:'HeartRate', Range:"30,200"}                
+                 {Code:'Temperature', Min: 35, Max: 42},
+                 {Code:'Weight', Min: 0, Max: 300},
+                 {Code:'BloodPressure', Min: 60, Max: 200},
+                 {Code:'Vol', Min: 0, Max: 5000},
+                 {Code:'HeartRate', Min: 30, Max: 200}                
                 ];
       for (var i=0;i<Tbl.length;i++)
       {
          if(Tbl[i].Code == code)
          {
-            res = Tbl[i].Range
+            res.Min = Tbl[i].Min;
+            res.Max = Tbl[i].Max;
             break;
          }
       }
@@ -1698,15 +1678,6 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
          });
     }
    
-  //插入任务执行情况后操作
-    function AfterPostcompliance(task)
-    {
-      //任务执行插入成功后，需修改界面显示标志位、测量结果与完成进度，更新下次任务完成时间 
-
-      //AfterDoneTask(task, "POST");       
-      
-    }
-
   //更新用户任务模板
     function UpdateUserTask(task)
     {
@@ -1833,36 +1804,15 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     };//Textarea：VascularAccess；
   
   //自定义弹窗
-    $scope.showPopup = function(task, flag) {
+    $scope.showPopup = function(task, flag, type) {
       $scope.data = {};
       $scope.data.alertFlag = false;
       //console.log(task);
-      var Template = PopTemplate.Input;
-      var word = '请填写'+ task.Name;
-      if(flag == 'textarea')
-      {
-          Template = PopTemplate.Textarea;
-          word = word + "情况";
-      }
-      else
-      {
-         if((task.code == "ywfz") || (task.code == "yl"))
-         {
-           flag = 'Select';
-           Template = PopTemplate.Select;
-           if(task.code == "ywfz")
-           {
-             word = "请选择是否浮肿";
-           }
-           else
-           {
-             word = "请选择引流是否通畅";
-           }
-         }
-      }
+      var PopInfo = GetPopInfo(flag, type, task);
+      $scope.data.value = PopInfo.content;
       var myPopup = $ionicPopup.show({
-         template: Template,     
-         title: word,
+         template: PopInfo.Template,     
+         title: PopInfo.word,
          scope: $scope,
          buttons: [
            { text: '取消' },
@@ -1870,7 +1820,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
              text: '<b>保存</b>',
              type: 'button-positive',
              onTap: function(e) {
-               if (!$scope.data.value) {
+               if (!$scope.data.value) 
+               {
                  // 不允许用户关闭，除非输入内容
                  e.preventDefault();
                } 
@@ -1878,25 +1829,26 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                {
                   if(flag == 'input') //只能输入数字
                   {
-                      var str = $scope.data.value.replace(/(^\s*)|(\s*$)/g, "");//去除字符串两端空格
-                      
-                      if(isNaN(str))
-                      {
-                          $scope.data.alertWords = "请输入数字！";
-                          $scope.data.alertFlag = true;
-                          e.preventDefault();
-                      } 
-                      else
-                      {
-                         var Num = parseInt(str);
-                         if((task.code == 'BloodPressure') && (Num > 140))
+                     var Range = AboutRange($scope.data.value, task.code);
+                     var word = Range.word;
+                     if(word != "")
+                     {
+                       $scope.data.alertWords = word;
+                       $scope.data.alertFlag = true;
+                       e.preventDefault();
+                     }
+                     else
+                     {
+                       if((task.code == 'BloodPressure') && (Range.num  != -1))
+                       {
+                         if(Range.num > 140)
                          {
-                           // $scope.data.alertWords = "请注意，您有高血压！";
-                           // $scope.data.alertFlag = true;
-                           alert("请注意，您有高血压！");
-                         }
-                         return str;                        
-                      }
+                           $scope.showAlert();
+                         }                                          
+                       }
+                       return Range.str;   
+                    }                                             
+                      
                   }
                   else
                   {
@@ -1915,7 +1867,16 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
           //向任务表中插入数据
           if((task.frequencyUnits == '天') && (task.instruction != ""))
           {
-              Description = task.instruction + '，' + Description; //若为一天多次的任务
+              if(type == 'fill')
+              {
+                 Description = task.instruction + '，' + Description; //若为一天多次的任务
+              }
+              else
+              {
+                  var arry = task.instruction.split('，');
+                  arry[arry.length-1] = res;
+                  Description = arry.join('，');
+              }             
           }          
           var item = {
                       "userId": UserId,
@@ -1931,6 +1892,90 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         }  
       });
     };
+ 
+  //弹窗标题、输入类型、显示内容
+    function GetPopInfo(flag, type, task)
+    {
+        var res = {};
+        var Template = PopTemplate.Input;
+        var word = '请填写'+ task.Name;
+        var content = "";
+        if(task.instruction == "")
+        {
+           type = 'fill';
+        }
+        if(type == 'edit')
+        {
+            word = task.Name;
+            content = task.instruction;
+            var arry = content.split('，');         
+            content = arry[arry.length-1];                      
+        }
+        if(flag == 'textarea')
+        {
+            Template = PopTemplate.Textarea;
+            word = word + "情况";
+        }
+        else
+        {
+           if((task.code == "ywfz") || (task.code == "yl"))
+           {
+             flag = 'Select';
+             Template = PopTemplate.Select;
+             if(task.code == "ywfz")
+             {
+               word = "请选择是否浮肿";
+             }
+             else
+             {
+               word = "请选择引流是否通畅";
+             }
+           }
+        }
+        res.Template = Template;
+        res.word = word;
+        res.content = content;
+        return res;
+    }
+
+  //测量输入格式与范围判定
+   function AboutRange(value, code)
+   {
+      var word = "";
+      var num = -1;
+      var res = {};
+      var str = value.replace(/(^\s*)|(\s*$)/g, "");//去除字符串两端空格                     
+      if(isNaN(str))
+      {
+          word = "请输入数字！";       
+      } 
+      else
+      {
+         var num = parseInt(str);
+         var range = RangeMatch(code);
+         if(!jQuery.isEmptyObject(range))
+         {
+            if((num < range.Min) || (num > range.Max))
+            {
+                word = "您输入的数值不在正常范围内!"
+            }
+         }
+      }
+      res.word = word;
+      res.num = num;
+      res.str = str;
+      return res;
+   }
+
+  //提示框
+   $scope.showAlert = function() {
+     var alertPopup = $ionicPopup.alert({
+       title: '提示',
+       template: '请注意，您可能患有高血压！'
+     });
+     alertPopup.then(function(res) {    
+     });
+   };
  
   //任务完成后设定下次任务执行时间
     function SetNextTime(LastDate, FreqTimes, Unit, Times)
@@ -1976,12 +2021,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       return Date2;
     }
  
- //医生排班表数据
+  //医生排班表数据
     $scope.Docweek = ["周一","周二","周三","周四","周五","周六","周日"];
     $scope.TblColor1 = ["gray", "green", "gray" ,"gray", "green", "green", "gray"];
     $scope.TblColor2 = ["gray", "green", "green" ,"green", "gray", "gray", "gray"];
 
- //弹窗：医生排班表
+  //弹窗：医生排班表
     $ionicModal.fromTemplateUrl('templates/modal.html', {
         scope: $scope,
         animation: 'slide-in-up'
@@ -2000,7 +2045,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
        $scope.modal.remove();
      });  
 
- //修改日期格式Date → yyyy-mm-dd
+  //修改日期格式Date → yyyy-mm-dd
    function ChangeTimeForm(date)
    {
       var nowDay = "";
@@ -2013,19 +2058,19 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       return nowDay;
    }
 
- //页面刷新
+  //页面刷新
     $scope.Refresh = function()
     {
         $window.location.reload();
     }
 
- //跳转至任务设置页面
+  //跳转至任务设置页面
    $scope.GotoSet = function()
    {
       $state.go('tab.taskSet');
    }
 
- //血透排班表字典
+  //血透排班表字典
    $scope.HemoTbl =[
                      {'background-color':'white'},
                      {'background-color':'white'},
@@ -2043,7 +2088,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                      {'background-color':'white'}    
                   ];
 
- //获取医生排班
+  //获取医生排班
     function GetMyDoctors()
     {
       var promise =  Patient.getMyDoctors({userId:UserId});
@@ -2070,29 +2115,31 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                       
        })
     }
-    //获取二维码信息
-  $scope.scanbarcode = function () {
-    console.log(Storage.get("UID"))
-    $cordovaBarcodeScanner.scan().then(function(imageData) {
-        // alert(imageData.text);
-        Patient.bindingMyDoctor({"patientId":Storage.get("UID"),"doctorId":imageData.text}).then(function(res){
-          if(res.result=="修改成功"){
-            $ionicPopup.alert({
-             title: '绑定成功！'
-            }).then(function(res) {
-              $state.go('tab.myDoctors');
-            });
-          }else if(res.result=="不存在的医生ID！"){
-            $ionicPopup.alert({
-             title: '不存在的医生ID！'
-            })
-          }
-       },function(){                    
-       })
-    }, function(error) {
-        console.log("An error happened -> " + error);
-    });
-  };
+
+  //获取二维码信息
+    $scope.scanbarcode = function () {
+      console.log(Storage.get("UID"))
+      $cordovaBarcodeScanner.scan().then(function(imageData) {
+          // alert(imageData.text);
+          Patient.bindingMyDoctor({"patientId":Storage.get("UID"),"doctorId":imageData.text}).then(function(res){
+            if(res.result=="修改成功"){
+              $ionicPopup.alert({
+               title: '绑定成功！'
+              }).then(function(res) {
+                $state.go('tab.myDoctors');
+              });
+            }else if(res.result=="不存在的医生ID！"){
+              $ionicPopup.alert({
+               title: '不存在的医生ID！'
+              })
+            }
+         },function(){                    
+         })
+      }, function(error) {
+          console.log("An error happened -> " + error);
+      });
+    };
+
 }])
 
 //任务设置--GL
