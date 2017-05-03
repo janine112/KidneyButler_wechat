@@ -35,33 +35,12 @@ angular.module('kidney.directives', ['kidney.services'])
                 }
                 return 'partials/tabs/consult/msg/'+ type+'.html';
             }
-                // $scope.avatarSrc=CONFIG.imgThumbUrl+msg.fromName+'_myAvatar.jpg';
-                // type=$scope.msg.contentType=='custom'?$scope.msg.content.contentStringMap.type:$scope.msg.contentType;
-                // type=$scope.msg.contentType;
-                // return 'partials/tabs/consult/msg/'+type+'.html';
-            // }
+
             
             $scope.emitEvent = function(code){
               $scope.$emit(code,arguments);
             }
-            // $scope.direct = $scope.msg.fromID==window.JMessage.username?'right':'left';
-            
-            // $scope.showProfile = function(){
-            //     console.log($scope.msg.fromID);
-            // }
-            // $scope.viewImage= function(thumb,url){
-            //     if(type=='image'){
-            //         //image massage
-            //         $scope.$emit('viewImage',type,thumb,$scope.msg.serverMessageId);
-            //     }else{
-            //         //image in card
-            //         $scope.$emit('viewImage',type,thumb,url);
-            //     }
-            // };
-            
-            // $scope.playVoice = function(){
 
-            // }
         }
     }
 }])
