@@ -47,6 +47,16 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                     // $scope.logStatus = "登录成功！";
                     $ionicHistory.clearCache();
                     $ionicHistory.clearHistory();
+                    User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
+                    {
+                        if (angular.isDefined(data.phoneNo) = true)
+                        {
+                            Storage.set('USERNAME',data.phoneNo);
+                        }
+                    },function(err)
+                    {
+                        console.log(err)
+                    })
                     Storage.set('TOKEN',data.results.token);//token作用目前还不明确
                     Storage.set('isSignIn',"Yes");
                     Storage.set('UID',data.results.userId);
