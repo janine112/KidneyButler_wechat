@@ -877,8 +877,8 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'counsel'},{
             getCounsel:{method:'GET', params:{route: 'getCounsels'}, timeout: 100000},
             questionaire:{method:'POST', params:{route: 'questionaire'}, timeout: 100000},
-            getStatus:{method:'POST', params:{route: 'getStatus'}, timeout: 100000}
-
+            getStatus:{method:'POST', params:{route: 'getStatus'}, timeout: 100000},
+            changeStatus:{method:'POST', params:{route: 'changeStatus'}, timeout: 100000}
         });
     };
 
@@ -1834,6 +1834,23 @@ angular.module('kidney.services', ['ionic','ngResource'])
     self.getStatus = function(params){
         var deferred = $q.defer();
         Data.Counsels.getStatus(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->0:{
+    //              patientId:'p01',
+    //              doctorId:'doc01',
+    //              type:1//1->咨询 2->问诊
+    //          }
+    self.changeStatus = function(params){
+        var deferred = $q.defer();
+        Data.Counsels.changeStatus(
             params,
             function(data, headers){
                 deferred.resolve(data);
