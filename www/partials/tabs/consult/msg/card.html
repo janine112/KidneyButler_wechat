@@ -4,15 +4,15 @@
         <div class="title">患者使用在线咨询服务</div>
         <hr/>
         <div class="info">
-            <p><span>症状symptom：</span>{{counsel.symptom}}</p>
-            <p><span>sickTime</span> {{counsel.sickTime}}</p>
-            <p><span>hospital</span>{{counsel.hospital}}</p>
-            <p><span>visitDate</span>{{counsel.visitDate}}</p>
-            <p><span>help</span>{{counsel.help}}</p>
+            <p><span>症状</span>{{counsel.symptom}}</p>
+            <p><span>患病时间</span> {{counsel.sickTime}}</p>
+            <p><span>就诊医院</span>{{counsel.hospital}}</p>
+            <p><span>就诊时间</span>{{counsel.visitDate}}</p>
+            <p><span>期望的帮助</span>{{counsel.help}}</p>
         </div>
-        <hr/>
+        <!-- <hr/>
         <div class="img-info">资料照片（3）</div>
-        <img ng-repeat="url in picurl" hiRes="{{url.hiRes}}" ng-src="{{url.src}}"/>
+        <img ng-repeat="url in picurl" hiRes="{{url.hiRes}}" ng-src="{{url.src}}"/> -->
     </div>
     <div ng-if="msg.status=='send_fail'" class="msg-fail"><span><i class="icon ion-android-warning"></i>发送失败</span></div>
 </div>
