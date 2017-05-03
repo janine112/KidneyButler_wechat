@@ -165,8 +165,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   var unablebutton = function(){      
      //验证码BUTTON效果
         $scope.isable=true;
-        $scope.veritext="180S再次发送"; 
-        var time = 179;
+        $scope.veritext="60S再次发送"; 
+        var time = 59;
         var timer;
         timer = $interval(function(){
             if(time==0){
@@ -258,9 +258,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     },function(){
                         $scope.logStatus="连接超时！";
                     });
-                    $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
-                    isregisted = true
-                    sendSMS(Verify.Phone);
+                    // $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
+                    // isregisted = true
+                    // sendSMS(Verify.Phone);
                 }else if(data.results == 1){
                     sendSMS(Verify.Phone);
                 }
