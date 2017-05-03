@@ -220,11 +220,11 @@
         float: right;
     }
     .media-card{
-        box-shadow:  inset 0px -1.5px 0px #d7d7d7;
-        width:84%;
-        padding:0.5em;
+        /*box-shadow:  inset 0px -1.5px 0px #d7d7d7;*/
+        width:100%;
+        padding:0.8em;
         background: #FFF;
-        margin:auto;
+        /*margin:auto;*/
     }
     .media-card .title{
         font-size: 1.25em;
