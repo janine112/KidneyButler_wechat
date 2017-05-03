@@ -3061,7 +3061,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         $scope.msgs = [];
         $scope.params = {
             msgCount: 0,
-            helpDivHeight: 60,
+            helpDivHeight: 0,
             hidePanel: true,
             moreMsgs:true,
             UID:Storage.get('UID'),
@@ -3538,7 +3538,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
     $scope.$on('keyboardshow', function(event, height) {
-        $scope.params.helpDivHeight = height + 60;
+        $scope.params.helpDivHeight = height;
         setTimeout(function() {
             $scope.scrollHandle.scrollBottom();
         }, 100);
@@ -3546,7 +3546,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     })
     $scope.$on('keyboardhide', function(event) {
         socket.close();
-        $scope.params.helpDivHeight = 60;
+        $scope.params.helpDivHeight = 0;
         // $ionicScrollDelegate.scrollBottom();
     })
     $scope.$on('$ionicView.leave', function() {

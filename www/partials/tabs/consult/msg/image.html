@@ -2,7 +2,7 @@
 	<!-- display time -->
 	<div ng-if="msg.diff" class="msg-time"><span>{{msg.createTimeInMillis | msgdate}}</span></div>
 	<!-- avatar -->
-	<img class="avatar" ng-src="{{msg.fromUser.avatarPath || 'img/max.png'}}" ng-click="emitEvent('profile',msg.fromName)"/>
+	<img class="avatar" ng-src="{{msg.fromUser.avatarPath || 'img/DefaultAvatar.jpg'}}" ng-click="emitEvent('profile',msg)"/>
 	<!-- chat bubble -->
 	<div my-spin="msg.status" class="msg-body media-image" ng-click="emitEvent('image','img',msg.content)" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event,'image')">
 		<!-- text content -->
@@ -13,6 +13,3 @@
 	</div>
 	<div ng-if="msg.status=='send_fail'"  class="msg-fail"><span><i class="icon ion-android-warning"></i>发送失败</span></div>
 </div>
-
-
-    <!-- padding-top: {{msg.content.format.height/msg.content.format.width*100 + '%' -->

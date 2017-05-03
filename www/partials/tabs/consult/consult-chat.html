@@ -11,6 +11,7 @@
         <div class="text-center padding hide-animate ng-hide" ng-hide="params.moreMsgs">没有更多消息了</div>
         <my-message ng-repeat="msg in msgs track by $index" msg="msg" msgindex='{{$index}}'></my-message>
         <div style="float:left;width:100%;" ng-style="{'padding-top':'{{params.helpDivHeight}}px'}"></div>
+        <div style="float:left;width:100%;padding-top:60px"></div>
     </ion-content>
 
 
@@ -18,7 +19,7 @@
         <ion-footer-bar class="input-box" style="position:absolute" keyboard-attach>
             <!-- 语音button -->
             <div style="position:absolute;bottom:0;">
-                <button style="padding:0 2px 0 4px" class="button button-icon icon ion-android-microphone" on-hold="getVoice()" on-release="stopAndSend()"></button>
+                <!-- <button style="padding:0 2px 0 4px" class="button button-icon icon ion-android-microphone" on-hold="getVoice()" on-release="stopAndSend()"></button> -->
                 <div  style="padding:0 2px"  class="button button-icon icon ion-android-image" ng-click="getImage('gallery')"></div>
                 <div  style="padding:0 2px"  class="button button-icon icon ion-android-camera" ng-click="getImage('cam')"></div>
                 <!-- <div  style="padding:0 2px"  class="button button-icon icon ion-android-add" ng-click="tt()"></div> -->
