@@ -34,28 +34,31 @@
                     您还未设定血透排班时间
                     <i class='icon'><button ng-click="GotoSet()">设置</button></i>
                 </a>
-                <a class="item item-icon-right" ng-repeat="item in Tasks.Hemo">
+                <ion-list>
+                <ion-item class="item item-icon-right" ng-repeat="item in Tasks.Hemo">
                     {{item.Name}}
                     <p>{{item.Freq}}</p>
-                    <p>提醒时间：{{item.startTime}}</p>
-                    <p>执行时间：{{item.endTime}}</p>
+                    <p>任务时间：{{item.startTime}}</p>
+                    <p ng-if="item.endTime != ''">执行时间：{{item.endTime}}</p>
                     <div class="statusList">
                         <div class="scheduleGray"></div>
                         <div class="scheduleGreen" style="width:{{item.Progress}}"></div>
                     </div>
+                    <ion-option-button class="button-calm" ng-click="showPopup(item, 'textarea', 'edit')">编辑</ion-option-button>
                     <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showPopup(item, 'textarea', 'fill')"></i>
                     <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
-                </a>
-                <a class="item item-icon-right" ng-repeat="item in Tasks.Other">
+                </ion-item>
+                <ion-item class="item item-icon-right" ng-repeat="item in Tasks.Other">
                     {{item.Name}}
-                    <p ng-if="item.frequencyTimes != 0">{{item.Freq}}</p>
+                    <p>{{item.Freq}}</p>
                     <p ng-if="item.frequencyTimes != 0">任务时间：{{item.startTime}}</p>
-                    <p ng-if="item.frequencyTimes == 0">{{item.instruction}}</p>
                     <p ng-if="item.DoneFlag">上次执行：{{item.endTime}}</p>
                     <p>{{item.content}}</p>
+                    <ion-option-button class="button-calm" ng-click="showPopup(item, 'textarea', 'edit')">编辑</ion-option-button>
                     <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showPopup(item, 'textarea', 'fill')"></i>
                     <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
-                </a>
+                </ion-item>
+                </ion-list>
             </a>
         </div>
         <!-- <button ng-click="Test()">测试</button>
