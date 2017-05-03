@@ -52,9 +52,14 @@
         </label>
 
         <ionic-datepicker input-obj="datepickerObject2" class="item item-input" ng-if="showSurgicalTime">
-        <span class="input-label"><!-- <i class="icon ion-asterisk" style="color:red;font-size:6px"> --></i>手术日期</span>
+        <span class="input-label"><!-- <i class="icon ion-asterisk" style="color:red;font-size:6px"> --></i>{{timename}}</span>
         <input  ng-model="BasicInfo.operationTime" dateformat type="text">
         </ionic-datepicker>
+
+        <label class="item item-input">
+            <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>过敏信息</span>
+                <input  ng-model="BasicInfo.allergic"  type="text" style="width:100%">
+        </label>
 
       <label class="item item-input">
         <span class="error" ng-show="Height.$error.pattern" style="color:red"></span>
@@ -70,7 +75,7 @@
 
       <ionic-datepicker input-obj="datepickerObject3" class="item item-input">
         <span class="input-label" style="margin-left:8px ">出生日期</span>
-        <input  ng-model="BasicInfo.birthday" dateformat type="text">
+        <input  ng-model="BasicInfo.birthday" dateformat  type="text">
       </ionic-datepicker>
 
       <label class="item item-input">
@@ -87,10 +92,10 @@
 
     </div>
       <button style="margin-top:0" class="button button-block button-balanced" ng-click ="submit()">
-            保存
+            下一步
       </button>
-      <button style="margin-top:0" class="button button-block button-balanced" class="button button-clear" ng-if="CanSkip" ng-click="SKip()">跳过
-      </button>
+      <!-- <button style="margin-top:0" class="button button-block button-balanced" class="button button-clear" ng-if="CanSkip" ng-click="SKip()">跳过
+      </button> -->
     
 
 
