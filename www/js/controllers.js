@@ -4117,34 +4117,37 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //增值服务--PXY
-.controller('MoneyCtrl', ['$scope','$state','$ionicHistory','Account','Storage',function($scope, $state,$ionicHistory,Account,Storage) {
+.controller('MoneyCtrl', ['$scope','$state','$ionicHistory','Account','Storage','Patient',function($scope, $state,$ionicHistory,Account,Storage,Patient) {
   $scope.barwidth="width:0%";
-  var patientId = Storage.get('UID')
+  var PID = Storage.get('UID')
+  var docid=""
   $scope.Goback = function(){
     $state.go('tab.mine')
   }
-
-  $scope.freeTimesRemain ="0";
   $scope.TimesRemain ="0";
-  $scope.Balance = "0";
-  //查询余额等等。。。。。
-  Account.getAccountInfo({userId:patientId}).then(
-    function(data)
-    {
-      if (data.results != "" && data.result != null)
-      {
-        $scope.freeTimesRemain = data.results.freeTimes
-        $scope.TimesRemain = data.results.times
-        $scope.Balance = data.results.money
+  $scope.freeTimesRemain ="0";
+  Patient.getMyDoctors({userId:Storage.get('UID')}).then(
+    function(data){
+      if(data.results.doctorId!=undefined){
+        docid=data.results.doctorId.userId
+        Account.getCounts({patientId:Storage.get('UID'),doctorId:docid}).then(
+          function(data)
+          {//不存在的医生ID
+            if (data.results != "不存在的医生ID" && data.result != "请填写doctorId!")
+            {
+              $scope.TimesRemain=data.result
+              console.log($scope.TimesRemain)
+            }
+          },
+          function(err)
+          {
+            console.log(err);
+          }
+        )
       }
-      
-      // console.log($scope.BasicInfo)
-    },
-    function(err)
-    {
-      console.log(err);
-    }
-  )
+    },function(err){
+        console.log(err);
+    })
 }])
 
 
@@ -4977,7 +4980,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 
-.controller('DoctorDetailCtrl', ['$ionicPopup','$scope','$state','$ionicHistory','$stateParams','$stateParams','Doctor',function($ionicPopup,$scope, $state,$ionicHistory,$stateParams,$stateParams,Doctor) {
+.controller('DoctorDetailCtrl', ['$ionicPopup','$scope','$state','$ionicHistory','$stateParams','$stateParams','Doctor','Counsels','Storage',function($ionicPopup,$scope, $state,$ionicHistory,$stateParams,$stateParams,Doctor,Counsels,Storage) {
   $scope.Goback = function(){
     $ionicHistory.goBack();
   }
@@ -4998,33 +5001,122 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     )
 
    $scope.question = function(){
-    var question = $ionicPopup.confirm({
-            title:"咨询确认",
-            template:"进入咨询后，您有三次询问医生的次数。确认付费咨询？",
-            okText:"确认",
-            cancelText:"取消"
-        });
-        question.then(function(res){
-            if(res){
-                $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:1});
-            }
+    Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID'),type:2})
+      .then(function(data)
+      {
+          console.log(data)
+          if(data.result!="请填写咨询问卷!"&&data.result.status==1)//还有未结束的，先让你进去看看
+          {
+            $ionicPopup.confirm({
+              title:"咨询确认",
+              template:"您有尚未结束的问诊，点击确认继续上一次问诊！",
+              okText:"确认",
+              cancelText:"取消"
+            }).then(function(res){
+                if(res){
+                    $state.go("tab.consult-chat",{chatId:DoctorId,type:2,status:1}); 
+                }
 
-        });
+            })
+          }
+          else{ 
+            Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID'),type:1})
+            .then(function(data)
+            {
+              console.log(data)
+                if(data.result.status==1)//没有未结束的，直接进去吧，但要提示进去能看，发的话要收你钱的
+                  {
+                    $ionicPopup.confirm({
+                      title:"咨询确认",
+                      template:"您有尚未结束的咨询，点击确认继续上一次咨询！",
+                      okText:"确认",
+                      cancelText:"取消"
+                    }).then(function(res){
+                        if(res){
+                            $state.go("tab.consult-chat",{chatId:DoctorId,type:1,status:1}); 
+                        }
+                    })
+                }
+                else
+                {
+                  $ionicPopup.confirm({
+                        title:"咨询确认",
+                        template:"进入咨询后，您有三次询问医生的次数。确认付费咨询？",
+                        okText:"确认",
+                        cancelText:"取消"
+                  }).then(function(res){
+                      if(res){
+                          $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:1});
+                      }
+
+                  })
+                }
+            
+            },function(err)
+            {
+                console.log(err)
+            })}
+              //再看看有没有未结束的咨询
+      },function(err)
+      {
+          console.log(err)
+      })
   }
 
   $scope.consult = function(){
-    var question = $ionicPopup.confirm({
-            title:"问诊确认",
-            template:"进入问诊后，当天您询问医生的次数不限。确认付费问诊？",
-            okText:"确认",
-            cancelText:"取消"
-        });
-        question.then(function(res){
-            if(res){
-                $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:2});
-            }
+    //先查询是否有咨询进行中 有的话问是否补差价 改问诊
+      Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID'),type:1})
+      .then(function(data)
+      {
+          if(data.result!="请填写咨询问卷!"&&data.result.status==1){//有正在进行的咨询
+            $ionicPopup.confirm({
+              title:"问诊确认",
+              template:"您有尚未结束的咨询，补齐差价可升级为问诊，问诊中询问医生的次数不限。确认付费升级为问诊？",
+              okText:"确认",
+              cancelText:"取消"
+            }).then(function(res){
+                if(res)
+                  //点击确认结束当前咨询的状态 然后新建一个问诊
+                  $state.go("tab.consult-chat",{chatId:DoctorId,type:2,status:1}); 
+                })
 
-        });
+            }else{//没有进行中的咨询 查找是否有正在进行中的问诊
+            Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID'),type:2})
+            .then(function(data)
+            {
+              if(data.result!="请填写咨询问卷!"&&data.result.status==1)//没有未结束的，直接进去吧，但要提示进去能看，发的话要收你钱的
+                {
+                  $ionicPopup.confirm({
+                    title:"问诊确认",
+                    template:"您有尚未结束的问诊，点击确认继续上一次问诊！",
+                    okText:"确认",
+                    cancelText:"取消"
+                  }).then(function(res){
+                      if(res){
+                          $state.go("tab.consult-chat",{chatId:DoctorId,type:2,status:1}); 
+                      }
+                  })
+              }
+              else//还有未结束的，先让你进去看看
+              {
+                  $ionicPopup.confirm({
+                    title:"问诊确认",
+                    template:"进入问诊后，当天您询问医生的次数不限。确认付费问诊？",
+                    okText:"确认",
+                    cancelText:"取消"
+                  }).then(function(res){
+                    if(res){
+                        $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:2});
+                    }
+                  })
+              }
+            
+            },function(err)
+            {
+                console.log(err)
+            })
+          }
+    })
   }
 }])
 
@@ -6786,17 +6878,21 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         $state.go("tab.consultquestion3",{DoctorId:DoctorId,counselType:counselType});
     }
     
-}
+
+  }
+
 
   $scope.backtoDisease = function(){
     Storage.set('tempquestionare',angular.toJson($scope.Questionare))
     $state.go("tab.consultquestion2",{DoctorId:DoctorId,counselType:counselType})
+
   } 
+
 
   $scope.Submitquestion = function(){
     // Storage.set('consultcacheinfo',angular.toJson([]));
     if(($scope.Questionare.title)&&($scope.Questionare.help)){
-            var temp = {
+        var temp = {
           "patientId":patientId,
           "type":counselType,
           "doctorId":$stateParams.DoctorId, 
@@ -7241,7 +7337,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                               DoctorDiags[i].showSurgicalTime = false;
                               DoctorDiags[i].DiseaseDetails = DoctorDiags[i].name.details;
                               console.log(DoctorDiags[i].DiseaseDetails);
-                              DoctorDiags[i].progress = searchObj(DoctorDiags[i].progress,DoctorDiags[i].DiseaseDetails);             
+                              if(DoctorDiags[i].DiseaseDetails!=undefined){
+                                DoctorDiags[i].progress = searchObj(DoctorDiags[i].progress,DoctorDiags[i].DiseaseDetails);             
+                              }
                             }
                           }
 
