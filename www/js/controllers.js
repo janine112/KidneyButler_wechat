@@ -3172,7 +3172,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //聊天 XJZ 
-.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication','Counsels','$ionicPopup', function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication,Counsels,$ionicPopup) {
+.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication','Counsels','$ionicPopup','Account', function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication,Counsels,$ionicPopup,Account) {
     $scope.input = {
         text: ''
     }
@@ -3245,28 +3245,31 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     })}
                     //再看看有没有未结束的咨询
                 $scope.counselstatus=Storage.get('STATUSNOW');
-                var head='',body='';
-                if($scope.params.counseltype!='1'){
-                    head+='问诊';
-                    if($scope.counselstatus=='0'){
-                        head+='-已结束';
-                        body='您没有提问次数了。如需提问，请新建咨询或问诊';
+                Account.getCounts({doctorId:$scope.params.chatId,patientId:Storage.get('UID')})
+                .then(function(res){
+                    var head='',body='';
+                    if($scope.params.counseltype!='1'){
+                        head+='问诊';
+                        if($scope.counselstatus=='0'){
+                            head+='-已结束';
+                            body='您没有提问次数了。如需提问，请新建咨询或问诊';
+                        }else{
+                            body='您可以不限次数进行提问';
+                        }
                     }else{
-                        body='您可以不限次数进行提问';
+                        head+='咨询';
+                        if(res.result<=0){
+                            head+='-已结束';
+                            body='您没有提问次数了。如需提问，请新建咨询或问诊';
+                        }else{
+                            body='您还有'+res.result.count+'次提问机会';
+                        }
                     }
-                }else{
-                    head+='咨询';
-                    if(res.result<=0){
-                        head+='-已结束';
-                        body='您没有提问次数了。如需提问，请新建咨询或问诊';
-                    }else{
-                        body='您还有'+res.result+'次提问机会';
-                    }
-                }
-                var alertPopup = $ionicPopup.alert({
-                    title: head,
-                    template: body
-                });
+                    var alertPopup = $ionicPopup.alert({
+                        title: head,
+                        template: body
+                    });
+                })
             },function(err)
             {
                 console.log(err)
