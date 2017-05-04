@@ -4165,7 +4165,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
           {//不存在的医生ID
             if (data.results != "不存在的医生ID" && data.result != "请填写doctorId!")
             {
-              $scope.TimesRemain=data.result
+              $scope.freeTimesRemain=data.result.freeTimes;
+              $scope.TimesRemain=data.result.count;
               console.log($scope.TimesRemain)
             }
           },
