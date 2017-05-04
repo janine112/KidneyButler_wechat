@@ -4215,7 +4215,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   $scope.showoriginal=function(resizedpath){
     $scope.openModal();
     console.log(resizedpath)
-    var originalfilepath="http://121.43.107.106:8052/uploads/photos/"+resizedpath.slice(resizedpath.lastIndexOf('/')+1).substr(7)
+    var originalfilepath="http://121.43.107.106:8052/uploads/photos/"+resizedpath.slice(resizedpath.lastIndexOf('/')+1)
     console.log(originalfilepath)
     $scope.healthinfoimgurl=originalfilepath;
   }
