@@ -49,7 +49,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                     $ionicHistory.clearHistory();
                     User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
                     {
-                        if (angular.isDefined(data.phoneNo) = true)
+                        if (angular.isDefined(data.phoneNo) == true)
                         {
                             Storage.set('USERNAME',data.phoneNo);
                         }
