@@ -2706,7 +2706,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 //我的 页面--PXY
 //我的 页面--PXY
-.controller('MineCtrl', ['$scope','$ionicHistory','$state','$ionicPopup','$resource','Storage','CONFIG','$ionicLoading','$ionicPopover','Camera', 'Patient','Upload','wechat','$location',function($scope, $ionicHistory, $state, $ionicPopup, $resource, Storage, CONFIG, $ionicLoading, $ionicPopover, Camera,Patient,Upload,wechat,$location) {
+.controller('MineCtrl', ['$scope','$ionicHistory','$state','$ionicPopup','$resource','Storage','CONFIG','$ionicLoading','$ionicPopover','Camera', 'Patient','Upload','wechat','$location','$timeout',function($scope, $ionicHistory, $state, $ionicPopup, $resource, Storage, CONFIG, $ionicLoading, $ionicPopover, Camera,Patient,Upload,wechat,$location,$timeout) {
   $scope.barwidth="width:0%";
   // Storage.set("personalinfobackstate","mine")
   
@@ -2804,6 +2804,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
  
  // 上传照片并将照片读入页面-------------------------
   var photo_upload_display = function(serverId){
+    $ionicLoading.show({
+        template:'头像更新中',
+        duration:5000
+    })
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" +  "myAvatar.jpg";
     console.log(temp_photoaddress)
@@ -2811,13 +2815,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     wechat.download({serverId:serverId, name:temp_name})
     .then(function(res){
       //res.path_resized
-      //图片路径
-      $scope.myAvatar="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
-      console.log($scope.myAvatar)
-      // $state.reload("tab.mine")
-      Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
-        console.log(r);
-      })
+      $timeout(function(){
+          $ionicLoading.hide();
+          //图片路径
+          $scope.myAvatar="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
+          console.log($scope.myAvatar)
+          // $state.reload("tab.mine")
+          Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
+            console.log(r);
+          })
+      },1000)
+      
     },function(err){
       console.log(err);
       reject(err);
@@ -4031,6 +4039,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
  
  // 上传照片并将照片读入页面-------------------------
   var photo_upload_display = function(serverId){
+    $ionicLoading.show({
+      template:'图片更新中',
+      duration:5000
+    })
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" + new Date().getTime() + "healthinfo.jpg";
     console.log(temp_photoaddress)
@@ -4038,7 +4050,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     .then(function(res){
       var data=angular.fromJson(res)
       //图片路径
-      $scope.health.imgurl.push("http://121.43.107.106:8052/uploads/photos/"+temp_photoaddress)
+      $timeout(function(){
+        $ionicLoading.hide();
+        $scope.health.imgurl.push("http://121.43.107.106:8052/uploads/photos/"+temp_photoaddress)
+      },1000)
+      
       // $state.reload("tab.mine")
       // Storage.set('localhealthinfoimg',angular.toJson($scope.health.imgurl));
       console.log($scope.health.imgurl)
