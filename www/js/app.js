@@ -15,6 +15,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
     if (angular.isDefined(temp[1]) == true)
     {
         var code = temp[1].split('#')[0]
+        Storage.set('code',code)
     }
     if (angular.isDefined(temp[2]) == true)
     {

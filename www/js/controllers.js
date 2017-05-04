@@ -4752,7 +4752,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //医生列表--PXY
-.controller('DoctorCtrl', ['Storage','$ionicLoading','$scope','$state','$ionicPopup','$ionicHistory','Dict','Patient','$location','Doctor','Counsels',function(Storage,$ionicLoading,$scope, $state,$ionicPopup,$ionicHistory,Dict,Patient,$location,Doctor,Counsels) {
+.controller('DoctorCtrl', ['Storage','$ionicLoading','$scope','$state','$ionicPopup','$ionicHistory','Dict','Patient','$location','Doctor','Counsels','wechat','order',function(Storage,$ionicLoading,$scope, $state,$ionicPopup,$ionicHistory,Dict,Patient,$location,Doctor,Counsels,wechat,order) {
   $scope.barwidth="width:0%";
   $scope.Goback = function(){
     $ionicHistory.goBack();
@@ -5144,7 +5144,67 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   // $scope.consult = function(){
   //   $state.go("tab.consultquestion1")
   // }
+  $scope.pay = function(){
+    var config = "";
+    wechat.settingConfig({url:$location.absUrl()}).then(function(data){
+      // alert(data.results.timestamp)
+      config = data.results;
+      config.jsApiList = ['chooseWXPay']
+      // alert(config.jsApiList)
+      // alert(config.debug)
+      wx.config({
+        debug:true,
+        appId:config.appId,
+        timestamp:config.timestamp,
+        nonceStr:config.nonceStr,
+        signature:config.signature,
+        jsApiList:config.jsApiList
+      })
+      wx.ready(function(){
+        wx.checkJsApi({
+            jsApiList: ['chooseWXPay'],
+            success: function(res) {
+                var neworder = {
+                  userId:'doc01',
+                  money:0.01,
+                  goodsInfo:{
+                    class:'01',
+                    name:'咨询',
+                    notes:'测试'
+                  },
+                  paystatus:0,
+                  paytime:"2017-05-02"
+                }
+                order.insertOrder(neworder).then(function(data){
+                  wechat.addOrder({code:Storage.get('code'),orderNo:data.results.orderNo}).then(function(data){
+                    wx.chooseWXPay({
+                      timestamp: data.results.timestamp,
+                      nonceStr: data.results.nonceStr,
+                      package: data.results.package,
+                      signType: data.results.signType,
+                      paySign: data.results.paySign,
+                      success: function(res) {
+                       
+                      }
+                    })
+                  },function(err){
 
+                  })
+                },function(err){
+
+                })
+                
+            }
+        });
+      })
+      wx.error(function(res){
+        alert(res.errMsg)
+      })
+
+    },function(err){
+
+    })
+  }
 
 }])
 
