@@ -3258,7 +3258,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         }
                     }else{
                         head+='咨询';
-                        if(res.result<=0){
+                        if(res.result.count<=0){
                             head+='-已结束';
                             body='您没有提问次数了。如需提问，请新建咨询或问诊';
                         }else{
