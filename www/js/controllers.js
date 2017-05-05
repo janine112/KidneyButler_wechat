@@ -3207,39 +3207,42 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     $scope.$on('$ionicView.enter', function() {
         $rootScope.conversation.type = 'single';
         $rootScope.conversation.id = $state.params.chatId;
-        Counsels.getStatus({doctorId:$state.params.chatId,patientId:Storage.get('UID'),type:2})
+        Counsels.getStatus({doctorId:$state.params.chatId,patientId:Storage.get('UID')})
             .then(function(data)
             {
+                Storage.set('STATUSNOW',data.result.status);
+                $scope.params.counseltype = data.result.type;
                 console.log(data)
-                if(data.result.status==0)//没有未结束的问诊，再看看有没有未结束的咨询
-                {   Storage.set('STATUSNOW',data.result.status);
-                  $scope.params.counseltype=2;
-                 }
-                else if(data.result.status==1)//还有未结束的，先让你进去看看
-                {  Storage.set('STATUSNOW',data.result.status);
-                  $scope.params.counseltype=2;
-                  }
-                  else{ 
-                    Counsels.getStatus({doctorId:$state.params.chatId,patientId:Storage.get('UID'),type:1})
-                    .then(function(data)
-                    {
-                        console.log(data)                       
-                        if(data.result.status==0)//没有未结束的，直接进去吧，但要提示进去能看，发的话要收你钱的
-                        {
-                            $scope.params.counseltype=1;
-                        Storage.set('STATUSNOW',data.result.status);
-                        }
-                        else if(data.result.status==1)//还有未结束的，先让你进去看看
-                        {   $scope.params.counseltype=1;
-                       Storage.set('STATUSNOW',data.result.status);
-                        }
+                // if(data.result.status==0)//没有未结束的问诊，再看看有没有未结束的咨询
+                // {   Storage.set('STATUSNOW',data.result.status);
+                //   $scope.params.counseltype=2;
+                //  }
+                // else if(data.result.status==1)//还有未结束的，先让你进去看看
+                // {  Storage.set('STATUSNOW',data.result.status);
+                //   $scope.params.counseltype=2;
+                //   }
+                //   else{ 
+                    // Counsels.getStatus({doctorId:$state.params.chatId,patientId:Storage.get('UID'),type:1})
+                    // .then(function(data)
+                    // {
+                    //     console.log(data)                       
+                    //     if(data.result.status==0)//没有未结束的，直接进去吧，但要提示进去能看，发的话要收你钱的
+                    //     {
+                    //         $scope.params.counseltype=1;
+                    //     Storage.set('STATUSNOW',data.result.status);
+                    //     }
+                    //     else if(data.result.status==1)//还有未结束的，先让你进去看看
+                    //     {   $scope.params.counseltype=1;
+                    //    Storage.set('STATUSNOW',data.result.status);
+                    //     }
                     
-                    },function(err)
-                    {
-                        console.log(err)
-                    })}
+                    // },function(err)
+                    // {
+                    //     console.log(err)
+                    // })
+                // }
                     //再看看有没有未结束的咨询
-                $scope.counselstatus=Storage.get('STATUSNOW');
+                $scope.counselstatus=data.result.status;
                 Account.getCounts({doctorId:$scope.params.chatId,patientId:Storage.get('UID')})
                 .then(function(res){
                     var head='',body='';
