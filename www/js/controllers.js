@@ -928,10 +928,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                 params    :{
                                     'regsubmit':'yes',
                                     'formhash':'',
-                                    'username':Storage.get('USERNAME'),
-                                    'password':Storage.get('USERNAME'),
-                                    'password2':Storage.get('USERNAME'),
-                                    'email':Storage.get('USERNAME')+'@qq.com'
+                                    'username':$scope.User.name+Storage.get('USERNAME').slice(7),
+                                    'password':$scope.User.name+Storage.get('USERNAME').slice(7),
+                                    'password2':$scope.User.name+Storage.get('USERNAME').slice(7),
+                                    'email':Storage.get('USERNAME')+'@bme319.com'
                                 },  // pass in data as strings
                                 headers : {
                                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -6631,12 +6631,23 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 //论坛
-.controller('forumCtrl', ['$scope', '$state', '$sce','$http','Storage',function ($scope, $state,$sce,$http,Storage) {
+.controller('forumCtrl', ['$scope', '$state', '$sce','$http','Storage','Patient',function ($scope, $state,$sce,$http,Storage,Patient) {
     var phoneNum=Storage.get('USERNAME')
     console.log(phoneNum)
+    Patient.getPatientDetail({userId: Storage.get('UID')})
+    .then(function(data)
+    {
+      console.log(data)
+      $http({
+          method  : 'POST',
+          url     : 'http://121.43.107.106:6699/member.php?mod=logging&action=logout&formhash=xxxxxx'
+      }).success(function(d) {
+              // console.log(data);
+          $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106:6699/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+data.results.name+phoneNum.slice(7)+"&password="+data.results.name+phoneNum.slice(7));
+          $scope.navigation=$sce.trustAsResourceUrl("http://121.43.107.106:6699/");
+      });
+    })
 
-    $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106:6699/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+phoneNum+"&password="+phoneNum);
-    $scope.navigation=$sce.trustAsResourceUrl("http://121.43.107.106:6699/");
 }])
 
 //写评论
