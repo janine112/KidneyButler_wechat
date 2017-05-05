@@ -261,6 +261,10 @@ angular.module('kidney.directives', ['kidney.services'])
         scope.minRating = scope.ratingsObj.minRating || 1;
         scope.readOnly = scope.ratingsObj.readOnly || false;
 
+        scope.$on('changeratingstar',function(event,r,tof){
+          scope.rating=r;
+          scope.readOnly=tof;
+        })
         //Setting the color for the icon, when it is active
         scope.iconOnColor = {
           color: scope.iconOnColor

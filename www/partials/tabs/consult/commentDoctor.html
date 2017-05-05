@@ -1,5 +1,10 @@
 <ion-view view-title="评论" hide-nav-bar="false" cache-view="false">
-
+  <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
+      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="left" >
+         <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-chevron-left"></i>返回</button>
+      </ion-nav-buttons>
+      
+    </ion-nav-bar>
   <ion-content>
     <!-- <div class="bar bar-calm item-input-inset">
      <button class="button button-icon icon ion-ios-arrow-left" ng-click="nvGoback()">返回</button> 
@@ -31,12 +36,12 @@
     <div class="list list-inset">
       <div class="item item-divider"> 评论</div> 
       <label class="item item-input"><i class="icon ion-android-create placeholder-icon"></i>
-        <textarea placeholder="说说您对该医生的评价，至少10个字哦" rows="3" ng-model="comment.commentContent"></textarea>
+        <textarea placeholder="说说您对该医生的评价，至少10个字哦" rows="3" ng-model="comment.commentContent" ng-disabled="editable"></textarea>
       </label>
     </div>
 
     <div class="list list-inset">
-    <button class="button button-block button-balanced" ng-click="deliverComment()">发表</button>
+    <button class="button button-block button-balanced" ng-click="deliverComment()" ng-disabled="editable">发表</button>
     </div>
 
   </ion-content>

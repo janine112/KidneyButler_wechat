@@ -878,7 +878,9 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getCounsel:{method:'GET', params:{route: 'getCounsels'}, timeout: 100000},
             questionaire:{method:'POST', params:{route: 'questionaire'}, timeout: 100000},
             getStatus:{method:'GET', params:{route: 'getStatus'}, timeout: 100000},
-            changeStatus:{method:'POST', params:{route: 'changeStatus'}, timeout: 100000}
+            changeStatus:{method:'POST', params:{route: 'changeStatus'}, timeout: 100000},
+            changeType:{method:'POST', params:{route: 'changeType'}, timeout: 100000},
+            insertCommentScore:{method:'POST', params:{route: 'insertCommentScore'}, timeout: 100000}
         });
     };
 
@@ -934,7 +936,8 @@ angular.module('kidney.services', ['ionic','ngResource'])
 
     var Comment =function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'comment'},{
-            getComments:{method:'GET', params:{route: 'getComments'}, timeout: 100000}
+            getComments:{method:'GET', params:{route: 'getComments'}, timeout: 100000},
+            getCommentsByC:{method:'GET', params:{route: 'getCommentsByC'}, timeout: 100000}
         });
     }
 
@@ -949,7 +952,8 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'account'},{
             getAccountInfo:{method:'GET', params:{route: 'getAccountInfo'}, timeout: 100000},
             getCounts:{method:'GET', params:{route: 'getCounts'}, timeout: 100000},
-            modifyCounts:{method:'POST', params:{route: 'modifyCounts'}, timeout: 100000}
+            modifyCounts:{method:'POST', params:{route: 'modifyCounts'}, timeout: 100000},
+            rechargeDoctor:{method:'POST', params:{route: 'rechargeDoctor'}, timeout: 100000}
         });
     }
 
@@ -1860,6 +1864,36 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
+    //params->0:{
+    //              patientId:'p01',
+    //              doctorId:'doc01',
+    //              type:1//1->咨询 2->问诊,3->咨询转问诊
+    //          }
+    self.changeType = function(params){
+        var deferred = $q.defer();
+        Data.Counsels.changeType(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //insertCommentScore
+    self.insertCommentScore = function(params){
+        var deferred = $q.defer();
+        Data.Counsels.insertCommentScore(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
     return self;
 }])
 
@@ -2010,6 +2044,19 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
+    //
+    self.rechargeDoctor = function(params){
+        var deferred = $q.defer();
+        Data.Account.rechargeDoctor(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
     return self;
 }])
 .factory('VitalSign', ['$q', 'Data', function($q, Data){
@@ -2047,6 +2094,19 @@ angular.module('kidney.services', ['ionic','ngResource'])
     self.getComments = function(params){
         var deferred = $q.defer();
         Data.Comment.getComments(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //根据counselid取comment zxf
+    self.getCommentsByC = function(params){
+        var deferred = $q.defer();
+        Data.Comment.getCommentsByC(
             params,
             function(data, headers){
                 deferred.resolve(data);
