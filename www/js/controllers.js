@@ -709,7 +709,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1999, 1, 1),   //Optional
+    from: new Date(1900, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       DiagnosisdatePickerCallback(val);
@@ -746,7 +746,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1999, 1, 1),   //Optional
+    from: new Date(1900, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       OperationdatePickerCallback(val);
@@ -783,7 +783,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1999, 1, 1),   //Optional
+    from: new Date(1900, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       BirthdatePickerCallback(val);
@@ -4050,7 +4050,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1999, 1, 1),   //Optional
+    from: new Date(1900, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       datePickerCallback(val);
@@ -6169,7 +6169,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1999, 1, 1),   //Optional
+    from: new Date(1900, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       DiagnosisdatePickerCallback(val);
@@ -6206,7 +6206,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     showTodayButton: 'false', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(1999, 1, 1),   //Optional
+    from: new Date(1900, 1, 1),   //Optional
     to: new Date(),    //Optional
     callback: function (val) {    //Mandatory
       OperationdatePickerCallback(val);
