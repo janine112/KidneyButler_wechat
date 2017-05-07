@@ -3497,7 +3497,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //聊天 XJZ 
-.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication','Counsels','$ionicPopup','Account','New','thisPatient', function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication,Counsels,$ionicPopup,Account,New,thisPatient) {
+.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication','Counsels','$ionicPopup','Account','News','thisPatient', function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication,Counsels,$ionicPopup,Account,News,thisPatient) {
     $scope.input = {
         text: ''
     }
@@ -3618,7 +3618,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         $scope.pushMsg(data.msg);
                     });
                 }
-                New.insertNews({userId:Storage.get('UID'),sendBy:$scope.params.groupId,readOrNot:1});
+                News.insertNews({userId:Storage.get('UID'),sendBy:$scope.params.groupId,readOrNot:1});
                 setTimeout(function() {
                     // if ($scope.params.counseltype == 1 && Storage.get('STATUSNOW') == 1) {
                         Counsels.getStatus({ doctorId: $state.params.chatId, patientId: Storage.get('UID')})
