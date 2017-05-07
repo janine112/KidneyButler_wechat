@@ -1105,6 +1105,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       config.jsApiList = ['scanQRCode']
       // alert(config.jsApiList)
       // alert(config.debug)
+      console.log(angular.toJson(config))
       wx.config({
         debug:false,
         appId:config.appId,
@@ -2874,6 +2875,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       config.jsApiList = ['chooseImage','uploadImage']
       // alert(config.jsApiList)
       // alert(config.debug)
+      console.log(angular.toJson(config))
       wx.config({
         debug:false,
         appId:config.appId,
@@ -2929,6 +2931,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         config.jsApiList = ['chooseImage','uploadImage']
         // alert(config.jsApiList)
         // alert(config.debug)
+        console.log(angular.toJson(config))
         wx.config({
           debug:false,
           appId:config.appId,
@@ -3329,6 +3332,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         wechat.settingConfig({ url: $location.absUrl() }).then(function(data) {
             config = data.results;
             config.jsApiList = ['startRecord','stopRecord','playVoice','chooseImage','uploadVoice', 'uploadImage']
+            console.log(angular.toJson(config))
             wx.config({
                 debug: false,
                 appId: config.appId,
@@ -4141,6 +4145,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       config.jsApiList = ['chooseImage','uploadImage']
       // alert(config.jsApiList)
       // alert(config.debug)
+      console.log(angular.toJson(config))
       wx.config({
         debug:false,
         appId:config.appId,
@@ -4197,6 +4202,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         config.jsApiList = ['chooseImage','uploadImage']
         // alert(config.jsApiList)
         // alert(config.debug)
+        console.log(angular.toJson(config))
         wx.config({
           debug:false,
           appId:config.appId,
@@ -5207,6 +5213,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       config.jsApiList = ['chooseWXPay']
       // alert(config.jsApiList)
       // alert(config.debug)
+      console.log(angular.toJson(config))
       wx.config({
         debug:true,
         appId:config.appId,
