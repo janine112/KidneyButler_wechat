@@ -4761,7 +4761,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //医生列表--PXY
-.controller('DoctorCtrl', ['Storage','$ionicLoading','$scope','$state','$ionicPopup','$ionicHistory','Dict','Patient','$location','Doctor','Counsels','wechat','order','Account',function(Storage,$ionicLoading,$scope, $state,$ionicPopup,$ionicHistory,Dict,Patient,$location,Doctor,Counsels,wechat,order,Account) {
+.controller('DoctorCtrl', ['Storage','$ionicLoading','$scope','$state','$ionicPopup','$ionicHistory','Dict','Patient','$location','Doctor','Counsels','wechat','order','Account','$http',function(Storage,$ionicLoading,$scope, $state,$ionicPopup,$ionicHistory,Dict,Patient,$location,Doctor,Counsels,wechat,order,Account,$http) {
   $scope.barwidth="width:0%";
   $scope.Goback = function(){
     $ionicHistory.goBack();
@@ -5222,20 +5222,27 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   paytime:"2017-05-02"
                 }
                 order.insertOrder(neworder).then(function(data){
-                  wechat.addOrder({openid:Storage.get('openid'),orderNo:data.results.orderNo}).then(function(data){
-                    wx.chooseWXPay({
-                      timestamp: data.results.timestamp,
-                      nonceStr: data.results.nonceStr,
-                      package: data.results.package,
-                      signType: data.results.signType,
-                      paySign: data.results.paySign,
-                      success: function(res) {
-                       
-                      }
-                    })
-                  },function(err){
+                  var json = 'http://ipv4.myexternalip.com/json';
+                  $http.get(json).then(function(result) {
+                      console.log(result.data.ip)
+                      wechat.addOrder({openid:Storage.get('openid'),orderNo:data.results.orderNo,ip:result}).then(function(data){
+                        wx.chooseWXPay({
+                          timestamp: data.results.timestamp,
+                          nonceStr: data.results.nonceStr,
+                          package: data.results.package,
+                          signType: data.results.signType,
+                          paySign: data.results.paySign,
+                          success: function(res) {
+                           
+                          }
+                        })
+                      },function(err){
 
-                  })
+                      })
+                  }, function(e) {
+                      console.log(e);
+                  });
+                  
                 },function(err){
 
                 })
