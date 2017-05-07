@@ -660,15 +660,6 @@ angular.module('kidney.services', ['ionic','ngResource'])
         getPushRegistrationID: getPushRegistrationID,
     }
 }])
-.factory('thisPatient',['Patient','Storage',function(Patient,Storage){
-    Patient.getPatientDetail({ userId: Storage.get('UID')})
-    .then(function(data) {
-        return data.results;
-    }, function(err) {
-        return {}
-    })
-
-}])
 //获取图片，拍照or相册，见CONFIG.cameraOptions。return promise。xjz
 .factory('Camera', ['$q','$cordovaCamera','$cordovaFileTransfer','CONFIG','fs','Upload',function($q,$cordovaCamera,$cordovaFileTransfer,CONFIG,fs,Upload) { 
   return {
