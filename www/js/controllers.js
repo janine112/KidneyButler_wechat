@@ -3448,7 +3448,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   okText:"确认",
                   cancelText:"取消"
               }).then(function(res){
-                  if(res){counseltype
+                  if(res){
                       $state.go("tab.consult-chat",{chatId:doctorId,type:1,status:1}); //虽然传了type和status但不打算使用 byZYH
                   }
 
@@ -3460,7 +3460,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   okText:"确认",
                   cancelText:"取消"
               }).then(function(res){
-                  if(res){counseltype
+                  if(res){
                       $state.go("tab.consult-chat",{chatId:doctorId,type:1,status:0}); //虽然传了type和status但不打算使用 byZYH
                   }
 
@@ -3474,7 +3474,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   okText:"确认",
                   cancelText:"取消"
               }).then(function(res){
-                  if(res){counseltype
+                  if(res){
                       $state.go("tab.consult-chat",{chatId:doctorId,type:data.result.type,status:1}); //虽然传了type和status但不打算使用 byZYH
                   }
 
@@ -3486,7 +3486,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   okText:"确认",
                   cancelText:"取消"
               }).then(function(res){
-                  if(res){counseltype
+                  if(res){
                       $state.go("tab.consult-chat",{chatId:doctorId,type:data.result.type,status:0}); //虽然传了type和status但不打算使用 byZYH
                   }
 
