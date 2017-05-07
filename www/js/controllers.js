@@ -3497,7 +3497,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //聊天 XJZ 
-.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication','Counsels','$ionicPopup','Account','News','thisPatient', function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication,Counsels,$ionicPopup,Account,News,thisPatient) {
+.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication','Counsels','$ionicPopup','Account','News', function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication,Counsels,$ionicPopup,Account,News) {
     $scope.input = {
         text: ''
     }
@@ -3604,6 +3604,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             })
         Patient.getPatientDetail({ userId: $scope.params.UID })
         .then(function(response) {
+            thisPatient=response.results;
             // socket = io.connect('ws://121.43.107.106:4050/chat');
             socket.emit('newUser',{user_name:response.results.name,user_id:$scope.params.UID});
             socket.on('err',function(data){
@@ -6022,7 +6023,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   }
 }])
 //咨询问卷--TDY
-.controller('consultquestionCtrl', ['$ionicLoading','Task','$scope', '$ionicPopup','$ionicModal','$state', 'Dict','Storage', 'Patient', 'VitalSign','$filter','$stateParams','$ionicPopover','Camera','Counsels','JM','CONFIG','Health','Account','thisPatient',function ($ionicLoading,Task,$scope,$ionicPopup, $ionicModal,$state,Dict,Storage,Patient,VitalSign,$filter,$stateParams,$ionicPopover,Camera,Counsels,JM,CONFIG,Health,Account,thisPatient) {
+.controller('consultquestionCtrl', ['$ionicLoading','Task','$scope', '$ionicPopup','$ionicModal','$state', 'Dict','Storage', 'Patient', 'VitalSign','$filter','$stateParams','$ionicPopover','Camera','Counsels','JM','CONFIG','Health','Account',function ($ionicLoading,Task,$scope,$ionicPopup, $ionicModal,$state,Dict,Storage,Patient,VitalSign,$filter,$stateParams,$ionicPopover,Camera,Counsels,JM,CONFIG,Health,Account) {
   $scope.showProgress = false
   $scope.showSurgicalTime = false
   var patientId = Storage.get('UID')
@@ -6279,7 +6280,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
           $scope.BasicInfo=angular.merge($scope.BasicInfo, data.results);
           // console.log($scope.BasicInfo)
           // $scope.BasicInfo = data.results
-          // $scope.BasicInfo.name = data.results.name
+          thisPatient = data.results
           // $scope.BasicInfo.gender = data.results.gender
           // $scope.BasicInfo.bloodType = data.results.bloodType
           // $scope.BasicInfo.hypertension = data.results.hypertension
@@ -6748,7 +6749,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 console.log(err)
               })
             }
-          
+            
             Storage.rm('tempquestionare')
             Storage.rm('tempimgrul')
             var msgJson={
