@@ -9,14 +9,15 @@
     
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
     <ion-content padding="true" style="">
-	   
-   		
+     
+      
 
-
+    <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
+      
      <div class="content has-header ionic-pseudo">
 
       <div class="list">
-      	<a class="item item-icon-left item-icon-right" href="#/insurance">
+        <a class="item item-icon-left item-icon-right" href="#/insurance">
           <i class="icon ion-heart"></i>
           肾病保险服务
           <i class="icon ion-chevron-right"></i>
@@ -34,7 +35,7 @@
           <span class="item-note" style="color:#333;font:bolder;">{{TimesRemain}}</span>
         </a>
 
-        <!-- <a class="item item-icon-left" >
+<!--         <a class="item item-icon-left" >
           <i class="icon ion-ios-cart"></i>
           账户余额
           <span class="item-note" style="color:#333; font:bolder;">{{Balance}}</span>

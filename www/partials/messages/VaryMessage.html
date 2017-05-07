@@ -1,19 +1,29 @@
-<ion-view view-title="{{messages.name}}消息">
+<ion-view view-title="{{varyMes.name}}消息">
+
+     <ion-nav-bar class="bar-dark" >
+      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="left" >
+         <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-chevron-left"></i>返回</button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
 
     <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
     <ion-content padding="true" style="">
+    <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
 
-    <div class="card" ng-show="messages.values.length==0">
+    <div class="card" ng-show="messages.length==0">
         <div class="item item-text-wrap">
             暂时没有此类消息
         </div>
     </div>
 
-    <div class="list card" ng-repeat="message in messages.values">
+    <div class="list card" ng-repeat="message in messages" ng-click="MoreMessageDetail($event,message.sendBy,message.type)">
 
         <div class="item item-avatar">
-            <img ng-src="img/{{avatar}}">
-            <h2>{{message.title}}</h2>
+            <img ng-src="img\{{varyMes.avatar}}" ng-if="notInsurance">
+            <img ng-src="{{message.docPhoto || 'img/doctor3.PNG'}}" ng-if="!notInsurance">
+            <h2 ng-if="notInsurance">{{message.title}}</h2>
+            <h2 ng-if="!notInsurance">{{message.docName}}</h2>
+
             <p>{{message.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
         </div>
 

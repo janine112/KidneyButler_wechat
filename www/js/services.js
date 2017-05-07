@@ -963,11 +963,12 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
     }
 
-    var New = function(){
+    var News = function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'new'},{
-            getNews:{method:'GET',params:{route:'getNews'},timeout:100000},
-            insertNews:{method:'POST',params:{route:'insertNews'},timeout:100000}
-        })
+            getNews:{method:'GET', params:{route: 'getNews'}, timeout: 100000},
+            insertNews:{method:'POST', params:{route: 'insertNews'}, timeout: 100000},
+            getNewsByReadOrNot:{method:'GET', params:{route: 'getNewsByReadOrNot'}, timeout: 100000}
+        });
     }
 
     var Communication =function(){
@@ -1017,7 +1018,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             serve.VitalSign = VitalSign();
             serve.Account = Account();
             serve.Message = Message();
-            serve.New = New();
+            serve.News = News();
             serve.Communication = Communication();
             serve.wechat = wechat();
             serve.order = order();
@@ -1037,7 +1038,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.VitalSign = VitalSign();
     serve.Account = Account();
     serve.Message = Message();
-    serve.New = New();
+    serve.News = News();
     serve.Communication = Communication();
     serve.wechat = wechat();
     serve.order = order();
@@ -2005,11 +2006,12 @@ angular.module('kidney.services', ['ionic','ngResource'])
     };
     return self;
 }])
-.factory('New',['$q','Data',function($q,Data){
+.factory('News', ['$q', 'Data', function($q, Data){
     var self = this;
+    //params->0:{type:1}
     self.getNews = function(params){
         var deferred = $q.defer();
-        Data.New.getNews(
+        Data.News.getNews(
             params,
             function(data, headers){
                 deferred.resolve(data);
@@ -2018,10 +2020,11 @@ angular.module('kidney.services', ['ionic','ngResource'])
                 deferred.reject(err);
         });
         return deferred.promise;
-    }
+    };
+
     self.insertNews = function(params){
         var deferred = $q.defer();
-        Data.New.insertNews(
+        Data.News.insertNews(
             params,
             function(data, headers){
                 deferred.resolve(data);
@@ -2030,7 +2033,20 @@ angular.module('kidney.services', ['ionic','ngResource'])
                 deferred.reject(err);
         });
         return deferred.promise;
-    }
+    };
+     self.getNewsByReadOrNot = function(params){
+        var deferred = $q.defer();
+        Data.News.getNewsByReadOrNot(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+
     return self;
 }])
 .factory('Account', ['$q', 'Data', function($q, Data){

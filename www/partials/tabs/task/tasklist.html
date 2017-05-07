@@ -1,7 +1,7 @@
 <ion-view view-title='任务'>
-    <!-- <ion-nav-buttons side="primary">
-        <a class="button icon-right ion-ios-refresh-empty button-clear" ng-click="Refresh()"></a>
-    </ion-nav-buttons> -->
+    <ion-nav-buttons side="primary">
+        <a class="button icon-left ion-qr-scanner button-clear" ng-click="scanbarcode()"></a>
+    </ion-nav-buttons>
     <div style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}"></div>
     <ion-content class="padding">
         <ion-refresher pulling-text="下拉刷新" spinner='ripple' refreshing-text="。。。" on-refresh="Refresh()">
@@ -22,9 +22,9 @@
                     </div>
                     <br />
                     <p>{{item.content}}</p>
-                    <ion-option-button class="button-calm" ng-click="showPopup(item, 'input', 'edit')">编辑</ion-option-button>
-                    <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showPopup(item, 'input', 'fill')"></i>
-                    <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty" ng-click="showPopup(item, 'input')"></i>
+                    <ion-option-button class="button-calm" ng-click="showMesPop(item,'edit')">编辑</ion-option-button>
+                    <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showMesPop(item,'fill')"></i>
+                    <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
 
                 </ion-item>
             </ion-list>
@@ -44,8 +44,8 @@
                         <div class="scheduleGray"></div>
                         <div class="scheduleGreen" style="width:{{item.Progress}}"></div>
                     </div>
-                    <ion-option-button class="button-calm" ng-click="showPopup(item, 'textarea', 'edit')">编辑</ion-option-button>
-                    <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showPopup(item, 'textarea', 'fill')"></i>
+                    <ion-option-button class="button-calm" ng-click="showHemoPop(item, 'edit')">编辑</ion-option-button>
+                    <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showHemoPop(item, 'fill')"></i>
                     <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
                 </ion-item>
                 <ion-item class="item item-icon-right" ng-repeat="item in Tasks.Other">
@@ -54,9 +54,10 @@
                     <p ng-if="item.frequencyTimes != 0">任务时间：{{item.startTime}}</p>
                     <p ng-if="item.DoneFlag">上次执行：{{item.endTime}}</p>
                     <p>{{item.content}}</p>
-                    <ion-option-button class="button-calm" ng-click="showPopup(item, 'textarea', 'edit')">编辑</ion-option-button>
-                    <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showPopup(item, 'textarea', 'fill')"></i>
+                    <ion-option-button class="button-calm" ng-click="showOtherPop(item, 'edit')">编辑</ion-option-button>
+                    <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showOtherPop(item, 'fill')"></i>
                     <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
+                    <button ng-if = "item.Flag" ng-click = "StartNewTask(item)">新任务</button>
                 </ion-item>
                 </ion-list>
             </a>
