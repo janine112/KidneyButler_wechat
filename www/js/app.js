@@ -387,15 +387,16 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
          
     })
     .state('tab.myHealthInfoDetail', {
-        url: '/mine/HealthInfoDetail/',
-        params: {id:null},
-        views: {
-          'tab-mine': {
-            templateUrl: 'partials/tabs/mine/editHealthInfo.html',
-            controller: 'HealthDetailCtrl'
-          }
-
+      cache:false,
+      url: '/mine/HealthInfoDetail/',
+      params: {id:null,caneidt:null},
+      views: {
+        'tab-mine': {
+          templateUrl: 'partials/tabs/mine/editHealthInfo.html',
+          controller: 'HealthDetailCtrl'
         }
+
+      }
          
     })
      .state('tab.myMoney', {
