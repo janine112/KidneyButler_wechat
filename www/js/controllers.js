@@ -3823,7 +3823,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
   $scope.newHealth = function(){
-    $state.go('tab.myHealthInfoDetail',{id:editId,caneidt:false});
+    $state.go('tab.myHealthInfoDetail',{id:null,caneidt:false});
 
   }
 
