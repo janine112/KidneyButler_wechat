@@ -963,6 +963,13 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
     }
 
+    var New = function(){
+        return $resource(CONFIG.baseUrl + ':path/:route',{path:'new'},{
+            getNews:{method:'GET',params:{route:'getNews'},timeout:100000},
+            insertNews:{method:'POST',params:{route:'insertNews'},timeout:100000}
+        })
+    }
+
     var Communication =function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'communication'},{
             getCommunication:{method:'GET', params:{route: 'getCommunication'}, timeout: 100000},
@@ -1010,6 +1017,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             serve.VitalSign = VitalSign();
             serve.Account = Account();
             serve.Message = Message();
+            serve.New = New();
             serve.Communication = Communication();
             serve.wechat = wechat();
             serve.order = order();
@@ -1029,6 +1037,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.VitalSign = VitalSign();
     serve.Account = Account();
     serve.Message = Message();
+    serve.New = New();
     serve.Communication = Communication();
     serve.wechat = wechat();
     serve.order = order();
@@ -1994,6 +2003,34 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
+    return self;
+}])
+.factory('New',['$q','Data',function($q,Data){
+    var self = this;
+    self.getNews = function(params){
+        var deferred = $q.defer();
+        Data.New.getNews(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    }
+    self.insertNews = function(params){
+        var deferred = $q.defer();
+        Data.New.insertNews(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    }
     return self;
 }])
 .factory('Account', ['$q', 'Data', function($q, Data){
