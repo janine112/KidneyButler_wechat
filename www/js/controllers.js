@@ -5225,7 +5225,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   var json = 'http://ipv4.myexternalip.com/json';
                   $http.get(json).then(function(result) {
                       console.log(result.data.ip)
-                      wechat.addOrder({openid:Storage.get('openid'),orderNo:data.results.orderNo,ip:result}).then(function(data){
+                      if (result.data.ip == null || result.data.ip == undefined || result.data.ip == "")
+                      {
+                        result.data.ip = "121.43.107.106"
+                      }
+                      wechat.addOrder({openid:Storage.get('openid'),orderNo:data.results.orderNo,ip:result.data.ip}).then(function(data){
                         wx.chooseWXPay({
                           timestamp: data.results.timestamp,
                           nonceStr: data.results.nonceStr,
