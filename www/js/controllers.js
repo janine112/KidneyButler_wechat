@@ -3391,7 +3391,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
                 FilteredDoctors = FilterDoctor(data.results);
                 console.log(FilteredDoctors);
-                News.getNews({userId:Storage.get('UID'),type:4}).then(
+                News.getNews({userId:Storage.get('UID'),type:11}).then(
                     function(data){
                         console.log(data.results);
                         if(data.results){
@@ -3458,7 +3458,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   okText:"确认",
                   cancelText:"取消"
               }).then(function(res){
-                  if(res){
+                  if(res){counseltype
                       $state.go("tab.consult-chat",{chatId:doctorId,type:1,status:1}); //虽然传了type和status但不打算使用 byZYH
                   }
 
@@ -3470,7 +3470,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   okText:"确认",
                   cancelText:"取消"
               }).then(function(res){
-                  if(res){
+                  if(res){counseltype
                       $state.go("tab.consult-chat",{chatId:doctorId,type:1,status:0}); //虽然传了type和status但不打算使用 byZYH
                   }
 
@@ -3484,7 +3484,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   okText:"确认",
                   cancelText:"取消"
               }).then(function(res){
-                  if(res){
+                  if(res){counseltype
                       $state.go("tab.consult-chat",{chatId:doctorId,type:data.result.type,status:1}); //虽然传了type和status但不打算使用 byZYH
                   }
 
@@ -3496,7 +3496,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   okText:"确认",
                   cancelText:"取消"
               }).then(function(res){
-                  if(res){
+                  if(res){counseltype
                       $state.go("tab.consult-chat",{chatId:doctorId,type:data.result.type,status:0}); //虽然传了type和status但不打算使用 byZYH
                   }
 
@@ -4758,9 +4758,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         );
 
 
-        News.getNewsByReadOrNot({userId:receiver,type:4,readOrNot:0}).then(
+        News.getNewsByReadOrNot({userId:receiver,type:11,readOrNot:0}).then(
             function(data){
+                console.log(data);
                 if(data.results.length){
+
                     
                     for(var x in data.results){
                         getDocNamePhoto(data.results[x].sendBy,data.results[x]);
@@ -4934,9 +4936,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         
         Message.getMessages({userId:Storage.get('UID'),type:Storage.get('getMessageType')}).then(
             function(data){
-                console.log(data);
+                
                 if(data.results.length){
-                    
+                    console.log(data.results);
                     if(Storage.get('getMessageType')==5){
                         for(var x in data.results){
                             getDocNamePhoto(data.results[x].sendBy,data.results[x]);
@@ -4961,6 +4963,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         News.getNewsByReadOrNot({userId:Storage.get('UID'),type:Storage.get('MessageType'),readOrNot:0}).then(
             function(data){
                 if(data.results){
+                    console.log(data.results);
                     if(data.results[0].readOrNot==0){
                         data.results[0].readOrNot=1;
                         News.insertNews(data.results[0]).then(
