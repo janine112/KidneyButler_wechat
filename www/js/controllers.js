@@ -6989,9 +6989,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       if($stateParams.counselId!=undefined&&$stateParams.counselId!=""&&$stateParams.counselId!=null){
         console.log($stateParams.counselId)
         Comment.getCommentsByC({counselId:$stateParams.counselId}).then(function(data){
-          if(data.results!=""||data.results.totalScore!=""){
-            console.log(data.results[0].totalScore/2)
-            console.log(1111)
+          if(!data.results.length){
             // //初始化
             $scope.comment.score=data.results[0].totalScore/2
             $scope.comment.commentContent=data.results[0].content
@@ -7026,7 +7024,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         
         else
         {//20170504 zxf
-          Counsels.insertCommentScore({doctorId:$stateParams.doctorId,patientId:$stateParams.patientId,sounselId:$stateParams.sounselId,totalScore:$scope.comment.score*2,content:$scope.comment.commentContent})
+          Counsels.insertCommentScore({doctorId:$stateParams.doctorId,patientId:$stateParams.patientId,counselId:$stateParams.counselId,totalScore:$scope.comment.score*2,content:$scope.comment.commentContent})
           // Counsels.insertCommentScore({doctorId:"doc01",patientId:"p01",counselId:"counsel01",totalScore:$scope.comment.score,content:$scope.comment.commentContent})
           .then(function(data){
             if(data.result=="成功"){//插入成功
