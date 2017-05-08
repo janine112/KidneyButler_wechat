@@ -4035,11 +4035,23 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         });
     }
 
+    $scope.backview=$ionicHistory.viewHistory().backView;
+    $scope.backstateId=null;
+    if($scope.backview!=null){
+      $scope.backstateId=$scope.backview.stateId
+    }
     $scope.goChats = function() {
         $ionicHistory.nextViewOptions({
             disableBack: true
         });
-        $state.go('tab.myDoctors');
+        if($scope.backstateId=="tab.myConsultRecord"){
+          $state.go("tab.myConsultRecord")
+        }
+        else if($scope.backstateId=="messages"){
+            $state.go('messages');
+        }else{
+          $state.go('tab.myDoctors');
+        }
         // $ionicHistory.goBack();
     }
 
