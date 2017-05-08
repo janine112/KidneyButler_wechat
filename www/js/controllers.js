@@ -3923,7 +3923,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
             targetID:$scope.params.chatId,
-            targetName:'',
+            targetName:$scope.params.counsel.doctorId.name,
             targetType:'single',
             status:'send_going',
             createTimeInMillis: Date.now(),
@@ -5293,7 +5293,32 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                       },function(err){
                         console.log(err)
                       })
-                      $state.go("tab.consult-chat",{chatId:id,type:3,status:1}); 
+                      var msgJson={
+                        contentType:'custom',
+                        fromName:'',
+                        fromID:Storage.get('UID'),
+                        fromUser:{
+                            avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+Storage.get('UID')+'_myAvatar.jpg'
+                        },
+                        targetID:id,
+                        targetName:'',
+                        targetType:'single',
+                        status:'send_going',
+                        createTimeInMillis: Date.now(),
+                        newsType:'11',
+                        content:{
+                            type:'counsel-upgrade',
+                        }
+                        }
+                        socket.emit('newUser',{user_name:Storage.get('UID'),user_id:Storage.get('UID')});
+                        socket.emit('message',{msg:msgJson,to:id});
+                        socket.on('messageRes',function(data){
+                          socket.off('messageRes');
+                          socket.emit('disconnect');
+                          $state.go("tab.consult-chat",{chatId:id,type:3,status:1}); 
+                        })
+
+                      
                     }
                   },function(err)
                   {
@@ -5634,7 +5659,33 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                       },function(err){
                         console.log(err)
                       })
-                      $state.go("tab.consult-chat",{chatId:DoctorId,type:3,status:1}); 
+
+                      var msgJson={
+                        contentType:'custom',
+                        fromName:'',
+                        fromID:Storage.get('UID'),
+                        fromUser:{
+                            avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+Storage.get('UID')+'_myAvatar.jpg'
+                        },
+                        targetID:DoctorId,
+                        targetName:'',
+                        targetType:'single',
+                        status:'send_going',
+                        createTimeInMillis: Date.now(),
+                        newsType:'11',
+                        content:{
+                            type:'counsel-upgrade',
+                        }
+                        }
+                        socket.emit('newUser',{user_name:Storage.get('UID'),user_id:Storage.get('UID')});
+                        socket.emit('message',{msg:msgJson,to:DoctorId});
+                        socket.on('messageRes',function(data){
+                          socket.off('messageRes');
+                          socket.emit('disconnect');
+                          $state.go("tab.consult-chat",{chatId:DoctorId,type:3,status:1}); 
+                          // $state.go("tab.consult-chat",{chatId:id,type:3,status:1}); 
+                        })
+                      
                     }
                   },function(err)
                   {
