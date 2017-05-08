@@ -1,6 +1,6 @@
 <ion-view cache-view="false" title="健康信息" >
 
-  <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
+  <ion-nav-bar class="bar-dark nav-title-slide-ios7 green-bg" style="" >
       <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="left" >
          <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-chevron-left"></i>返回</button>
       </ion-nav-buttons>
@@ -8,13 +8,18 @@
          <button class="button button-clear" ng-click="newHealth()"><i class="icon ion-plus-round"></i></button>
       </ion-nav-buttons>
     </ion-nav-bar>
+  <!--<ion-nav-bar class="bar-dark nav-title-slide-ios7 green-bg" style="" >
+    <ion-nav-buttons side="left">
+      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
+    </ion-nav-buttons>
+  </ion-nav-bar>-->
 
 
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
-  <ion-content padding="true" style="">
+  <ion-content  style="">
 
     <ion-list>
-      <ion-item ng-repeat="item in items | orderBy:'-acture'" ng-click="gotoHealthDetail($event,item)">
+      <ion-item ng-repeat="item in items | orderBy:'-time'" ng-click="gotoHealthDetail($event,item)">
         <div class="row">
           <div class="col-25">
           <div ng-repeat = "img in item.url">
@@ -30,8 +35,8 @@
               <p>{{item.description}}</p>
             </div>
           </div>
-        </div>  
-        
+        </div>
+
         <div style="text-align: right">
           <i class="icon ion-trash-a" style="font-size: 3em;"></i>
           <!-- <button class="button button-clear" style="color:#666" ng-click="EditHealth(item)"><i class="icon ion-edit"></i></button> -->
@@ -39,12 +44,14 @@
 
       </ion-item>
     </ion-list>
+
+  
     <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
     
-    
 
 
-           
+
+
   </ion-content>
-          
+
 </ion-view>

@@ -156,7 +156,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
      var a=document.getElementById("agreement");
         // console.log(document.body.clientHeight);
         console.log(window.screen.height);
-        a.style.height=window.screen.height*0.72+"px";
+        a.style.height=window.screen.height*0.65+"px";
 
 }])
 
@@ -1204,7 +1204,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   //初始化
     $scope.barwidth="width:0%";
     var UserId = Storage.get('UID');
-    //UserId = "Test12"; //测试id------
+    //UserId = "Test12"; //U201702071766
     $scope.Tasks = {}; //任务
     $scope.HemoBtnFlag = false; //血透排班设置标志    
     var OverTimeTaks = [];
@@ -1360,11 +1360,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             else //测量中的非每日任务 加入Other并从测量中去除（即血管通路情况）
             {
                 var newTask = $scope.Tasks.Measure[i];
-                newTask.type = task.type;
-                newTask.Name = NameMatch(newTask.code);
-                newTask.Freq = newTask.frequencyTimes + newTask.frequencyUnits +newTask.times + newTask.timesUnits;
-                newTask.Flag = false;
-                $scope.Tasks.Other.push(newTask); 
+                HandlOtherTask(newTask, task);                 
                 $scope.Tasks.Measure.splice(i, 1);
             }                        
         }
@@ -1401,13 +1397,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                task.endTime = "";
             }
             //判定是否为新的一周以更新任务日期
-            var days = GetDifDays(dateNowStr, StartArry[1]);
+            var days = GetDifDays(dateNowStr, StartArry[0]);
             if(days >= 7)
             {
                 task.Flag = false;
-                for (var i=0;i<StartArry.length;i++)
+                while(days >= 7)
                 {
-                   StartArry[i] = ChangeTimeForm(SetNextTime(StartArry[i]));                 
+                    for (var i=0;i<StartArry.length;i++)
+                    { 
+                       StartArry[i] = ChangeTimeForm(SetNextTime(StartArry[i], task.frequencyTimes, task.frequencyUnits, task.times));                 
+                    }
+                    days = GetDifDays(dateNowStr, StartArry[0]);
                 }
                 task.DateStr = GetHemoStr(StartArry, task.DateStr.split('+')[1], []); 
                 //修改数据库
@@ -1445,45 +1445,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             }               
             else
             {   
-              newTask.Flag = false;   
-              newTask.DoneFlag = false;          
-              newTask.type = task.type;
-              newTask.Name = NameMatch(newTask.type);
-              newTask.Freq = newTask.frequencyTimes + newTask.frequencyUnits + newTask.times + newTask.timesUnits;
-              if ((newTask.type == "LabTest") && (newTask.code == "LabTest_9"))
-              {
-                  newTask.Freq = "初次评估";
-              }
-              if(newTask.endTime != '2050-11-02T07:58:51.718Z') //显示已执行时间              
-              {
-                 newTask.Flag = true;
-                 newTask.DoneFlag = true;
-                 newTask.endTime = newTask.endTime.substr(0, 10);
-              }    
-              
-             var TimeCompare = IfTaskOverTime(newTask.startTime, newTask.frequencyTimes, newTask.frequencyUnits, newTask.times); //错过任务执行时间段，后延
-              if (TimeCompare != '')
-              {
-                 newTask.startTime = TimeCompare;
-                 newTask.Flag = false; 
-                 OverTimeTaks.push(newTask);
-              } 
-              else
-              {
-                 var days = GetDifDays(newTask.startTime, dateNowStr);
-                 if(days <= 0)
-                 {
-                   newTask.Flag = false;
-                 }
-                 else
-                 {
-                   if(newTask.Flag) //到默认时间修改填写状态
-                   {
-                     CompDateToDefault(newTask);
-                   }                   
-                 }                 
-              }                       
-              $scope.Tasks.Other.push(newTask);   
+               HandlOtherTask(newTask, task);            
             }
         } 
         if(OverTimeTaks.length != 0)
@@ -1491,6 +1453,54 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             ChangeOverTime();//过期任务新任务时间插入数据库   
         }  
     }
+
+  //处理其他任务详细
+  function HandlOtherTask(newTask, task)
+  {
+      newTask.Flag = false;   
+      newTask.DoneFlag = false;          
+      newTask.type = task.type;
+      newTask.Name = NameMatch(newTask.type)
+      if(newTask.type == 'Measure') //血管通路情况
+      {
+         newTask.Name = NameMatch(newTask.code);
+      }
+      newTask.Freq = newTask.frequencyTimes + newTask.frequencyUnits + newTask.times + newTask.timesUnits;
+      if ((newTask.type == "LabTest") && (newTask.code == "LabTest_9"))
+      {
+          newTask.Freq = "初次评估";
+      }
+      if(newTask.endTime != '2050-11-02T07:58:51.718Z') //显示已执行时间              
+      {
+         newTask.Flag = true;
+         newTask.DoneFlag = true;
+         newTask.endTime = newTask.endTime.substr(0, 10);
+      }    
+      
+      var TimeCompare = IfTaskOverTime(newTask.startTime, newTask.frequencyTimes, newTask.frequencyUnits, newTask.times); //错过任务执行时间段，后延
+      if (TimeCompare != '')
+      {
+         newTask.startTime = TimeCompare;
+         newTask.Flag = false; 
+         OverTimeTaks.push(newTask);
+      } 
+      else
+      {
+         var days = GetDifDays(newTask.startTime, dateNowStr);
+         if(days <= 0)
+         {
+           newTask.Flag = false;
+         }
+         else
+         {
+           if(newTask.Flag) //到默认时间修改填写状态
+           {
+             CompDateToDefault(newTask);
+           }                   
+         }                 
+      }                       
+      $scope.Tasks.Other.push(newTask);   
+  }
 
   //批量更新任务
     function ChangeOverTime()
@@ -6964,25 +6974,24 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       };
       //$stateParams.counselId
        //获取历史评论
-      if ($stateParams.counselId != undefined && $stateParams.counselId != "" && $stateParams.counselId != null) {
-          console.log($stateParams.counselId)
-          Comment.getCommentsByC({ counselId: $stateParams.counselId }).then(function(data) {
-              if (data.results != "" || data.results.totalScore != "") {
-                  console.log(data.results[0].totalScore / 2)
-                  console.log(1111)
-                      // //初始化
-                  $scope.comment.score = data.results[0].totalScore / 2
-                  $scope.comment.commentContent = data.results[0].content
-                      //评论星星初始化
-                  $scope.$broadcast('changeratingstar', $scope.comment.score, true);
-                  $scope.editable = true;
-              }
-          }, function(err) {
-              console.log(err)
-          })
-        }
+      if($stateParams.counselId!=undefined&&$stateParams.counselId!=""&&$stateParams.counselId!=null){
+        console.log($stateParams.counselId)
+        Comment.getCommentsByC({counselId:$stateParams.counselId}).then(function(data){
+          if(data.results!=""||data.results.totalScore!=""){
+            console.log(data.results[0].totalScore/2)
+            console.log(1111)
+            // //初始化
+            $scope.comment.score=data.results[0].totalScore/2
+            $scope.comment.commentContent=data.results[0].content
+             //评论星星初始化
+             $scope.$broadcast('changeratingstar',$scope.comment.score,true);
+             $scope.editable=true;
+          }
+        }, function(err){
+          console.log(err)
+        })
+      }
     
-
 
 
       //评论星星点击改变分数
