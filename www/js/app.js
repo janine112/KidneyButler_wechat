@@ -17,10 +17,6 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         var code = temp[1].split('#')[0]
         Storage.set('code',code)
     }
-    if (angular.isDefined(temp[2]) == true)
-    {
-        var state = temp[2].split('#')[0]
-    }
     var wechatData = ""
     if (angular.isDefined(code) == true)
     {
