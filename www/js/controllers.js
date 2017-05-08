@@ -5444,7 +5444,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             success: function(res) {
                 var neworder = {
                   userId:'doc01',
-                  money:0.01,
+                  money:1,
                   goodsInfo:{
                     class:'01',
                     name:'咨询',
