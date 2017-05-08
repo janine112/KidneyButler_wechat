@@ -3527,7 +3527,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             counselcount:0,
             counseltype:'',
             counselstatus:'',
-            needlisten:0
+            needlisten:0,
+            counsel:''
         }
         // if($state.params.type=='0') $scope.params.hidePanel=false;
         // if (window.JMessage) {
@@ -3545,6 +3546,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             {
                 Storage.set('STATUSNOW',data.result.status);
                 $scope.params.counseltype = data.result.type;
+                $scope.params.counsel = data.result;
                 console.log(data)
                 // if(data.result.status==0)//没有未结束的问诊，再看看有没有未结束的咨询
                 // {   Storage.set('STATUSNOW',data.result.status);
@@ -3828,7 +3830,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     })
     $scope.$on('gopingjia', function(event, args) {
         event.stopPropagation();
-        $state.go('tab.consult-comment',{DoctorId:args[1]});
+        $state.go('tab.consult-comment',{counselId:$scope.params.counsel.counselId,doctorId:$scope.params.chatId,patientId:$scope.params.counsel.patientId.userId});
     })
     //病例Panel
     // $scope.togglePanel = function() {
@@ -6911,21 +6913,25 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       };
       //$stateParams.counselId
        //获取历史评论
-      Comment.getCommentsByC({counselId:"counsel01"}).then(function(data){
-        if((data.results!=""||data.results.totalScore!="")&&($stateParams.counselId!=undefined)){
-          console.log(data.results[0].totalScore/2)
-          console.log(1111)
-          // //初始化
-          $scope.comment.score=data.results[0].totalScore/2
-          $scope.comment.commentContent=data.results[0].content
-           //评论星星初始化
-           $scope.$broadcast('changeratingstar',$scope.comment.score,true);
-           $scope.editable=true;
+      if ($stateParams.counselId != undefined && $stateParams.counselId != "" && $stateParams.counselId != null) {
+          console.log($stateParams.counselId)
+          Comment.getCommentsByC({ counselId: $stateParams.counselId }).then(function(data) {
+              if (data.results != "" || data.results.totalScore != "") {
+                  console.log(data.results[0].totalScore / 2)
+                  console.log(1111)
+                      // //初始化
+                  $scope.comment.score = data.results[0].totalScore / 2
+                  $scope.comment.commentContent = data.results[0].content
+                      //评论星星初始化
+                  $scope.$broadcast('changeratingstar', $scope.comment.score, true);
+                  $scope.editable = true;
+              }
+          }, function(err) {
+              console.log(err)
+          })
         }
-      }, function(err){
-        console.log(err)
-      })
     
+
 
 
       //评论星星点击改变分数

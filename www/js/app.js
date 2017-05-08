@@ -283,7 +283,8 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           templateUrl: 'partials/tabs/consult/commentDoctor.html',
           controller: 'SetCommentCtrl'
         }
-      }
+      },
+      params:{counselId:null,doctorId:null,patientId:null}
     })
     .state('tab.AllDoctors', {
       url: '/AllDoctors',
