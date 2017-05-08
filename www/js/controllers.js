@@ -3913,7 +3913,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
             },
             targetID:$scope.params.chatId,
-            targetName:'',
+            targetName:$scope.params.counsel.doctorId.name,
             targetType:'single',
             status:'send_going',
             createTimeInMillis: Date.now(),
