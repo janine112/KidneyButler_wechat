@@ -3391,7 +3391,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
                 FilteredDoctors = FilterDoctor(data.results);
                 console.log(FilteredDoctors);
-                News.getNews({userId:Storage.get('UID'),type:4}).then(
+                News.getNews({userId:Storage.get('UID'),type:'11'}).then(
                     function(data){
                         console.log(data.results);
                         if(data.results){
@@ -4758,7 +4758,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         );
 
 
-        News.getNewsByReadOrNot({userId:receiver,type:4,readOrNot:0}).then(
+        News.getNewsByReadOrNot({userId:receiver,type:'11',readOrNot:0}).then(
             function(data){
                 if(data.results.length){
                     
