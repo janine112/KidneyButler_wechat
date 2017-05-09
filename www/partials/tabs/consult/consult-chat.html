@@ -9,7 +9,7 @@
     <ion-content delegate-handle="myContentScroll" class="gray-back">
         <ion-refresher on-refresh="DisplayMore()"></ion-refresher>
         <div class="text-center padding hide-animate ng-hide" ng-hide="params.moreMsgs">没有更多消息了</div>
-        <my-message ng-repeat="msg in msgs track by $index" msg="msg" msgindex='{{$index}}'></my-message>
+        <my-message ng-repeat="msg in msgs track by $index" msg="msg" photourls='photoUrls' msgindex='{{$index}}'></my-message>
         <div style="float:left;width:100%;" ng-style="{'padding-top':'{{params.helpDivHeight}}px'}"></div>
         <div style="float:left;width:100%;padding-top:60px"></div>
     </ion-content>

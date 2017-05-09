@@ -11,6 +11,7 @@ angular.module('kidney.directives', ['kidney.services'])
         template: '<div ng-include="getTemplateUrl()"></div>',
         scope: {
             msg:'=',
+            photourls:'=',
             msgindex:'@'
         },
         restrict:'AE',
