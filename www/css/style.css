@@ -1,4 +1,1058 @@
 /* Empty. Add your own CSS if you like */
+.mt-40 {
+  margin-top: 40px !important;
+}
+/*我的页面弹出窗*/
+.me-pop{
+  width: 80%;
+  left: 10%!important;
+  padding: 33px;
+}
+.me-pop .popover-arrow{
+  display: none;
+}
+
+.me-pop .me-pop-title img{
+  width: 67px;
+  height: 67px;
+  display: inline-block;
+  float: left;
+}
+.me-pop .me-pop-message{
+  padding-left: 70px;
+  margin-left: 10px;
+
+}
+.me-pop .me-pop-message p{
+  margin-bottom: 0;
+  color: #808080;
+}
+.me-pop .me-massage-name{
+  padding-top: 25px;
+  font-weight:bold ;
+  color: #333333;
+}
+.me-pop .me-pop-code{
+  text-align: center;
+  margin-top: 30px;
+}
+.me-pop .me-pop-code img{
+  width: 142px;
+  height: 142px;
+}
+/*头部底部*/
+.tabs {
+  height: 55px;
+}
+.has-tabs{
+  bottom: 55px;
+}
+.bar.bar-positive {
+  background: #6ac4f8;
+}
+.consult-tab{
+display: inline-block;
+  line-height: 44px;
+  height: 44px;
+  border-bottom: 1px solid #FFFFFF;
+  color: #333;
+}
+.home {
+  font-size: 24px !important;
+  line-height: 32px;
+}
+
+.tab-item.tab-item-active {
+  color: #6ac4f8;
+}
+
+.tabs-positive > .tabs, .tabs.tabs-positive {
+  background: #f7f7f7;
+  color: #545454;
+  border-color: #6ac4f8 !important;
+  border-top-width: 2px !important;
+}
+
+.tab-title {
+  font-size: 16px !important;
+  margin-top: 5px;
+}
+
+/*搜索*/
+.item-input-inset {
+  background: #fafafa;
+  margin-top: 10px;
+}
+
+.item-input-wrapper {
+  background: #FFFFFF;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+/*筛选*/
+.checkbox input, .checkbox-icon{
+  width: 18px;
+  height: 18px;
+  margin-top: 5px;
+}
+.checkbox input:after, .checkbox-icon:after{
+  top:23%;
+  width: 10px;
+}
+.bar.item-input-inset .item-input-wrapper input::-webkit-input-placeholder {
+  color: #818181;
+}
+
+.bar.item-input-inset .item-input-wrapper input:-moz-placeholder {
+  color: #818181;
+}
+
+.bar.item-input-inset .item-input-wrapper input::-moz-placeholder {
+  color: #818181;
+}
+
+.bar.item-input-inset .item-input-wrapper input:-ms-input-placeholder {
+  color: #818181;
+}
+/*我的*/
+.me-top-box{
+  height: 200px;
+  width: 100%;
+}
+.me-top-bg{
+  height: 100%;
+  width: 100%;
+  background: url(../img/hospital1.png);
+  -webkit-filter: blur(5px); /* Chrome, Opera */
+  -moz-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+  filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=5, MakeShadow=false);
+}
+.me-avatar-box{
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  border: 1px solid #FFFFFF;
+  text-align: center;
+  display: inline-block;
+  position: absolute;
+  text-decoration:none;
+}
+.me-massage-box{
+  position: absolute;
+  left: 50%;
+  top:20px;
+  margin-left: -40px;
+  z-index: 9999;
+
+}
+.me-code{
+  position: absolute;
+  top:20px;
+  right: 40px;
+  z-index: 10000;
+  font-size: 24px;
+  color: #333333;
+}
+.me-avatar{
+  width: 60px;
+  height: 60px;
+  border: 1px solid #FFFFFF;
+  border-radius:100% ;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -30px;
+  margin-left: -30px;
+}
+.me-avatar{
+  min-height: 60px;
+  min-width: 60px;
+  border-radius: 100%;
+}
+.me-avatar div{
+  width: 60px;
+  height: 60px;
+}
+.me-avatar img{
+  width: 60px;
+  height: 60px;
+
+  border-radius: 100%;
+}
+.me-edit-btn{
+  width: 70px;
+  background: #FFFFFF;
+  margin: 0 auto;
+  border-radius: 3px;
+  font-size: 12px;
+  margin-top: 74px;
+  color: #333333;
+}
+.me-massage{
+  position: absolute;
+  top:102px;
+  width: 150px;
+  margin-left: -37px;
+  text-align: center;
+}
+.me-massage p{
+  margin-bottom: 0px;
+}
+.me-mun .row{
+  border-bottom: 1px solid #e9e9e9;
+  height: 70px;
+  line-height: 27px;
+  margin-top: 0;
+  padding: 15px;
+}
+.me-mun .row a{
+  color: #6e6e6e;
+  text-decoration: none;
+  font-size: 16px;
+}
+.me-mun .row .iconfont{
+  color: #242424;
+  font-size: 32px;
+  margin-right: 15px;
+  vertical-align: middle;
+}
+.me-list a{
+  height: 55px;
+  line-height: 27px;
+}
+.me-list a:after{
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  position: absolute;
+  top: 50%;
+  right: 11px;
+  display: block;
+  margin-top: -8px;
+  color: #ccc;
+  content: "\f125";
+  text-transform: none;
+  font-weight: normal;
+  font-style: normal;
+  font-variant: normal;
+  font-size: 16px;
+  font-family: 'Ionicons';
+  line-height: 1;
+  speak: none;
+}
+.me-list .item-icon-left .iconfont{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 11px;
+  height: 100%;
+  font-size: 26px;
+  vertical-align: middle;
+}
+.me-list .item-icon-left .iconfont:last-child{
+  top: 3px;
+}
+.me-list .item-icon-left .iconfont:before{
+  display: block;
+  width: 32px;
+  text-align: center;
+}
+.me-dic{
+  color: #ee3939!important;
+  display: inline-block;
+  margin-right:0!important;
+  margin-top: -16px;
+  font-size: 40px!important;
+  margin-left: -13px;
+}
+/*患者信息*/
+.patient-active {
+  width: 50px;
+  height: 50px;
+
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  border-radius: 50%;
+}
+.pat-mun-icon{
+  font-size: 32px;
+}
+.patient-active div {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.patient-active div img {
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 50%;
+}
+
+.pat-ts {
+  position: absolute;
+  top: 80px;
+  left: 16px;
+
+}
+.pati-message{
+  padding-left:90px
+}
+.tast-bar .button span{
+  border-right: none!important;
+}
+.tast-active{
+  line-height: 40px;
+  border-bottom: 2px solid #05a8fa!important;
+  color: #05a8fa;
+}
+.task-icon-r{
+
+}
+.task-list .item-icon-left .icon, .item-icon-right .icon{
+  height: auto!important;
+  top:16px!important;
+}
+.task-list p {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 0;
+}
+.task-item{
+  border-color: #ddd;
+  background-color: #fff;
+  color: #444;
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin: -1px;
+  padding:10px 25px ;
+  border-width: 1px;
+  border-style: solid;
+  font-size: 16px;
+}
+.task-item-right{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
+  position: absolute;
+  top: 16px;
+  right: 25px;
+  font-size: 32px;
+}
+.task-item-right select{
+  border-right: 1px solid #828282;
+  border-bottom: none;
+  border-top: none;
+  border-left: none;
+}
+.task-item img{
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+}
+.task-item span{
+  vertical-align: middle;
+}
+/**/
+
+
+
+
+/*未读消息小红点*/
+
+.login_btn {
+  background: #6ac4f8!important;
+}
+
+.bg-wite {
+  background: #ffffff !important;
+
+}
+
+.bg-wite .bar.bar-positive .title {
+  color: #4d4d4d !important;
+  font-weight: bold;
+}
+
+.bar-positive {
+  background: #333;
+}
+
+.button__badge {
+  background-color: #fa3e3e;
+  border-radius: 2px;
+  color: white;
+
+  padding: 1px 3px;
+  font-size: 10px;
+
+  position: absolute; /* Position the badge within the relatively positioned button */
+  top: 0;
+  right: 0;
+}
+
+.red-badge :before {
+  position: absolute;
+  content: '';
+  background-color: #FF0000;
+  border-radius: 50%;
+  opacity: 0.8;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+
+.msg-badge {
+  background-color: #fa3e3e;
+  border-radius: 2px;
+  color: white;
+
+  padding: 1px 3px;
+  font-size: 10px;
+
+  position: absolute; /* Position the badge within the relatively positioned button */
+  top: 0;
+  right: 0;
+}
+
+/*取消ionicPopover固定高度 XJZ*/
+.popover {
+  height: auto !important;
+}
+
+.popover ion-header-bar {
+  position: relative;
+}
+
+.popover ion-content {
+  top: 0;
+  position: relative;
+}
+
+.mine-msg-right {
+  color: #6e6e6e;
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  font-size: 24px;
+}
+
+.mine-verfy-btn {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  min-height: 33px;
+  line-height: 33px;
+  width: 80%;
+}
+
+.myinfo-msg-right {
+  color: lightgray;
+  position: absolute;
+  right: 30px;
+  top: 9px;
+}
+
+.myinfo-img-right {
+  color: lightgray;
+  position: absolute;
+  right: 30px;
+  top: 6px;
+}
+
+/*咨询页面*/
+.tab-search {
+  background-color: white;
+  width: 76%;
+  height: 27px;
+  text-align: left;
+  position: absolute;
+  right: 12%;
+  border-radius: 27px;
+  bottom: 8px;
+  padding-left: 23px;
+}
+
+/* Empty. Add your own CSS if you like */
+/*XJZ*/
+.gray-back {
+  background-color: #F6F6F6;
+}
+
+.hide-animate {
+  /*line-height: 20px;*/
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: 0.1s all linear;
+}
+
+.hide-animate.ng-hide {
+  line-height: 0px;
+}
+
+.hide-animate.ng-hide-add,
+.hide-animate.ng-hide-remove {
+  display: block !important;
+}
+
+.high-light {
+  color: #6ac4f8 !important;
+  border-color: #6ac4f8;
+}
+
+/*message box -------------------------------------------------------------------------------*/
+.msgbox {
+  /*display: list-item;*/
+  /*position: relative;*/
+  /*float: right;*/
+  width: 100%;
+  margin-top: 1em;
+  padding: 0 0.6em;
+}
+
+.msg-time {
+  /*padding:2px 4px;*/
+  width: 100%;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.msg-time span {
+  /*word-break: */
+  font-size: 0.85em;
+  color: #FFF;
+  background-color: #DDD;
+  /*display: inline-block;*/
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+
+.msg-fail {
+  width: 100%;
+  float: right;
+  text-align: right;
+  padding-right: 3.7em;
+}
+
+.msg-fail span {
+  font-size: 0.9em;
+  color: #B71C1C;
+}
+
+.status {
+  position: relative;
+  float: inherit;
+  margin: 0 -0.7em;
+  height: 3em;
+  width: 2.5em;
+}
+
+.msgbox .avatar {
+  /*float: left;*/
+  /*display: block;*/
+  /*display:inline;*/
+  vertical-align: top;
+  display: inline-block;
+  width: 3em;
+  height: 3em;
+}
+
+/*.float-left {
+    float: left;
+}
+.float-right {
+    float: right;
+}*/
+.msgbox-receive {
+  float: left;
+}
+
+.msgbox-send {
+  float: right;
+}
+
+.msgbox-receive .avatar {
+  float: left;
+}
+
+.msgbox-send .avatar {
+  float: right;
+}
+
+/*msg-body：消息气泡*/
+.msg-body {
+  position: relative;
+  display: table;
+  box-shadow: inset 0px -1.5px 0px #d7d7d7;
+  vertical-align: middle;
+  /*width: 250px;*/
+  min-height: 3em;
+  margin: 0px 0.7em;
+  border-width: 0px;
+  -webkit-border-radius: 0.3em;
+  -moz-border-radius: 0.3em;
+  border-radius: 0.3em;
+  max-width: 70%;
+  word-break: normal;
+  word-wrap: break-word;
+}
+
+.msgbox-receive .msg-body {
+  float: left;
+  background: #FFF;
+}
+
+.no-bubble-color .msg-body {
+  background: #FFF !important;
+}
+
+.msgbox-send .msg-body {
+  float: right;
+  background: #26C6DA;
+}
+
+/*小三角*/
+.msg-body:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  /*border-width: 0.6em 0.6em 0.6em 0;*/
+  /*border-color: transparent #FFF;*/
+  display: block;
+  width: 0;
+  z-index: 1;
+  margin-top: -0.5em;
+  /*left: -0.55em;*/
+  top: 1.5em;
+}
+
+.msgbox-receive .msg-body:after {
+  border-width: 0.5em 0.5em 0.5em 0;
+  border-color: transparent #FFF;
+  left: -0.45em;
+}
+
+.msgbox-send .msg-body:after {
+  border-width: 0.5em 0 0.5em 0.5em;
+  border-color: transparent #26C6DA;
+  right: -0.45em;
+}
+
+.no-bubble-color .msg-body:after {
+  border-color: transparent #FFF !important;
+}
+
+.image-msgbox .msg-body:after {
+  border-color: transparent transparent !important;
+}
+
+/*小三角*/
+/*消息主体*/
+/*text type*/
+.media-text {
+  font-size: 1.1em;
+  padding: 0.45em 0.7em 0.45em 0.7em;
+  vertical-align: middle;
+  display: table-cell;
+  /*line-height:1.4em;*/
+  /*vertical-align: middle;*/
+  /*display: inline-block;*/
+  /*margin: 0px;*/
+}
+
+/*image type*/
+.media-image {
+  /*padding: 0.35em;*/
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.media-image img {
+  /*padding: 0.35em;*/
+  vertical-align: middle;
+  max-height: 8em;
+}
+
+/*contact type*/
+.media-contact {
+  padding: 0.4em 0.6em;
+  width: 16em;
+
+}
+
+.media-contact img {
+  height: 2.5em;
+  width: 2.5em;
+}
+
+.media-contact div {
+  display: inline-block;
+  max-width: 11.5em;
+  padding-left: 0.3em;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+  /*word-break: normal;*/
+  /*word-wrap: white-space;*/
+
+}
+
+.media-contact .name {
+  margin: 0px;
+  font-size: 1.1em;
+}
+
+.media-contact .info {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  /*text-overflow:ellipsis;*/
+  margin-bottom: 2px;
+  /*margin:0px;*/
+  color: #666;
+  font-size: 0.8em;
+}
+
+.media-contact hr {
+  border-color: #C7C7C7;
+  border-style: solid;
+  border-width: 1px 0px 0px 0px;
+  margin: 3px 0px 2px 0px;
+  /*display:inline-block;*/
+}
+
+.media-contact .footer {
+  margin: 0px;
+  color: #AAA;
+  font-size: 6px;
+}
+
+/*card type*/
+.msgbox-card {
+
+  float: right;
+}
+
+.media-card {
+  box-shadow: inset 0px -1.5px 0px #d7d7d7;
+  width: 84%;
+  padding: 0.5em;
+  background: #FFF;
+  margin: auto;
+}
+
+.media-card .title {
+  font-size: 1.25em;
+  padding: 0.2em;
+
+}
+
+.media-card p {
+
+}
+
+.media-card span {
+  color: #2196F3;
+  font-size: 1.15em;
+  padding-right: 0.5em;
+}
+
+.media-card .img-info {
+  font-size: 1.1em;
+  color: #666;
+}
+
+.media-card img {
+  height: 3.2em;
+  width: 3.2em;
+  margin: 0.2em;
+}
+
+.media-card hr {
+  border-color: #C7C7C7;
+  border-style: solid;
+  border-width: 1px 0px 0px 0px;
+  /*margin: 3px 0px 2px 0px;*/
+}
+
+.media-endl {
+  /*float: center;*/
+  position: relative;
+  /*display: table;*/
+  /*box-shadow:  inset 0px -1.5px 0px #d7d7d7;*/
+  /*vertical-align: middle;*/
+  text-align: center;
+  width: 100%;
+  /*min-height: 3em;*/
+  /*margin: 0px 0.7em;*/
+  /*border-width: 0px;*/
+  color: #448AFF;
+  font-size: 0.9em;
+  /*-webkit-border-radius: 0.3em;*/
+  /*-moz-border-radius: 0.3em;*/
+  /*border-radius: 0.3em;*/
+  /*max-width: 70%;*/
+  /*word-break: normal;*/
+  /*word-wrap: break-word;*/
+}
+
+/*image viewer ----------------------------------------------------------------------------*/
+.image-modal {
+  width: 100% !important;
+  height: 100%;
+  top: 0 !important;
+  left: 0 !important;
+  background: rgba(0, 0, 0, 1);
+}
+
+.slider {
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  width: 100%;
+  height: 600px;
+  /*margin:auto;*/
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center, center;
+}
+
+.imageLarge {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  /*margin:auto;*/
+  /*vertical-align: middle;*/
+}
+
+.picBox {
+  height: 100vh;
+  width: 100%;
+  text-align: center;
+}
+
+.picBox span {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.picBox #bigPic {
+  width: 100%;
+  /*width: auto;*/
+  /*height: auto;*/
+  vertical-align: middle;
+  /*position: absolute;  */
+  /*top: 0;  */
+  /*bottom: 0;  */
+  /*left: 0;  */
+  /*right: 0;  */
+  /*margin: auto;*/
+}
+
+.frame img {
+  /*max-height: 100%;  */
+  width: 100%;
+  /*width: auto;*/
+  /*height: auto;*/
+  vertical-align: middle;
+  /*position: absolute;  */
+  /*top: 0;  */
+  /*bottom: 0;  */
+  /*left: 0;  */
+  /*right: 0;  */
+  margin: auto;
+}
+
+/*input box--------------------------------------------------------------*/
+.input-box {
+  position: absolute;
+  /*display: flex;*/
+  bottom: 0;
+  border-width: 0;
+  min-height: 44px;
+  transform: translate3d(0, 0, 0);
+  right: 0;
+  left: 0;
+  font-size: 100%;
+  /*z-index: 9;*/
+  /*box-sizing: border-box;*/
+  padding: 5px;
+  overflow: visible;
+  /*user-select: none;*/
+}
+
+/*list item ---------------------------*/
+.my-icon-item {
+
+}
+
+.margin-list {
+  margin-top: 1.5em;
+}
+
+.my-icon-item i:first-child {
+  color: #4CAF50;
+}
+
+/*   .my-icon-item i:nth-child(2){
+     color:#AAA;
+ }*/
+.item-span {
+  display: inline-block;
+  color: #AAA;
+  padding-left: 20px;
+  max-width: 15em;
+}
+
+.my-photo-item {
+  padding-top: 8px !important;
+  padding-bottom: 8px;
+}
+
+.item-photo-span {
+  display: inline-block;
+  color: #AAA;
+  padding-left: 20px;
+  /*max-width: 15em;*/
+}
+
+.my-photo-item img {
+  height: 3em;
+  width: 3em;
+  padding: 2px;
+  /*margin:auto 0*/
+  position: relative;
+  top: 18px;
+  /*display:inline-block; */
+  /*color:#AAA;*/
+  /*padding-left:20px;*/
+  /*max-width: 15em;*/
+}
+
+/*group member avatar list div -----------------------------------*/
+.avatar-item {
+  display: inline-block;
+  width: 20%;
+  padding: 3px 7px;
+  text-align: center;
+}
+
+.avatar-item img {
+  height: 100%;
+  width: 100%;
+}
+
+.avatar-item div {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/*QR code ----------------------------------------------------------*/
+.qr-code {
+  width: 90%;
+  margin: auto;
+  margin-top: 40px;
+  background-color: #FFF;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  text-align: center;
+}
+
+.qr-code div:first-child {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.qr-code .title {
+  font-size: 1.1em;
+  padding-left: 0.5em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.qr-code img {
+  width: 3em;
+  height: 3em;
+  vertical-align: middle;
+}
+
+.qr-code img {
+  width: 3em;
+  height: 3em;
+}
+/*个人资料*/
+.myinfo-avatar .img-cen{
+  text-align: center;
+  width: 100%;
+}
+.myinfo-avatar{
+  text-align: center;
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+}
+.myinfo-avatar img{
+  width: 5.625rem;
+  height: 5.625rem;
+}
+.myinfo-cont{
+  padding:0 1.875rem;
+}
+.myinfo-cont .item{
+  border-left: 0;
+  border-right: 0;
+  border-color:  #d2d2d2;
+}
+.myinfo-cont .item .msg{
+  margin-left: 0;
+  padding-right: 15px;
+  border-right: 1px solid #d2d2d2;
+}
+.health-img-box{
+  width: 100%;
+}
+.health-img{
+  width: 30%;
+  float: left;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 10px;
+  margin-right:5%;
+}
+.health-img:nth-child(3n){
+  margin-right: 0;
+}
+.health-img img{
+  width: 100%;
+
+}
+
+/* Empty. Add your own CSS if you like */
 .head-red-point {
   position: absolute;
   top: 12%;
@@ -26,4 +1080,15 @@
 
 .ionic_ratings .read_only {
   pointer-events:none;
+}
+
+select:disabled{
+    border: none;
+    background-color: #FFFFFF;
+    /*color:#ACA899;*/
+}
+input:disabled{
+    /*border: none;*/
+    background-color: #FFFFFF;
+    /*color:#ACA899;*/
 }

@@ -61,7 +61,7 @@
 
                     <ionic-datepicker input-obj="datepickerObject2" class="item item-input" ng-if="showSurgicalTime&&canEdit">
                         <span class="input-label" style="margin-left:8px ">{{timename}}</span>
-                        <input  ng-model="User.operationTime"  type="text">
+                        <input  ng-model="User.operationTime" dateformat type="text">
                     </ionic-datepicker>
 
                     <label class="item item-input">
@@ -76,7 +76,7 @@
 
                     <ionic-datepicker  ng-if="canEdit" input-obj="datepickerObject3" class="item item-input">
                         <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>出生日期</span>
-                        <input  ng-model="User.birthday"  type="text">
+                        <input  ng-model="User.birthday" dateformat type="text">
                     </ionic-datepicker>
 
                     <label class="item item-input">
@@ -112,7 +112,7 @@
 
                     <ionic-datepicker ng-if="canEdit" input-obj="datepickerObject1" class="item item-input">
                         <span class="input-label" style="margin-left:8px ">诊断日期</span>
-                        <input  ng-model="User.lastVisit.time"  type="text">
+                        <input  ng-model="User.lastVisit.time" dateformat type="text">
                     </ionic-datepicker>
 
                     <label class="item item-input">
@@ -126,6 +126,107 @@
                 </button>
 
             </div>
+
+<!--             <div ng-if="!canEdit">
+                <div  class="list">
+                    <label class="item item-input">
+                        <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>姓名</span>
+                        <p style="text-align:right;width:50%">{{User.name}}</p>
+                    </label>
+
+
+                    <label  class="item item-input">
+                        <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>性别</div>
+                        <p style="text-align:right;width:50%">{{User.gender.Name}}</p>
+                    </label>
+
+
+                    <label  class="item item-input">
+                        <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>血型</div>
+                        <p style="text-align:right;width:50%">{{User.bloodType.Name}}</p>
+                    </label>
+
+                    <label  class="item item-input ">
+                        <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>是否高血压</div>
+                        <p style="text-align:right;width:50%">{{User.hypertension.Name}}</p>
+
+                    </label>
+
+                    <label  class="item item-input">
+                        <div class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>肾病类型</div>
+                        <p style="text-align:right;width:50%">{{User.class.typeName}}</p>
+
+                    </label>
+
+                    <label  class="item item-input" ng-if="showProgress">
+                        <div class="input-label" style="margin-left:8px ">疾病进程</div>
+                        <p style="text-align:right;width:50%">{{User.class_info.name}}</p>
+
+                    </label>
+
+                    <label  class="item item-input" ng-if="showSurgicalTime">
+                        <div class="input-label" style="margin-left:8px ">{{timename}}</div>
+                        <p style="text-align:right;width:50%">{{User.operationTime}}</p>
+                    </label>
+
+
+                    <label class="item item-input">
+                        <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>过敏信息</span>
+                        <p style="text-align:right;width:50%">{{User.allergic}}</p>
+                    </label>
+
+
+                    <label class="item item-input">
+                        <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>出生日期</span>
+                        <p style="text-align:right;width:50%">{{User.birthday}}</p>
+                    </label>
+
+                    <label class="item item-input">
+                        <span class="input-label"><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>身份证号</span>
+                        <p style="text-align:right;width:50%">{{User.IDNo}}</p>
+
+                    </label>
+
+                    <label class="item item-input">
+                        <span class="input-label" style="margin-left:8px ">身高（cm）</span>
+                        <p style="text-align:right;width:50%">{{User.height}}</p>
+                    </label>
+
+                    <label class="item item-input">
+                        <span class="input-label" style="margin-left:8px ">体重（kg）</span>
+                        <p style="text-align:right;width:50%">{{User.weight}}</p>
+                    </label>
+
+
+                </div>
+
+                <div>
+                    <span class="input-label" style="margin-left:6px "><i class="icon ion-clipboard" style="margin-right:3px;font-size:20px" ></i>最近就诊信息</span>
+                    <label class="item item-input">
+                        <span class="input-label" style="margin-left:8px ">就诊医院</span>
+                        <p style="text-align:right;width:50%">{{User.lastVisit.hospital}}</p>
+                    </label>
+
+                    <label class="item item-input">
+                        <span class="input-label" style="margin-left:8px ">诊断日期</span>
+                        <p style="text-align:right;width:50%">{{User.lastVisit.time}}</p>
+                    </label>
+
+                    <label class="item item-input">
+                        <span class="input-label" style="margin-left:8px ">诊断结果</span>
+                        <p style="text-align:right;width:50%">{{User.lastVisit.diagnosis}}</p>
+                    </label>
+                </div>
+
+
+
+
+
+            </div>
+ -->
+
+
+
 
   </ion-content>
 
