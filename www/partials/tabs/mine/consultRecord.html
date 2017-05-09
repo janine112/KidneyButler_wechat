@@ -1,6 +1,6 @@
 <ion-view cache-view="false" title="咨询记录" >
 
-  <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
+<ion-nav-bar class="bar-dark nav-title-slide-ios7 green-bg" style="" >
       <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="left" >
          <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-chevron-left"></i>返回</button>
       </ion-nav-buttons>
@@ -8,17 +8,18 @@
 
 
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
-  <ion-content padding="true" style="">
+  <ion-content style="">
 
     <ion-list>
       <ion-item ng-repeat="item in items" class="item-thumbnail-left item-text-wrap" ng-click="getConsultRecordDetail($event,item.userId)">
-        <img ng-src="{{item.photoUrl || 'img/doctor3.PNG'}}">
+        <img  ng-src="{{item.photoUrl || 'img/doctor3.PNG'}}">
         <h2>{{item.name}}</h2>
         <p style="text-align: right">{{item.lastMsgDate|dateFormat:"YYYY-MM-DD h:m"}}</p>
-        <p>{{item.response}}</p>
+        <p>{{item.latestMsg}}</p>
       </ion-item>
     </ion-list>
     <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
+    
     
     
 
