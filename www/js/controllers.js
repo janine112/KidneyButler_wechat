@@ -3713,6 +3713,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 console.log(data);
                 var d=data.results;
                 $scope.$broadcast('scroll.refreshComplete');
+                if(d=='没有更多了!') return $scope.params.moreMsgs = false;
                 var res=[];
                 for(var i in d){
                     res.push(d[i].content);
