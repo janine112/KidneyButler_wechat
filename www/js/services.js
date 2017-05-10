@@ -2342,7 +2342,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
         // alert(config.debug)
         console.log(angular.toJson(config))
         wx.config({
-          debug:true,
+          debug:false,
           appId:config.appId,
           timestamp:config.timestamp,
           nonceStr:config.nonceStr,
@@ -2380,7 +2380,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
                             signType: data.results.signType,
                             paySign: data.results.paySign,
                             success: function(res) {
-                             
+                              return res;
                             }
                           })
                         },function(err){
