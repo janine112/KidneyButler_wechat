@@ -1111,7 +1111,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   $scope.QRscan = function(){
     // alert(1)
     var config = "";
-    var path = "http://t.go5le.net/?code=" + Storage.get('code');
+    var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -3209,7 +3209,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   };      
   $scope.choosePhotos = function() {
     var config = "";
-    var path = "http://t.go5le.net/?code=" + Storage.get('code');
+    var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -3266,7 +3266,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     $scope.isShow=true;
     $scope.takePicture = function() {
       var config = "";
-      var path = "http://t.go5le.net/?code=" + Storage.get('code');
+      var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
       wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -3519,7 +3519,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     $scope.input = {
         text: ''
     }
-    var path = "http://t.go5le.net/?code=" + Storage.get('code');
+    var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     // $scope.msgs = [];
     $scope.scrollHandle = $ionicScrollDelegate.$getByHandle('myContentScroll');
     function toBottom(animate,delay){
@@ -4521,7 +4521,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   };      
   $scope.choosePhotos = function() {
     var config = "";
-    var path = "http://t.go5le.net/?code=" + Storage.get('code');
+    var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -4579,7 +4579,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   $scope.isShow=true;
   $scope.takePicture = function() {
       var config = "";
-      var path = "http://t.go5le.net/?code=" + Storage.get('code');
+      var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
       wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -5501,7 +5501,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   // }
   $scope.pay = function(){
     var config = "";
-    var path = "http://t.go5le.net/?code=" + Storage.get('code');
+    var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
