@@ -2278,6 +2278,6 @@ angular.module('kidney.services', ['ionic','ngResource'])
       },function(err){
         reject(res)
       })
-    }
+    })
   };
 }])
