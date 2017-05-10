@@ -2329,7 +2329,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     }
 })
 
-.factory('payment',['wechat','Storage','$http',function(wechat,Storage,$http){
+.factory('payment',['wechat','Storage','$http','order',function(wechat,Storage,$http,order){
   return {
     payment:function(neworder){
       var config = "";
