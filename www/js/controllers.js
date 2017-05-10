@@ -1,6 +1,6 @@
 angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','ionic-datepicker','kidney.directives'])//,'ngRoute'
 //登录--PXY
-.controller('SignInCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','JM', '$location','wechat','$sce',function($scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,JM,$location,wechat,$sce) {
+.controller('SignInCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','jmapi', '$location','wechat','$sce',function($scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,jmapi,$location,wechat,$sce) {
   $scope.barwidth="width:0%";
   $scope.navigation_login=$sce.trustAsResourceUrl("http://121.43.107.106:6699/member.php?mod=logging&action=logout&formhash=xxxxxx");
   // Storage.set("personalinfobackstate","logOn");
@@ -81,8 +81,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 else if(data.results.mesg=="login success!"){
                     //jmessage login
 
-                    JM.login(data.results.userId);
-
+                    jmapi.users(data.results.userId);
+                    
                     $scope.logStatus = "登录成功！";
                     $ionicHistory.clearCache();
                     $ionicHistory.clearHistory();
@@ -134,12 +134,13 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   
 }])
 
-.controller('AgreeCtrl', ['$stateParams','$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User', function($stateParams,$scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User) {
+.controller('AgreeCtrl', ['$stateParams','$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','jmapi', function($stateParams,$scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,jmapi) {
     $scope.YesIdo = function(){
         console.log('yesido');
         if($stateParams.last=='signin'){
             User.updateAgree({userId:Storage.get('UID'),agreement:"0"}).then(function(data){
                 if(data.results!=null){
+                    jmapi.users(Storage.get('UID'));
                     $timeout(function(){$state.go('tab.tasklist');},500);
                 }else{
                     console.log("用户不存在!");
@@ -425,7 +426,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //个人信息--PXY
-.controller('userdetailCtrl',['$http','$stateParams','$scope','$state','$ionicHistory','$timeout' ,'Storage', '$ionicPopup','$ionicLoading','$ionicPopover','Dict','Patient', 'VitalSign','$filter','Task','User',function($http,$stateParams,$scope,$state,$ionicHistory,$timeout,Storage, $ionicPopup,$ionicLoading, $ionicPopover,Dict,Patient, VitalSign,$filter,Task,User){
+.controller('userdetailCtrl',['$http','$stateParams','$scope','$state','$ionicHistory','$timeout' ,'Storage', '$ionicPopup','$ionicLoading','$ionicPopover','Dict','Patient', 'VitalSign','$filter','Task','User','jmapi',function($http,$stateParams,$scope,$state,$ionicHistory,$timeout,Storage, $ionicPopup,$ionicLoading, $ionicPopover,Dict,Patient, VitalSign,$filter,Task,User,jmapi){
   $scope.barwidth="width:0%";
   //注册时可跳过个人信息
   // $scope.CanSkip = function(){
@@ -948,6 +949,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                             }).success(function(data) {
                                 // console.log(data);
                             });
+
+                            jmapi.users(patientId);
 
                             User.updateAgree({userId:patientId,agreement:"0"}).then(function(data){
                                 if(data.results!=null){

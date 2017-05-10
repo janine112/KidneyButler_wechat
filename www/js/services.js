@@ -49,117 +49,6 @@ angular.module('kidney.services', ['ionic','ngResource'])
     }
   };
 }])
-
-
-// --------上传头像---------------- 
-//跟我写的Camera同名了，这是旧的，不一定有用，就先注释了 XJZ
-
-  // .factory('Camera', ['$q','$cordovaCamera','CONFIG', '$cordovaFileTransfer','Storage',function($q,$cordovaCamera,CONFIG,$cordovaFileTransfer,Storage) { //LRZ
-  //   return {
-  //     getPicture: function() {
-
-  //       var options = { 
-  //           quality : 75, 
-  //           destinationType : 0, 
-  //           sourceType : 1, 
-  //           allowEdit : true,
-  //           encodingType: 0,
-  //           targetWidth: 300,
-  //           targetHeight: 300,
-  //           popoverOptions: CONFIG.popoverOptions,
-  //           saveToPhotoAlbum: false
-  //       };
-
-  //      var q = $q.defer();
-
-  //       $cordovaCamera.getPicture(options).then(function(imageData) {
-  //           imgURI = "data:image/jpeg;base64," + imageData;
-  //           // console.log("succeed" + imageData);
-  //           q.resolve(imgURI);
-  //       }, function(err) {
-  //           // console.log("sth wrong");
-  //           imgURI = undefined;
-  //           q.resolve(err);
-  //       });      
-  //       return q.promise; //return a promise
-  //     },
-
-  //     getPictureFromPhotos: function(){
-  //       var options = { 
-  //           quality : 75, 
-  //           destinationType : 0, 
-  //           sourceType : 0, 
-  //           allowEdit : true,
-  //           encodingType: 0,
-  //           targetWidth: 300,
-  //           targetHeight: 300
-  //       };
-  //         //从相册获得的照片不能被裁减 调研~
-  //      var q = $q.defer();
-  //       $cordovaCamera.getPicture(options).then(function(imageData) {
-  //           imgURI = "data:image/jpeg;base64," + imageData;
-  //           // console.log("succeed" + imageData);
-  //           q.resolve(imgURI);
-  //       }, function(err) {
-  //           // console.log("sth wrong");
-  //           imgURI = undefined;
-  //           q.resolve(err);
-  //       });      
-  //       return q.promise; //return a promise      
-  //     },
-
-  //     uploadPicture : function(imgURI, temp_photoaddress){
-  //         // document.addEventListener('deviceready', onReadyFunction,false);
-  //         // function onReadyFunction(){
-  //           var uri = encodeURI(CONFIG.ImageAddressIP + "/upload.php");
-  //           var photoname = Storage.get("UID"); // 取出病人的UID作为照片的名字
-  //           var options = {
-  //             fileKey : "file",
-  //             fileName : temp_photoaddress,
-  //             chunkedMode : true,
-  //             mimeType : "image/jpeg"
-  //           };
-  //           var q = $q.defer();
-  //           //console.log("jinlaile");
-  //           $cordovaFileTransfer.upload(uri,imgURI,options)
-  //             .then( function(r){
-  //               console.log("Code = " + r.responseCode);
-  //               console.log("Response = " + r.response);
-  //               console.log("Sent = " + r.bytesSent);
-  //               var result = "上传成功";
-  //               q.resolve(result);        
-  //             }, function(error){
-  //               console.log(error);
-  //               alert("An error has occurred: Code = " + error.code);
-  //               console.log("upload error source " + error.source);
-  //               console.log("upload error target " + error.target);
-  //               q.resolve(error);          
-  //             }, function (progress) {
-  //               console.log(progress);
-  //             })
-
-  //             ;
-  //           return q.promise;  
-  //         // }
-
-
-  //         // var ft = new FileTransfer();
-  //         // $cordovaFileTransfer.upload(imgURI, uri, win, fail, options);
-        
-  //     },
-
-  //   uploadPicture2: function(imgURI){
-  //     document.addEventListener("deviceready", onDeviceReady, false);
-
-  //     function onDeviceReady() {
-  //    // as soon as this function is called FileTransfer "should" be defined
-  //       console.log(FileTransfer);
-  //       console.log(File);
-  //     }
-  //   }
-  //   }
-  // }])
-
 //media文件操作 XJZ
 .factory('fs',['$q','$cordovaFile','$filter',function($q,$cordovaFile,$filter){
     return {
@@ -269,6 +158,47 @@ angular.module('kidney.services', ['ionic','ngResource'])
     }
     return audio;
 }])
+.factory('jmapi',['$http','JM','jm',function($http,JM,jm){
+    return {
+        registerByPhone:function(phone){
+            return User.getUserId({phoneNo:phone})
+                .then(function(data){
+                    if(data.UserId) return this.users(data.UserId);
+                    return data;
+                },function(err){
+                    return err;
+                })
+        },
+        users:function(userId){
+            var d={
+                "username":userId,
+                "password":JM.pGen(userId),
+                "flag":'patient'
+            }
+            var arr=[d];
+            return jm.users(d);
+        },
+        groups:function(owner,userArr,Gname,Gdesc){
+            var d={
+                "owner_username":owner, 
+                "name": Gname, 
+                "members_username": userArr, 
+                "desc": Gdesc,
+                "flag":'patient'
+            };
+            return jm.groups(d);
+        },
+        groupsMembers:function(gid,addArr,delArr){
+            var d={
+                "add":addArr,
+                "remove":delArr,
+                "groupId":gid,
+                "flag":'patient'
+            }
+            return jm.groupsMembers(d);
+        }
+    }
+}])
 //jmessage XJZ
 .factory('JM', ['Storage','$q','Patient', function(Storage,$q,Patient) {
     var ConversationList = [];
@@ -299,42 +229,6 @@ angular.module('kidney.services', ['ionic','ngResource'])
         // console.log("checkIsLogin...");
         
     }
-
-    // function getPushRegistrationID() {
-    //     try {
-    //         window.JPush.getRegistrationID(onGetRegistrationID);
-    //         if (device.platform != "Android") {
-    //             window.JPush.setDebugModeFromIos();
-    //             window.JPush.setApplicationIconBadgeNumber(0);
-    //         } else {
-    //             window.JPush.setDebugMode(true);
-    //         }
-    //     } catch (exception) {
-    //         console.log(exception);
-    //     }
-    // }
-
-    // function updateUserInfo() {
-    //     window.JMessage.getMyInfo(
-    //         function(response) {
-    //             var myInfo = JSON.parse(response);
-    //             console.log("user is login" + response);
-    //             window.JMessage.username = myInfo.userName;
-    //             window.JMessage.nickname = myInfo.nickname;
-    //             window.JMessage.gender = myInfo.mGender;
-    //             $('#myInfoUsername').val(myInfo.userName);
-    //             $('#myInfoNickname').val(myInfo.nickname);
-    //             $('#myInfoGender').val(myInfo.gender);
-    //         }, null);
-    // }
-
-    // function getUserDisplayName() {
-    //     if (window.JMessage.nickname.length == 0) {
-    //         return window.JMessage.username;
-    //     } else {
-    //         return window.JMessage.nickname;
-    //     }
-    // }
 
     function login(user) {
         return $q(function(resolve, reject) {
@@ -394,55 +288,6 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
     }
 
-    // function updateConversationList() {
-    //     $('#conversationList').empty().listview('refresh');
-    //     console.log("updateConversationList");
-    //     window.JMessage.getConversationList(
-    //         function(response) {
-    //             conversationList = JSON.parse(response);
-    //         },
-    //         function(response) {
-    //             alert("Get conversation list failed.");
-    //             console.log(response);
-    //         });
-    // }
-
-    // function onReceiveMessage(message) {
-    //     console.log("onReceiveSingleMessage");
-    //     if (device.platform == "Android") {
-    //         message = window.JMessage.message;
-    //         console.log(JSON.stringify(message));
-    //     }
-    //     // messageArray.unshift(message);
-    //     //refreshConversation();
-    // }
-    // function getMessageHistory(username) {
-    //     $('#messageList').empty().listview('refresh');
-    //     //读取的是从 0 开始的 50 条聊天记录，可按实现需求传不同的值。
-    //     window.JMessage.getHistoryMessages("single", username,
-    //         '', 0, 50, function (response) {
-    //             console.log("getMessageHistory ok: " + response);
-    //             messageArray = JSON.parse(response);
-    //             refreshConversation();
-    //         }, function (response) {
-    //             alert("getMessageHistory failed");
-    //             console.log("getMessageHistory fail" + response);
-    //         }
-    //     );
-    // }
-    // function sendMessage() {
-    //     var messageContentString = $("#messageContent").val();
-    //     window.JMessage.sendSingleTextMessage(
-    //         usernameForConversation, messageContentString, null,
-    //         function (response) {
-    //             var msg = JSON.parse(response);
-    //             messageArray.unshift(msg);
-    //             refreshConversation();
-    //         }, function (response) {
-    //             console.log("send message fail" + response);
-    //             alert("send message fail" + response);
-    //         });
-    // }
     function onGetRegistrationID(response) {
         console.log("registrationID is " + response);
         Storage.set('jid', response);
@@ -508,40 +353,6 @@ angular.module('kidney.services', ['ionic','ngResource'])
         }
     }
 
-    // function onSetTagsWithAlias(event) {
-    //     try {
-    //         console.log("onSetTagsWithAlias");
-    //         var result = "result code:" + event.resultCode + " ";
-    //         result += "tags:" + event.tags + " ";
-    //         result += "alias:" + event.alias + " ";
-    //         $("#tagAliasResult").html(result);
-    //     } catch (exception) {
-    //         console.log(exception)
-    //     }
-    // }
-
-    // function setTagWithAlias() {
-    //     try {
-    //         var username = $("#loginUsername").val();
-    //         var tag1 = $("#tagText1").val();
-    //         var tag2 = $("#tagText2").val();
-    //         var tag3 = $("#tagText3").val();
-    //         var alias = $("#aliasText").val();
-    //         var dd = [];
-    //         if (tag1 != "") {
-    //             dd.push(tag1);
-    //         }
-    //         if (tag2 != "") {
-    //             dd.push(tag2);
-    //         }
-    //         if (tag3 != "") {
-    //             dd.push(tag3);
-    //         }
-    //         window.JPush.setTagsWithAlias(dd, alias);
-    //     } catch (exception) {
-    //         console.log(exception);
-    //     }
-    // }
     function newGroup(name,des,members){
         return $q(function(resolve,reject){
             window.JMessage.createGroup('abcde','fg',
@@ -653,6 +464,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             // document.addEventListener("jpush.receiveMessage",
             //     onReceivePushMessage, false);
         },
+        pGen:pGen,
         sendCustom:sendCustom,
         login:login,
         register: register,
@@ -992,6 +804,14 @@ angular.module('kidney.services', ['ionic','ngResource'])
         })
     }
 
+    var jm = function(){
+        return $resource(CONFIG.baseUrl + ':path/:route',{path:'jm'},{
+            users:{method:'POST', params:{route: 'users'}, timeout: 100000},
+            groups:{method:'POST', params:{route: 'groups'}, timeout: 100000},
+            groupsMembers:{method:'POST', params:{route: 'groups/members'}, timeout: 100000}
+        })
+    }
+
     var order = function(){
         return $resource(CONFIG.baseUrl + ':path/:route',{path:'order'},{
             insertOrder:{method:'POST', params:{route: 'insertOrder'}, timeout: 100000},
@@ -1021,6 +841,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             serve.News = News();
             serve.Communication = Communication();
             serve.wechat = wechat();
+            serve.jm = jm();
             serve.order = order();
         }, 0, 1);
     };
@@ -1041,6 +862,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.News = News();
     serve.Communication = Communication();
     serve.wechat = wechat();
+    serve.jm = jm();
     serve.order = order();
     return serve;
 }])
@@ -2328,6 +2150,58 @@ angular.module('kidney.services', ['ionic','ngResource'])
         }
     }
 })
+.factory('jm', ['$q', 'Data', function($q, Data){
+    var self = this;
+    //params->{
+            //  url:'patient_class'
+           // }
+    self.users = function(params){
+        var deferred = $q.defer();
+        Data.jm.users(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->{
+            //  code:'3'
+            // }
+    self.groups = function(params){
+        var deferred = $q.defer();
+        Data.jm.groups(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->{
+            //  serverId:
+            //  name:
+            // }
+    self.groupsMembers = function(params){
+        var deferred = $q.defer();
+        Data.jm.groupsMembers(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+
+
+    return self;
+}])
 
 .factory('payment',['wechat','Storage','$http','order',function(wechat,Storage,$http,order){
   return {
