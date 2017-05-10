@@ -5514,8 +5514,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   paystatus:0,
                   paytime:"2017-05-02"
                 }
-    var paymentresult = payment.payment(neworder)
-    console.log(paymentresult)
+    payment.payment(neworder).then(function(data){
+      console.log(data)
+    },function(data){
+      console.log(err)
+    })
     // var config = "";
     // var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     // wechat.settingConfig({url:path}).then(function(data){
