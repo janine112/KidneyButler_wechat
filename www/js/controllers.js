@@ -5511,7 +5511,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   paystatus:0,
                   paytime:"2017-05-02"
                 }
-    payment.payment(neworder)
+    var paymentresult = payment.payment(neworder)
+    console.log(paymentresult)
     // var config = "";
     // var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     // wechat.settingConfig({url:path}).then(function(data){
