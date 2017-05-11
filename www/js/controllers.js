@@ -5516,7 +5516,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 }
     payment.payment(neworder).then(function(data){
       console.log(data)
-    },function(data){
+    },function(err){
       console.log(err)
     })
     // var config = "";

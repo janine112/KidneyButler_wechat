@@ -2203,12 +2203,13 @@ angular.module('kidney.services', ['ionic','ngResource'])
     return self;
 }])
 
-.factory('payment',['wechat','Storage','$http','order',function(wechat,Storage,$http,order){
+.factory('payment',['$q','wechat','Storage','$http','order',function($q,wechat,Storage,$http,order){
   return {
     payment:function(neworder){
       var config = "";
       var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
-      return wechat.settingConfig({url:path}).then(function(data){
+      var defer = $q.defer()
+      wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
         config.jsApiList = ['chooseWXPay']
@@ -2254,29 +2255,29 @@ angular.module('kidney.services', ['ionic','ngResource'])
                             signType: data.results.signType,
                             paySign: data.results.paySign,
                             success: function(res) {
-                              return res;
+                              deferred.resolve(res);
                             }
                           })
                         },function(err){
-                            return err;
+                            deferred.reject(err);
                         })
                     }, function(e) {
-                        return e;
+                        deferred.reject(e);
                     });
                     
                   },function(err){
-                    return err;
+                    deferred.reject(err);
                   })
                   
               }
           });
         })
         wx.error(function(res){
-          return res;
+          deferred.reject(err);
         })
 
       },function(err){
-        return err;
+        deferred.reject(err);
       })
     }
   };
