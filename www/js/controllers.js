@@ -966,7 +966,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                             function(data){
                                                 if(data.result=="插入成功"){
                                                     var now = new Date()
-                                                    now =  $filter("date")(now, "yyyy-MM-dd HH:mm:ss")
+                                                    now =  $filter("date")(now, "yyyy-MM-dd HH:mm:ss");
                                                     if (angular.isDefined(Storage.get('openid')) == true)
                                                     {
                                                       User.setOpenId({phoneNo:Storage.get('USERNAME'),openId:Storage.get('openid')}).then(function(data){
@@ -1110,7 +1110,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 //主页面--PXY
-.controller('GoToMessageCtrl', ['$scope','$timeout','$state', '$location','wechat','$window','Patient','Storage','$ionicPopup','$window','$interval','News',function($scope, $timeout,$state,$location,wechat,$window,Patient,Storage,$ionicPopup,$window,$interval,News) {
+.controller('GoToMessageCtrl', ['$scope','$timeout','$state', '$location','wechat','$window','Patient','Storage','$ionicPopup','$window','$interval','News','$ionicHistory',function($scope, $timeout,$state,$location,wechat,$window,Patient,Storage,$ionicPopup,$window,$interval,News,$ionicHistory) {
   $scope.QRscan = function(){
     // alert(1)
     var config = "";
@@ -1176,7 +1176,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
   $scope.hasUnreadMessages = false;
     $scope.GoToMessage = function(){
-      $state.go('messages');
+        Storage.set('messageBackState',$ionicHistory.currentView().stateId);
+        $state.go('messages');
     }
     $scope.gotomine=function(){
       $state.go('tab.mine');
@@ -1198,7 +1199,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             });
     }
     GetUnread();
-    RefreshUnread = $interval(GetUnread,30000);
+    RefreshUnread = $interval(GetUnread,2000);  
 
 }])
 
@@ -4828,7 +4829,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
     $scope.Goback = function(){
-      $ionicHistory.goBack();
+        $state.go(Storage.get('messageBackState'));
+      // $ionicHistory.goBack();
     }
 
     var SetRead = function(message){
@@ -6926,7 +6928,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         if (data.result == "新建成功")
         {
             $scope.submitable=true;
-            
+
             Storage.rm('tempquestionare')
             Storage.rm('tempimgrul')
             var msgJson={

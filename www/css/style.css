@@ -1092,3 +1092,96 @@ input:disabled{
     background-color: #FFFFFF;
     /*color:#ACA899;*/
 }
+
+span.tick {
+  position: absolute;
+  right: 0px;
+}
+
+input.hasTick {
+  text-align: right;
+  margin-right: 10%;
+}
+
+
+.item-select-custom {
+  position: relative; }
+  .item-select-custom select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 10%;
+    padding: 0 48px 0 16px;
+    max-width: 65%;
+    border: none;
+    background: #fff;
+    color: #333;
+    text-indent: .01px;
+    text-overflow: '';
+    white-space: nowrap;
+    font-size: 14px;
+    cursor: pointer;
+    direction: rtl; }
+  .item-select-custom select::-ms-expand {
+    display: none; }
+  .item-select-custom option {
+    direction: ltr; }
+  .item-select-custom:after {
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    margin-top: -3px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    color: #999;
+    content: "";
+    pointer-events: none; }
+  .item-select-custom.item-light select {
+    background: #fff;
+    color: #444; }
+  .item-select-custom.item-stable select {
+    background: #f8f8f8;
+    color: #444; }
+  .item-select-custom.item-stable:after, .item-select-custom.item-stable .input-label {
+    color: #666666; }
+  .item-select-custom.item-positive select {
+    background: #387ef5;
+    color: #fff; }
+  .item-select-custom.item-positive:after, .item-select-custom.item-positive .input-label {
+    color: #fff; }
+  .item-select-custom.item-calm select {
+    background: #11c1f3;
+    color: #fff; }
+  .item-select-custom.item-calm:after, .item-select-custom.item-calm .input-label {
+    color: #fff; }
+  .item-select-custom.item-assertive select {
+    background: #ef473a;
+    color: #fff; }
+  .item-select-custom.item-assertive:after, .item-select-custom.item-assertive .input-label {
+    color: #fff; }
+  .item-select-custom.item-balanced select {
+    background: #33cd5f;
+    color: #fff; }
+  .item-select-custom.item-balanced:after, .item-select-custom.item-balanced .input-label {
+    color: #fff; }
+  .item-select-custom.item-energized select {
+    background: #ffc900;
+    color: #fff; }
+  .item-select-custom.item-energized:after, .item-select-custom.item-energized .input-label {
+    color: #fff; }
+  .item-select-custom.item-royal select {
+    background: #886aea;
+    color: #fff; }
+  .item-select-custom.item-royal:after, .item-select-custom.item-royal .input-label {
+    color: #fff; }
+  .item-select-custom.item-dark select {
+    background: #444;
+    color: #fff; }
+  .item-select-custom.item-dark:after, .item-select-custom.item-dark .input-label {
+    color: #fff; }
