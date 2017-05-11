@@ -2255,30 +2255,31 @@ angular.module('kidney.services', ['ionic','ngResource'])
                             signType: data.results.signType,
                             paySign: data.results.paySign,
                             success: function(res) {
-                              deferred.resolve(res);
+                              defer.resolve(res);
                             }
                           })
                         },function(err){
-                            deferred.reject(err);
+                            defer.reject(err);
                         })
                     }, function(e) {
-                        deferred.reject(e);
+                        defer.reject(e);
                     });
                     
                   },function(err){
-                    deferred.reject(err);
+                    defer.reject(err);
                   })
                   
               }
           });
         })
         wx.error(function(res){
-          deferred.reject(err);
+          defer.reject(err);
         })
 
       },function(err){
-        deferred.reject(err);
+        defer.reject(err);
       })
+      return defer.promise;
     }
   };
 }])
