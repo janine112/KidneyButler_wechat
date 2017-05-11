@@ -3162,7 +3162,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       $timeout(function(){
           $ionicLoading.hide();
           //图片路径
-          $scope.myAvatar="http://121.43.107.106:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
+          $scope.myAvatar="http://121.196.221.44:8052/uploads/photos/"+temp_name+'?'+new Date().getTime();
           console.log($scope.myAvatar)
           // $state.reload("tab.mine")
           Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
@@ -4476,7 +4476,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       //图片路径
       $timeout(function(){
         $ionicLoading.hide();
-        $scope.health.imgurl.push("http://121.43.107.106:8052/uploads/photos/"+temp_photoaddress)
+        $scope.health.imgurl.push("http://121.196.221.44:8052/uploads/photos/"+temp_photoaddress)
       },1000)
       
       // $state.reload("tab.mine")
@@ -4659,7 +4659,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   $scope.showoriginal=function(resizedpath){
     $scope.openModal();
     console.log(resizedpath)
-    var originalfilepath="http://121.43.107.106:8052/uploads/photos/"+resizedpath.slice(resizedpath.lastIndexOf('/')+1)
+    var originalfilepath="http://121.196.221.44:8052/uploads/photos/"+resizedpath.slice(resizedpath.lastIndexOf('/')+1)
     console.log(originalfilepath)
     $scope.healthinfoimgurl=originalfilepath;
   }
