@@ -765,7 +765,8 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getAccountInfo:{method:'GET', params:{route: 'getAccountInfo'}, timeout: 100000},
             getCounts:{method:'GET', params:{route: 'getCounts'}, timeout: 100000},
             modifyCounts:{method:'POST', params:{route: 'modifyCounts'}, timeout: 100000},
-            rechargeDoctor:{method:'POST', params:{route: 'rechargeDoctor'}, timeout: 100000}
+            rechargeDoctor:{method:'POST', params:{route: 'rechargeDoctor'}, timeout: 100000},
+            updateFreeTime:{method:'POST', params:{route: 'updateFreeTime'}, timeout: 100000}
         });
     }
 
@@ -1932,6 +1933,19 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
+
+    self.updateFreeTime = function(params){
+         var deferred = $q.defer();
+         Data.Account.updateFreeTime(
+             params,
+             function(data, headers){
+                 deferred.resolve(data);
+             },
+             function(err){
+                 deferred.reject(err);
+         });
+         return deferred.promise;
+     };
     return self;
 }])
 .factory('VitalSign', ['$q', 'Data', function($q, Data){

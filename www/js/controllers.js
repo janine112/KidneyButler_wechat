@@ -3567,7 +3567,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             .then(function(data)
             {
                 Storage.set('STATUSNOW',data.result.status);
-                $scope.params.counseltype = data.result.type;
+                $scope.params.counseltype=data.result.type=='3'?'2':data.result.type;
                 $scope.params.counsel = data.result;
                 console.log(data)
                 // if(data.result.status==0)//没有未结束的问诊，再看看有没有未结束的咨询
@@ -4214,7 +4214,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
   $scope.newHealth = function(){
-    $state.go('tab.myHealthInfoDetail',{id:null,caneidt:false});
+    $state.go('tab.myHealthInfoDetail',{id:null,caneidt:true});
 
   }
 
@@ -5306,6 +5306,16 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               cancelText:"取消"
             }).then(function(res){
               if(res){
+                //免费咨询次数减一 count+3
+                Account.updateFreeTime({patientId:Storage.get('UID')}).then(function(data){
+                  Account.modifyCounts({patientId:Storage.get('UID'),doctorId:id,modify:3}).then(function(data){
+                    console.log(data)
+                  },function(err){
+                    console.log(err)
+                  })
+                },function(err){
+                  console.log(err)
+                })
                 $state.go("tab.consultquestion1",{DoctorId:id,counselType:1});
               }
             })
@@ -5714,7 +5724,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               cancelText:"取消"
             }).then(function(res){
               if(res){
-                $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:1});
+                //免费咨询次数减一 count+3
+                Account.updateFreeTime({patientId:Storage.get('UID')}).then(function(data){
+                  Account.modifyCounts({patientId:Storage.get('UID'),doctorId:id,modify:3}).then(function(data){
+                    console.log(data)
+                  },function(err){
+                    console.log(err)
+                  })
+                },function(err){
+                  console.log(err)
+                })
+                $state.go("tab.consultquestion1",{DoctorId:id,counselType:1});
               }
             })
           }else{
