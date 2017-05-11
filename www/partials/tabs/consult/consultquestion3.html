@@ -21,7 +21,7 @@
         <input  ng-model="Questionare.title"  type="text" placeholder="方便让医生注意到">
       </label>
     </div>
-      <button style="margin-top:0" class="button button-block button-balanced" ng-click ="Submitquestion()">
+      <button style="margin-top:0" ng-disabled="submitable" class="button button-block button-balanced" ng-click ="Submitquestion()">
             提交
       </button>
       <button style="margin-top:0" class="button button-block button-balanced" class="button button-clear" ng-click="backtoDisease()">上一步

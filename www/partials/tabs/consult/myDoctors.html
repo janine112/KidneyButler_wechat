@@ -21,7 +21,7 @@
         <p style="font-size: 12px">擅长：{{doctor.major}}</p>
         <p style="font-size: 12px">收费：<span>咨询{{doctor.charge1}}元一答</span><span style="margin-left: 10px">问诊{{doctor.charge2}}元一次</span></p>
         <div class="row" style="font-size: 12px">
-            <div class="col" style="color:#2B67F5"><i class="icon ion-star"></i><span>{{doctor.score||"无"}}</span></div>
+            <div class="col" style="color:#2B67F5"><i class="icon ion-star"></i><span>{{doctor.score.toFixed(2)||"无"}}</span></div>
             <div class="col" style="color:#2B67F5"><span style="margin-left: 10px">咨询量：{{doctor.count1}}</span></div>
             <div class="col" style="color:#2B67F5"> <span style="margin-left: 10px">问诊量：{{doctor.count2}}</span></div>
             <div class="col" style="color:#181544;font-size:14px;font-weight:bold;"><span><i class="icon ion-help-circled"></i>咨询</span></div>

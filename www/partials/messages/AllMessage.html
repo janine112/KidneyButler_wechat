@@ -9,11 +9,7 @@
 
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
   <ion-content padding="true" style="">
-    <div class="card" ng-if="!(pay||alert||task||insurance||chats.length)">
-        <div class="item item-text-wrap">
-            暂时没有消息
-        </div>
-    </div>
+    
 
     <ion-list>
 
@@ -69,6 +65,11 @@
 
 
     </ion-list> 
+    <div class="card" ng-if="(pay=='')&&(alert=='')&&(task=='')&&(insurance=='')&&(chats.length==0)">
+        <div class="item item-text-wrap">
+            暂时没有消息
+        </div>
+    </div>
     <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
   </ion-content>
           
