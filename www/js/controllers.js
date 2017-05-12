@@ -254,6 +254,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         else if($stateParams.phonevalidType=='wechat'){
             User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                 if(data.results == 0){
+                    var tempuserId = data.UserId
                     Patient.getPatientDetail({userId:data.UserId}).then(function(data){
                         if(data.results == null){
                             $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或转移到肾病守护者进行操作";
@@ -312,7 +313,15 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                               User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                                   if(data.msg == "success!")
                                   {
-                                    $state.go('tab.tasklist');
+                                    User.getAgree({userId:tempuserId}).then(function(res){
+                                        if(res.results.agreement=="0"){
+                                            $state.go('tab.tasklist');
+                                        }else{
+                                            $state.go('agreement',{last:'signin'});
+                                        }
+                                    },function(err){
+                                        console.log(err);
+                                    })
                                   }
                               },function(){
                                   $scope.logStatus = "连接超时！";
