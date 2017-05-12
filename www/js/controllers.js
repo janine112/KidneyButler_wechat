@@ -3548,25 +3548,33 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             counseltype:'',
             counselstatus:'',
             needlisten:0,
-            counsel:''
+            counsel:'',
+            connect:false
         }
         // if($state.params.type=='0') $scope.params.hidePanel=false;
         // if (window.JMessage) {
         //     window.JMessage.enterSingleConversation($state.params.chatId, CONFIG.crossKey);
         //     getMsg(15);
         // }
+        var loadWatcher = $scope.$watch('msgs.length',function(newv,oldv){
+            if(newv) {
+                loadWatcher();
+                var lastMsg=$scope.msgs[$scope.msgs-1];
+                return News.insertNews({userId:lastMsg.targetID,sendBy:fromID,type:'11',readOrNot:1});
+            }
+        });
         $scope.getMsg(15).then(function(data){$scope.msgs=data;});
         toBottom(true,2000);
     });
     $scope.$on('$ionicView.enter', function() {
         $rootScope.conversation.type = 'single';
         $rootScope.conversation.id = $state.params.chatId;
-        News.insertNews({userId:Storage.get('UID'),sendBy:$scope.params.chatId,type:'11',readOrNot:1});
+        // News.insertNews({userId:Storage.get('UID'),sendBy:$scope.params.chatId,type:'11',readOrNot:1});
         Counsels.getStatus({doctorId:$state.params.chatId,patientId:Storage.get('UID')})
             .then(function(data)
             {
                 Storage.set('STATUSNOW',data.result.status);
-                $scope.params.counseltype = data.result.type;
+                $scope.params.counseltype = data.result.type=='3'?'2':data.result.type;
                 $scope.params.counsel = data.result;
                 console.log(data)
                 // if(data.result.status==0)//没有未结束的问诊，再看看有没有未结束的咨询
@@ -3599,30 +3607,43 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 // }
                     //再看看有没有未结束的咨询
                 $scope.counselstatus=data.result.status;
+
+                
+
                 Account.getCounts({doctorId:$scope.params.chatId,patientId:Storage.get('UID')})
                 .then(function(res){
-                    var head='',body='';
-                    if($scope.params.counseltype!='1'){
-                        head+='问诊';
-                        if($scope.counselstatus=='0'){
-                            head+='-已结束';
-                            body='您没有提问次数了。如需提问，请新建咨询或问诊';
-                        }else{
-                            body='您可以不限次数进行提问';
-                        }
+                    if($scope.params.connect){
+                        return sendCnNotice($scope.params.counseltype,$scope.counselstatus,res.result.count);
                     }else{
-                        head+='咨询';
-                        if(res.result.count<=0){
-                            head+='-已结束';
-                            body='您没有提问次数了。如需提问，请新建咨询或问诊';
-                        }else{
-                            body='您还有'+res.result.count+'次提问机会';
-                        }
+                        var connectWatcher = $scope.$watch('params.connect',function(newv,oldv){
+                            if(newv) {
+                                connectWatcher();
+                                return sendCnNotice($scope.params.counseltype,$scope.counselstatus,res.result.count);
+                            }
+                        });
                     }
-                    var alertPopup = $ionicPopup.alert({
-                        title: head,
-                        template: body
-                    });
+                    // var head='',body='';
+                    // if($scope.params.counseltype!='1'){
+                    //     head+='问诊';
+                    //     if($scope.counselstatus=='0'){
+                    //         head+='-已结束';
+                    //         body='您没有提问次数了。如需提问，请新建咨询或问诊';
+                    //     }else{
+                    //         body='您可以不限次数进行提问';
+                    //     }
+                    // }else{
+                    //     head+='咨询';
+                    //     if(res.result.count<=0){
+                    //         head+='-已结束';
+                    //         body='您没有提问次数了。如需提问，请新建咨询或问诊';
+                    //     }else{
+                    //         body='您还有'+res.result.count+'次提问机会';
+                    //     }
+                    // }
+                    // var alertPopup = $ionicPopup.alert({
+                    //     title: head,
+                    //     template: body
+                    // });
                 })
             },function(err)
             {
@@ -3684,7 +3705,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 }
                 // $rootScope.$broadcast('messageResponse',data);
             });
-
+            $scope.params.connect=true;
         }, function(err) {
 
         });
@@ -3713,7 +3734,55 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     //         first++;
     //     }
     // }
+    function sendCnNotice(type,status,cnt){
+        var len=$scope.msgs.length;
+        if(len==0 || !($scope.msgs[len-1].content.type!='count-notice' && $scope.msgs[len-1].content.count==cnt)){
+            var bodyDoc='';
+            if(type!='1'){
+                if(status=='0'){
+                    bodyDoc='您仍可以向患者追加回答，该消息不计费';
+                    bodyPat='您没有提问次数了。如需提问，请新建咨询或问诊';
+                }else{
+                    bodyDoc='患者提问不限次数';
+                    bodyPat='您可以不限次数进行提问';
+                }
+            }else{
+                if(cnt<=0 || status=='0'){
+                    bodyDoc='您仍可以向患者追加回答，该消息不计费';
+                    bodyPat='您没有提问次数了。如需提问，请新建咨询或问诊';
+                }else{
+                    bodyDoc='您还需要回答'+cnt+'个问题';
+                    bodyPat='您还有'+cnt+'次提问机会';
+                }
+            }
 
+            var notice={
+                type:'count-notice',
+                ctype:type,
+                cstatus:status,
+                count:cnt,
+                bodyDoc:bodyDoc,
+                bodyPat:bodyPat,
+                counseltype:type
+            }
+            var msgJson={
+                contentType:'custom',
+                fromID:$scope.params.UID,
+                fromName:thisPatient.name,
+                fromUser:{
+                    avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+$scope.params.UID+'_myAvatar.jpg'
+                },
+                targetID:$scope.params.chatId,
+                targetName:$scope.params.counsel.doctorId.name,
+                targetType:'single',
+                status:'send_going',
+                createTimeInMillis: Date.now(),
+                newsType:11,
+                content:notice
+            }
+            socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
+        }
+    }
     $scope.getMsg = function(num) {
         console.info('getMsg');
         return $q(function(resolve,reject){
