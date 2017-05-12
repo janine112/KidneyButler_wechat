@@ -3570,8 +3570,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         var loadWatcher = $scope.$watch('msgs.length',function(newv,oldv){
             if(newv) {
                 loadWatcher();
-                var lastMsg=$scope.msgs[$scope.msgs-1];
-                return News.insertNews({userId:lastMsg.targetID,sendBy:fromID,type:'11',readOrNot:1});
+                var lastMsg=$scope.msgs[$scope.msgs.length-1];
+                return News.insertNews({userId:lastMsg.targetID,sendBy:lastMsg.fromID,type:'11',readOrNot:1});
             }
         });
         $scope.getMsg(15).then(function(data){$scope.msgs=data;});
@@ -3795,6 +3795,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
         }
     }
+    function noMore(){
+        $scope.params.moreMsgs = false;
+        setTimeout(function(){
+            $scope.$apply(function(){
+                $scope.params.moreMsgs = true;
+            });
+        },5000);
+    }
     $scope.getMsg = function(num) {
         console.info('getMsg');
         return $q(function(resolve,reject){
@@ -3810,7 +3818,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 console.log(data);
                 var d=data.results;
                 $scope.$broadcast('scroll.refreshComplete');
-                if(d=='没有更多了!') return $scope.params.moreMsgs = false;
+                if(d=='没有更多了!') return noMore();
                 var res=[];
                 for(var i in d){
                     res.push(d[i].content);
