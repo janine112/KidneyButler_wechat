@@ -170,6 +170,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   $scope.Verify={Phone:"",Code:""};
   $scope.veritext="获取验证码";
   $scope.isable=false;
+  var tempuserId = ""
   var unablebutton = function(){      
      //验证码BUTTON效果
         $scope.isable=true;
@@ -254,7 +255,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         else if($stateParams.phonevalidType=='wechat'){
             User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                 if(data.results == 0){
-                    var tempuserId = data.UserId
+                    tempuserId = data.UserId
                     Patient.getPatientDetail({userId:data.UserId}).then(function(data){
                         if(data.results == null){
                             $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或转移到肾病守护者进行操作";
