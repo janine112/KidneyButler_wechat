@@ -3749,12 +3749,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     function sendNotice(type,status,cnt){
         return setTimeout(function(){
             return sendCnNotice(type,status,cnt);
-        },1000);
+        },2000);
     }
     function sendCnNotice(type,status,cnt){
 
         var len=$scope.msgs.length;
-        if(len==0 || !($scope.msgs[len-1].content.type!='count-notice' && $scope.msgs[len-1].content.count==cnt)){
+        if(len==0 || !($scope.msgs[len-1].content.type=='count-notice' && $scope.msgs[len-1].content.count==cnt)){
             var bodyDoc='';
             if(type!='1'){
                 if(status=='0'){
