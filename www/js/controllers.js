@@ -2,7 +2,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 //登录--PXY
 .controller('SignInCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','jmapi', '$location','wechat','$sce',function($scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,jmapi,$location,wechat,$sce) {
   $scope.barwidth="width:0%";
-  $scope.navigation_login=$sce.trustAsResourceUrl("http://121.196.221.44:6699/member.php?mod=logging&action=logout&formhash=xxxxxx");
+  $scope.navigation_login=$sce.trustAsResourceUrl("http://patientdiscuss.haihonghospitalmanagement.com/member.php?mod=logging&action=logout&formhash=xxxxxx");
   // Storage.set("personalinfobackstate","logOn");
   // alert($location.absUrl())
   var temp = $location.absUrl().split('=')
@@ -943,7 +943,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
                             $http({
                                 method  : 'POST',
-                                url     : 'http://121.196.221.44:6699/member.php?mod=register&mobile=2&handlekey=registerform&inajax=1',
+                                url     : 'http://patientdiscuss.haihonghospitalmanagement.com/member.php?mod=register&mobile=2&handlekey=registerform&inajax=1',
                                 params    :{
                                     'regsubmit':'yes',
                                     'formhash':'',
@@ -3112,7 +3112,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                      //$timeout(function () {
                      $ionicHistory.clearCache();
                      $ionicHistory.clearHistory();
-                     $scope.navigation_login=$sce.trustAsResourceUrl("http://121.196.221.44:6699/member.php?mod=logging&action=logout&formhash=xxxxxx");
+                     $scope.navigation_login=$sce.trustAsResourceUrl("http://patientdiscuss.haihonghospitalmanagement.com/member.php?mod=logging&action=logout&formhash=xxxxxx");
                     //}, 30);
                     //$ionicPopup.hide();
                 }
@@ -7170,8 +7170,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     .then(function(data)
     {
       console.log(data)
-      $scope.navigation_login=$sce.trustAsResourceUrl("http://121.196.221.44:6699/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+data.results.name+phoneNum.slice(7)+"&password="+data.results.name+phoneNum.slice(7));
-      $scope.navigation=$sce.trustAsResourceUrl("http://121.196.221.44:6699/");
+      $scope.navigation_login=$sce.trustAsResourceUrl("http://patientdiscuss.haihonghospitalmanagement.com/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=2&username="+data.results.name+phoneNum.slice(7)+"&password="+data.results.name+phoneNum.slice(7));
+      $scope.navigation=$sce.trustAsResourceUrl("http://patientdiscuss.haihonghospitalmanagement.com/");
     })
 
 }])
