@@ -2287,7 +2287,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
           });
         })
         wx.error(function(res){
-          defer.reject(err);
+          defer.reject(res);
         })
 
       },function(err){
