@@ -3625,12 +3625,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 Account.getCounts({doctorId:$scope.params.chatId,patientId:Storage.get('UID')})
                 .then(function(res){
                     if($scope.params.connect){
-                        return sendCnNotice($scope.params.counseltype,$scope.counselstatus,res.result.count);
+                        return sendNotice($scope.params.counseltype,$scope.counselstatus,res.result.count);
                     }else{
                         var connectWatcher = $scope.$watch('params.connect',function(newv,oldv){
                             if(newv) {
                                 connectWatcher();
-                                return sendCnNotice($scope.params.counseltype,$scope.counselstatus,res.result.count);
+                                return sendNotice($scope.params.counseltype,$scope.counselstatus,res.result.count);
                             }
                         });
                     }
@@ -3746,7 +3746,13 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     //         first++;
     //     }
     // }
+    function sendNotice(type,status,cnt){
+        return setTimeout(function(){
+            return sendCnNotice(type,status,cnt);
+        },1000);
+    }
     function sendCnNotice(type,status,cnt){
+
         var len=$scope.msgs.length;
         if(len==0 || !($scope.msgs[len-1].content.type!='count-notice' && $scope.msgs[len-1].content.count==cnt)){
             var bodyDoc='';
