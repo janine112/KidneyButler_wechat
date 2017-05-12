@@ -45,6 +45,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                                 onTap: function(e) {
                                     $state.go('signin')
                                 }
+                              },
                            {
                                 text: '<b>確定</b>',
                                 type: 'button-positive',
