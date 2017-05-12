@@ -4,10 +4,10 @@ angular.module('kidney.services', ['ionic','ngResource'])
 .constant('CONFIG', {
     appKey: 'fe7b9ba069b80316653274e4',
     crossKey: 'cf32b94444c4eaacef86903e',
-    baseUrl: 'http://121.43.107.106:4050/',
-    mediaUrl: 'http://121.43.107.106:8052/',
-    imgThumbUrl: 'http://121.43.107.106:8052/uploads/photos/resize',
-    imgLargeUrl: 'http://121.43.107.106:8052/uploads/photos/',
+    baseUrl: 'http://121.196.221.44:4050/',
+    mediaUrl: 'http://121.196.221.44:8052/',
+    imgThumbUrl: 'http://121.196.221.44:8052/uploads/photos/resize',
+    imgLargeUrl: 'http://121.196.221.44:8052/uploads/photos/',
     cameraOptions: {
         cam: {
             quality: 60,
@@ -525,7 +525,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     },
     uploadPicture : function(imgURI, temp_photoaddress){
         return $q(function(resolve, reject) {
-          var uri = encodeURI("http://121.43.107.106:4050/upload")
+          var uri = encodeURI("http://121.196.221.44:4050/upload")
             // var photoname = Storage.get("UID"); // 取出病人的UID作为照片的名字
             var options = {
               fileKey : "file",
@@ -765,7 +765,8 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getAccountInfo:{method:'GET', params:{route: 'getAccountInfo'}, timeout: 100000},
             getCounts:{method:'GET', params:{route: 'getCounts'}, timeout: 100000},
             modifyCounts:{method:'POST', params:{route: 'modifyCounts'}, timeout: 100000},
-            rechargeDoctor:{method:'POST', params:{route: 'rechargeDoctor'}, timeout: 100000}
+            rechargeDoctor:{method:'POST', params:{route: 'rechargeDoctor'}, timeout: 100000},
+            updateFreeTime:{method:'POST', params:{route: 'updateFreeTime'}, timeout: 100000}
         });
     }
 
@@ -1932,6 +1933,19 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
+
+    self.updateFreeTime = function(params){
+         var deferred = $q.defer();
+         Data.Account.updateFreeTime(
+             params,
+             function(data, headers){
+                 deferred.resolve(data);
+             },
+             function(err){
+                 deferred.reject(err);
+         });
+         return deferred.promise;
+     };
     return self;
 }])
 .factory('VitalSign', ['$q', 'Data', function($q, Data){
@@ -2245,7 +2259,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
                         console.log(result.data.ip)
                         if (result.data.ip == null || result.data.ip == undefined || result.data.ip == "")
                         {
-                          result.data.ip = "121.43.107.106"
+                          result.data.ip = "121.196.221.44"
                         }
                         wechat.addOrder({openid:Storage.get('openid'),orderNo:data.results.orderNo,ip:result.data.ip}).then(function(data){
                           wx.chooseWXPay({
