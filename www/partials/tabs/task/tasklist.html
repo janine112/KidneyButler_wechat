@@ -4,61 +4,69 @@
         <ion-refresher pulling-text="下拉刷新" spinner='ripple' refreshing-text="。。。" on-refresh="Refresh()">
         </ion-refresher>
         <div style="text-align: center;"><a href="#/insurance">肾病保险服务</a></div>
-        <div class="list" can-swipe="listCanSwipe">
-            <a class="item" style="font-size:20px;text-align:center;font-weight:bold;background-color:rgba(44, 62, 149, 0.1);">
-                今日任务
-            </a>
-            <ion-list>
-                <ion-item class="item item-icon-right item-remove-animate" ng-repeat="item in Tasks.Measure">
-                    {{item.Name}}<span style="font-size:12px;color:#9E9E9E" ng-if="item.Unit != '' ">({{item.Unit}})</span>
-                    <p>{{item.Freq}}</p>
-                    <p>{{item.instruction}}</p>
-                    <div ng-if="item.TimesFlag" class="statusList">
-                        <div class="scheduleGray"></div>
-                        <div class="scheduleGreen" style="width:{{item.Progress}}"></div>
-                    </div>
-                    <br />
-                    <p>{{item.content}}</p>
-                    <ion-option-button class="button-calm" ng-click="showMesPop(item,'edit')">编辑</ion-option-button>
-                    <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showMesPop(item,'fill')"></i>
-                    <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
+        <ion-list>
+            <a class="item green-bg font-white" style="border: 0;font-size: 14px;border-bottom: 1px solid #fff;margin-bottom: 0" ng-click="open==true?open=false:open=true" ng-model="open">
+            测量任务
+            <i class="icon ion-chevron-up" ng-if="!open"></i> 
+            <i class="icon ion-chevron-down" ng-if="open"></i>
+            </a>   
 
-                </ion-item>
-            </ion-list>
-            <a class="item" style="font-size:20px;text-align:center;font-weight:bold;background-color:rgba(44, 62, 149, 0.1);">
-                其他任务 <button ng-click="openModal()">查看医生排班</button>
-                <a class="item item-icon-right" ng-if="HemoBtnFlag">
-                    您还未设定血透排班时间
-                    <i class='icon'><button ng-click="GotoSet()">设置</button></i>
-                </a>
-                <ion-list>
-                <ion-item class="item item-icon-right" ng-repeat="item in Tasks.Hemo">
-                    {{item.Name}}
-                    <p>{{item.Freq}}</p>
-                    <p>任务时间：{{item.startTime}}</p>
-                    <p ng-if="item.endTime != ''">执行时间：{{item.endTime}}</p>
-                    <div class="statusList">
-                        <div class="scheduleGray"></div>
-                        <div class="scheduleGreen" style="width:{{item.Progress}}"></div>
-                    </div>
-                    <ion-option-button class="button-calm" ng-click="showHemoPop(item, 'edit')">编辑</ion-option-button>
-                    <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showHemoPop(item, 'fill')"></i>
-                    <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
-                </ion-item>
-                <ion-item class="item item-icon-right" ng-repeat="item in Tasks.Other">
-                    {{item.Name}}
-                    <p>{{item.Freq}}</p>
-                    <p ng-if="item.frequencyTimes != 0">任务时间：{{item.startTime}}</p>
-                    <p ng-if="item.DoneFlag">上次执行：{{item.endTime}}</p>
-                    <p>{{item.content}}</p>
-                    <ion-option-button class="button-calm" ng-click="showOtherPop(item, 'edit')">编辑</ion-option-button>
-                    <i ng-if="!item.Flag" class="icon ion-edit" style="font-size:20px" ng-click="showOtherPop(item, 'fill')"></i>
-                    <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
-                    <button ng-if = "item.Flag" ng-click = "StartNewTask(item)">新任务</button>
-                </ion-item>
-                </ion-list>
+            <ion-item class="item item-icon-right item-remove-animate" ng-show="!open" ng-repeat="item in Tasks.Measure">
+                {{item.Name}}<span style="font-size:12px;color:#9E9E9E" ng-if="item.Unit != '' ">({{item.Unit}})</span>
+                <p>{{item.Freq}}</p>
+                <p>{{item.instruction}}</p>              
+                <div class="task-jd" ng-if="item.TimesFlag">
+                    <span style="width: {{item.Progress}}">
+                    </span>
+                </div>
+                <br />
+                <p>{{item.content}}</p>
+                <ion-option-button class="button-calm" ng-click="showMesPop(item,'edit')">编辑</ion-option-button>
+                <i ng-if="!item.Flag" class="icon iconfont icon-xiugaibi" style="font-size:20px" ng-click="showMesPop(item,'fill')"></i>
+                <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
+            </ion-item>
+        </ion-list>
+
+        <ion-list>    
+            <a class="item green-bg font-white" style="border: 0;margin-top: 0">
+            <label>其它任务</label>
+            <span class="mg-left10 mg-right10">|</span>
+            <label ng-click = "openModal()">医生排班表</label>
+            <i class="iconfont icon-icondayu"></i>
             </a>
-        </div>
+            <a class="item item-icon-right" ng-if="HemoBtnFlag">
+                您还未设定血透排班时间
+                <i class='icon'><button ng-click="GotoSet()" class="button button-small green-bg font-white">设置</button></i>
+            </a>
+                
+            <ion-item class="item item-icon-right" ng-repeat="item in Tasks.Hemo">
+                {{item.Name}}
+                <p>{{item.Freq}}</p>
+                <p>任务时间：{{item.startTime}}</p>
+                <p ng-if="item.endTime != ''">执行时间：{{item.endTime}}</p>                   
+                <div class="task-jd">
+                    <span style="width: {{item.Progress}}">
+                    </span>
+                </div>
+                <ion-option-button class="button-calm" ng-click="showHemoPop(item, 'edit')">编辑</ion-option-button>
+                <i ng-if="!item.Flag" class="icon iconfont icon-xiugaibi" style="font-size:20px" ng-click="showHemoPop(item, 'fill')"></i>
+                <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
+            </ion-item>
+
+            <ion-item class="item item-icon-right" ng-repeat="item in Tasks.Other">
+                {{item.Name}}
+                <p>{{item.Freq}}</p>
+                <p ng-if="item.frequencyTimes != 0">任务时间：{{item.startTime}}</p>
+                <p ng-if="item.DoneFlag">上次执行：{{item.endTime}}</p>
+                <p>{{item.content}}</p>
+                <ion-option-button class="button-calm" ng-click="showOtherPop(item, 'edit')">编辑</ion-option-button>
+                <i ng-if="!item.Flag" class="icon iconfont icon-xiugaibi" style="font-size:20px" ng-click="showOtherPop(item, 'fill')"></i>
+                <i ng-if="item.Flag" class="icon ion-ios-checkmark-empty"></i>
+                <button ng-if = "item.Flag" ng-click = "StartNewTask(item)">新任务</button>
+            </ion-item>
+               
+            
+     </ion-list>
         <!-- <button ng-click="Test()">测试</button>
         <h>{{TestTime}}</h> -->
     </ion-content>
@@ -110,7 +118,7 @@
                         <div>停诊</div>
                     </div>
                 </div>
-                <button class="button button-full button-positive" ng-click="modal.hide()">返回</button>
+                <button class="button button-block green-bg font-white" ng-click="modal.hide()">返回</button>
             </ion-content>
         </ion-modal-view>
     </script>

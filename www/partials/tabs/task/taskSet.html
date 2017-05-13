@@ -5,74 +5,84 @@
       </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content class="padding">
-        <p>今日任务</p>
-        <div class="list">           
-            <a class="item item-icon-right" ng-repeat="item in Tasks.Measure">
+        <div class="list"> 
+            <a class="item green-bg font-white" style="border: 0;font-size: 14px;border-bottom: 1px solid #fff;margin-bottom: 0" ng-click="open==true?open=false:open=true" ng-model="open">
+            测量任务
+            <i class="icon ion-chevron-up" ng-if="!open"></i> 
+            <i class="icon ion-chevron-down" ng-if="open"></i>
+            </a> 
+                      
+            <a class="item item-icon-right" ng-repeat="item in Tasks.Measure" ng-show="!open">
                 {{item.Name}}                            
                 <p>{{item.Freq}}</p>
                 <p>{{item.content}}</p>            
             </a>                                                            
         </div>
-        <p>其他任务</p>
-        <button ng-click = "EnableEdit()">编辑</button>
-        <div ng-if="Tasks.Hemo.Flag">
-                
-            <div class="item" id="Hemo"> <!-- 设定锚点 -->
-                 请设定血透次数&nbsp;&nbsp;&nbsp;&nbsp;
-                 一周
-                <select ng-model = "Tasks.Hemo.times" ng-options = "item for item in HemoTimesOptions" disabled="true"></select>                   
-                次 
-               <!--  <h2>{{Tasks.Hemo.instruction}}（{{Tasks.Hemo.Freq}}）</h2> -->
-                <div class="row">
-                    <div class="col" style="border-left:solid;border-top:solid;border-color: green"><span style="opacity:0">上午</span></div>
-                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">一</div>
-                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">二</div>
-                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">三</div>
-                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">四</div>
-                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">五</div>
-                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">六</div>
-                    <div class="col" style="border-left:solid;border-top:solid;border-right:solid;border-color: green">日</div>
-                </div>
-                <div class="row" disabled = "true">
-                    <div class="col" style="border-left:solid;border-top:solid;border-color: green">上午</div>
-                    <div class="col" ng-click="HemoSelect(0)" ng-style="HemoTbl[0].style" style="border-left:solid;border-top:solid;border-color: green;"></div>
-                    <div class="col" ng-click="HemoSelect(1)" ng-style="HemoTbl[1].style" style="border-left:solid;border-top:solid;border-color: green;"></div>
-                    <div class="col" ng-click="HemoSelect(2)" ng-style="HemoTbl[2].style" style="border-left:solid;border-top:solid;border-color: green"></div>
-                    <div class="col" ng-click="HemoSelect(3)" ng-style="HemoTbl[3].style" style="border-left:solid;border-top:solid;border-color: green"></div>
-                    <div class="col" ng-click="HemoSelect(4)" ng-style="HemoTbl[4].style" style="border-left:solid;border-top:solid;border-color: green;"></div>
-                    <div class="col" ng-click="HemoSelect(5)" ng-style="HemoTbl[5].style" style="border-left:solid;border-top:solid;border-color: green"></div>
-                    <div class="col" ng-click="HemoSelect(6)" ng-style="HemoTbl[6].style" style="border-left:solid;border-top:solid;border-right: solid;border-color: green"></div>
-                </div>
-                <div class="row" disabled = "true">
-                    <div class="col" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green;">下午</div>
-                    <div class="col" ng-click="HemoSelect(7)" ng-style="HemoTbl[7].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
-                    <div class="col" ng-click="HemoSelect(8)" ng-style="HemoTbl[8].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
-                    <div class="col" ng-click="HemoSelect(9)" ng-style="HemoTbl[9].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green;"></div>
-                    <div class="col" ng-click="HemoSelect(10)" ng-style="HemoTbl[10].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
-                    <div class="col" ng-click="HemoSelect(11)" ng-style="HemoTbl[11].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
-                    <div class="col" ng-click="HemoSelect(12)" ng-style="HemoTbl[12].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
-                    <div class="col" ng-click="HemoSelect(13)" ng-style="HemoTbl[13].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-right: solid;border-color: green"></div>
-                </div>
-                <p style="padding-left:4px;">点击选择血透时间</p>
-                <div class="row" style="padding:0px;">
-                    <div class='col'>
-                        <div style="width: 20px;height: 20px;background-color: red;border: solid;border-color: green"></div>
+
+       <div class="list"> 
+            <a class="item green-bg font-white" style="border: 0;margin-top: 0">
+                <label>其它任务</label>
+                <span class="mg-left10 mg-right10">|</span>
+                <button style="background-color:transparent;" ng-click = "EnableEdit()"><label style="color:white;">编辑</label></button>
+            </a>
+            <div ng-if="Tasks.Hemo.Flag">
+                    
+                <div class="item" id="Hemo"> <!-- 设定锚点 -->
+                     请设定血透次数&nbsp;&nbsp;&nbsp;&nbsp;
+                     一周
+                    <select ng-model = "Tasks.Hemo.times" ng-options = "item for item in HemoTimesOptions" disabled="true"></select>                   
+                    次 
+                   <!--  <h2>{{Tasks.Hemo.instruction}}（{{Tasks.Hemo.Freq}}）</h2> -->
+                    <div class="row">
+                        <div class="col" style="border-left:solid;border-top:solid;border-color: green"><span style="opacity:0">上午</span></div>
+                        <div class="col" style="border-left:solid;border-top:solid;border-color: green">一</div>
+                        <div class="col" style="border-left:solid;border-top:solid;border-color: green">二</div>
+                        <div class="col" style="border-left:solid;border-top:solid;border-color: green">三</div>
+                        <div class="col" style="border-left:solid;border-top:solid;border-color: green">四</div>
+                        <div class="col" style="border-left:solid;border-top:solid;border-color: green">五</div>
+                        <div class="col" style="border-left:solid;border-top:solid;border-color: green">六</div>
+                        <div class="col" style="border-left:solid;border-top:solid;border-right:solid;border-color: green">日</div>
                     </div>
-                    <div class='col'>
-                        
-                        <div >选中</div>
+                    <div class="row" disabled = "true">
+                        <div class="col" style="border-left:solid;border-top:solid;border-color: green">上午</div>
+                        <div class="col" ng-click="HemoSelect(0)" ng-style="HemoTbl[0].style" style="border-left:solid;border-top:solid;border-color: green;"></div>
+                        <div class="col" ng-click="HemoSelect(1)" ng-style="HemoTbl[1].style" style="border-left:solid;border-top:solid;border-color: green;"></div>
+                        <div class="col" ng-click="HemoSelect(2)" ng-style="HemoTbl[2].style" style="border-left:solid;border-top:solid;border-color: green"></div>
+                        <div class="col" ng-click="HemoSelect(3)" ng-style="HemoTbl[3].style" style="border-left:solid;border-top:solid;border-color: green"></div>
+                        <div class="col" ng-click="HemoSelect(4)" ng-style="HemoTbl[4].style" style="border-left:solid;border-top:solid;border-color: green;"></div>
+                        <div class="col" ng-click="HemoSelect(5)" ng-style="HemoTbl[5].style" style="border-left:solid;border-top:solid;border-color: green"></div>
+                        <div class="col" ng-click="HemoSelect(6)" ng-style="HemoTbl[6].style" style="border-left:solid;border-top:solid;border-right: solid;border-color: green"></div>
                     </div>
-                    <div class='col'>
-                        <div style="width: 20px;height: 20px;background-color: white;border: solid;border-color: green"></div>
+                    <div class="row" disabled = "true">
+                        <div class="col" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green;">下午</div>
+                        <div class="col" ng-click="HemoSelect(7)" ng-style="HemoTbl[7].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                        <div class="col" ng-click="HemoSelect(8)" ng-style="HemoTbl[8].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                        <div class="col" ng-click="HemoSelect(9)" ng-style="HemoTbl[9].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green;"></div>
+                        <div class="col" ng-click="HemoSelect(10)" ng-style="HemoTbl[10].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                        <div class="col" ng-click="HemoSelect(11)" ng-style="HemoTbl[11].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                        <div class="col" ng-click="HemoSelect(12)" ng-style="HemoTbl[12].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-color: green"></div>
+                        <div class="col" ng-click="HemoSelect(13)" ng-style="HemoTbl[13].style" style="border-left:solid;border-top:solid;border-bottom: solid;border-right: solid;border-color: green"></div>
                     </div>
-                    <div class='col'>
-                        
-                        <div>空闲</div>
+                    <p style="padding-left:4px;">点击选择血透时间</p>
+                    <div class="row" style="padding:0px;">
+                        <div class='col'>
+                            <div style="width: 20px;height: 20px;background-color: red;border: solid;border-color: green"></div>
+                        </div>
+                        <div class='col'>
+                            
+                            <div >选中</div>
+                        </div>
+                        <div class='col'>
+                            <div style="width: 20px;height: 20px;background-color: white;border: solid;border-color: green"></div>
+                        </div>
+                        <div class='col'>
+                            
+                            <div>空闲</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div> 
-        <div class="list">                  
+            </div> 
+                         
             <a class="item item-icon-right" ng-repeat="item in Tasks.Other">
                 {{item.Name}}
                 <p>{{item.Freq}}</p>
