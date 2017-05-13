@@ -1,19 +1,18 @@
-<div class="msgbox msgbox-card">
+<div class="msgbox no-bubble-color {{'msgbox-'+msg.direct}}"">
     <div ng-if="msg.diff" class="msg-time"><span>{{msg.createTimeInMillis | msgdate}}</span></div>
-    <div class="media-card" on-hold="emitEvent('holdmsg',msg._id,$event)" ng-click="emitEvent('viewcard',counsel.consultId,$event)">
-        <div class="title">患者使用在线咨询服务</div>
+    <!-- avatar -->
+    <img class="avatar" ng-src="{{photourls[msg.fromID] || 'img/DefaultAvatar.jpg'}}" ng-click="emitEvent('profile',msg)"/>
+    <div class="media-card msg-body" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event)" ng-click="emitEvent('viewcard',msg,$event)">
+        <div class="card-title">患者使用在线{{counsel.type=='1'?'咨询':'问诊'}}服务</div>
         <hr/>
         <div class="info">
             <p><span>主题</span>{{counsel.symptom}}</p>
             <p><span>发病时间</span> {{counsel.sickTime}}</p>
-            <p><span>诊断结果</span>{{counsel.diagnosis}}</p>
             <p><span>就诊医院</span> {{counsel.hospital}}</p>
             <p><span>就诊时间</span>{{counsel.visitDate.substr(0,10)}}</p>
-            <p><span>问题描述</span>{{counsel.help}}</p>
+            <p><span>诊断结果</span>{{counsel.diagnosis}}</p>
+            <p><span>期望的帮助</span>{{counsel.help}}</p>
         </div>
-        <hr/>
-        <!-- <div class="img-info">资料照片（3）</div> -->
-       <!--  <img ng-repeat="url in picurl" hiRes="{{url.hiRes}}" ng-src="{{url.src}}"/> -->
     </div>
     <div ng-if="msg.status=='send_fail'" class="msg-fail"><span><i class="icon ion-android-warning"></i>发送失败</span></div>
 </div>
