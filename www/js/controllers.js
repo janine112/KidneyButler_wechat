@@ -256,21 +256,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                 if(data.results == 0){
                     tempuserId = data.UserId
-                    Patient.getPatientDetail({userId:data.UserId}).then(function(data){
-                        if(data.results == null){
-                            $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或转移到肾病守护者进行操作";
-                            return;
-                        }else {
-                            $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
-                            isregisted = true
-                            sendSMS(Verify.Phone);
-                        }
-                    },function(){
-                        $scope.logStatus="连接超时！";
-                    });
-                    // $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
-                    // isregisted = true
-                    // sendSMS(Verify.Phone);
+                    if(data.roles.indexOf('patient') == -1){
+                        $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或转移到肾病守护者进行操作";
+                        return;
+                    }else {
+                        $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
+                        isregisted = true
+                        sendSMS(Verify.Phone);
+                    }
                 }else if(data.results == 1){
                     sendSMS(Verify.Phone);
                 }
