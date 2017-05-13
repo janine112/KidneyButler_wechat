@@ -6311,7 +6311,7 @@ button.item.item-button-right {
   .item-avatar-left .item-content > img:first-child,
   .item-avatar-left .item-content .item-image {
     position: absolute;
-    top: 16px;
+    top: 30%;
     left: 16px;
     max-width: 40px;
     max-height: 40px;

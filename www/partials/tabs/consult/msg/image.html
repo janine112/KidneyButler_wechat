@@ -2,14 +2,18 @@
 	<!-- display time -->
 	<div ng-if="msg.diff" class="msg-time"><span>{{msg.createTimeInMillis | msgdate}}</span></div>
 	<!-- avatar -->
-	<img class="avatar" ng-src="{{photourls[msg.fromID] || 'img/DefaultAvatar.jpg'}}" ng-click="emitEvent('profile',msg)"/>
+	<img class="avatar" ng-src="{{avatarSrc || 'img/doctor3.PNG'}}" ng-click="emitEvent('profile',msg.fromName)"/>
 	<!-- chat bubble -->
-	<div my-spin="msg.status" class="msg-body media-image" ng-click="emitEvent('image','img',msg.content)" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event,'image')">
+	<div my-spin="msg.status" class="msg-body media-image" ng-click="emitEvent('image','img',msg.content.localThumbnailPath,msg.serverMessageId)">
 		<!-- text content -->
 		<!-- <div class="media-image"> -->
-			<img  src="{{msg.content.thumb}}"/>
+			<img  ng-src="{{msg.content.localThumbnailPath}}"/>
 		<!-- </div> -->
 		
 	</div>
 	<div ng-if="msg.status=='send_fail'"  class="msg-fail"><span><i class="icon ion-android-warning"></i>发送失败</span></div>
+	<!-- <div class="status">{{msg.status}} </div> -->
 </div>
+
+
+    <!-- padding-top: {{msg.content.format.height/msg.content.format.width*100 + '%' -->

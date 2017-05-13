@@ -2,7 +2,7 @@
 	<!-- display time -->
 	<div ng-if="msg.diff" class="msg-time"><span>{{msg.createTimeInMillis | msgdate}}</span></div>
 	<!-- avatar -->
-	<img class="avatar" ng-src="{{photourls[msg.fromID] || 'img/DefaultAvatar.jpg'}}" ng-click="emitEvent('profile',msg)"/>
+	<img class="avatar" ng-src="{{avatarSrc || 'img/max.png'}}" ng-click="emitEvent('profile',msg.fromName)"/>
 	<!-- chat bubble -->
 	<div class="msg-body" ng-click="">
 		<!-- text content -->

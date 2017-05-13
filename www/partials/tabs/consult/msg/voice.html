@@ -3,11 +3,11 @@
 	<!-- <my-time></my-time> -->
 	<div ng-if="msg.diff" class="msg-time"><span>{{msg.createTimeInMillis | msgdate}}</span></div>
 	<!-- avatar -->
-	<img class="avatar" ng-src="{{photourls[msg.fromID] || 'img/DefaultAvatar.jpg'}}" ng-click="emitEvent('profile',msg)"/>
+	<img class="avatar" ng-src="{{avatarSrc || 'img/max.png'}}" ng-click="emitEvent('profile',msg.fromName)"/>
 	<!-- chat bubble -->
-	<div class="msg-body " ng-click="emitEvent('voice',msg.content)"  on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event,'voice')">
+	<div class="msg-body " ng-click="emitEvent('voice',msg.content.local_path)">
 		<!-- text content -->
-		<div class="media-text"><i class="icon ion-volume-high"></i>语音</div>
+		<div class="media-text">这是录音{{msg.content.duration}}</div>
 	</div>
 	<div my-small-spin="msg.status" class="status"></div>
 	<div ng-if="msg.status=='send_fail'"  class="msg-fail"><span><i class="icon ion-android-warning"></i>发送失败</span></div>

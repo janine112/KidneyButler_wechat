@@ -1,44 +1,38 @@
 <ion-view title="登录">
-  <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
-     
+  <ion-nav-bar class="bar-dark nav-title-slide-ios7 green-bg"  >
+
   </ion-nav-bar>
-  <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2px;background-color: #33cd5f;{{barwidth}}" ></div>
-  <ion-content padding="true"  style=" padding-left:10%;padding-right:10%;background : -webkit-linear-gradient(bottom, rgb(101, 98, 160) 00%, rgb(0, 0, 0) 99%);">
-   <!--  <div class="row" >
-      <div class="col text-center" >
-        <div style="max-width:500px"> -->
-          <div class="row text-center" style="min-height:100px">
-            
-          </div>
-          <div class="list list-inset" style="margin-bottom:0">
-            <label class="item item-input" >
-              <span class="input" style="margin-right:16px"><i class="icon ion-person"></i></span>
-              <input type="tel"  ng-model="logOn.username" placeholder="手机号" >
-            </label>
-            <label class="item item-input">
-              <span class="input" style="margin-right:16px"><i class="icon ion-locked"></i></span>
-              <input type="password" ng-model="logOn.password" placeholder="密 码" >
-            </label>
-          </div>
-          <div class="row" style="padding:0" >
-            <div class="col col-75"><p style="color:#B8B8B8">{{logStatus}}</p></div>
-            <div class="col "><p style="color:#9999cc;text-align:right" ng-click="toReset()">忘记密码</p></div>
-          </div>
+  <!-- <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2px;background-color: #33cd5f;{{barwidth}}" ></div> -->
+  <ion-content padding="true" class="green-white-bg">
+    <!--  <div class="row" >
+       <div class="col text-center" >
+         <div style="max-width:500px"> -->
 
-          <button style="margin-top:0" class="button button-block button-balanced" ng-click="signIn(logOn)">立即登录</button>
-          <button style="margin-top:0" class="button button-block button-balanced" >微信登录</button>
-          <!-- <button style="margin-top:0" class="button button-block button-balanced" ng-click="test()">测试</button> -->
+    <div class="list list-inset" style="margin-bottom:0;margin-top: 30px">
+      <label class="item item-input green-edite-css" >
+        <span class="input " style="margin-right:16px"><i class="icon ion-iphone"></i></span>
+        <input type="tel"  ng-model="logOn.username" placeholder="手机号" >
+      </label>
+      <label class="item item-input green-edite-css mg-10 ">
+        <span class="input" style="margin-right:16px"><i class="icon ion-ios-locked-outline"></i></span>
+        <input type="password" ng-model="logOn.password" placeholder="密 码" >
+      </label>
+    </div>
+    <div class="row" style="padding:0;margin-top: 5px" >
+      <div class="col col-30 "><p style="color:#7a7a7a;text-align:left" ng-click="toRegister()">立即注册</p></div>
+      <div class="col col-40"><p style="color:#B8B8B8">{{logStatus}}</p></div>
+      <div class="col "><p style="color:#7a7a7a;text-align:right;" ng-click="toReset()">忘记密码</p></div>
+    </div>
 
-  <!--       </div>
-      </div>
-    </div> -->
-           <iframe id="bbsframe_login" ng-src ='{{navigation_login}}' height="100%" width="100%" ng-show=false>
-            <p>Your browser does not support iframes.</p>
-          </iframe>
+    <button style="margin-top:30px" class="button button-block button-balanced green-bg" ng-click="signIn(logOn)">立即登录</button>
+    <!-- <button style="margin-top:0" class="button button-block button-balanced green-bg" >微信登录</button> -->
+    <!-- <button style="margin-top:0" class="button button-block button-balanced" ng-click="test()">测试</button> -->
+
+    <!--       </div>
+        </div>
+      </div> -->
+
   </ion-content>
-          
-  <div  class="text-center hide-on-keyboard-open" style="position:absolute;bottom:0px;width:100%;min-height:10%">
-    <span style="color:#9999cc">还没有帐号？</span><span style="color:#FFFFFF" ng-click="toRegister()">注册</span>
 
-  </div>
+
 </ion-view>

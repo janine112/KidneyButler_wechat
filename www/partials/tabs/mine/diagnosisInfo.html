@@ -1,10 +1,10 @@
 <ion-view cache-view="false" title="诊断信息" >
 
-  <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
+  <!-- <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" > -->
       <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="left" >
          <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-chevron-left"></i>返回</button>
       </ion-nav-buttons>
-    </ion-nav-bar>
+    <!-- </ion-nav-bar> -->
 
 
   <ion-content padding="true" style="">
@@ -18,13 +18,13 @@
   
         <div class="row">
             <div class="col">肾病类型</div>
-            <select class="col" ng-disabled="true" ng-model="diagnosis.name" ng-options=" Disease.typeName for Disease in Diseases track by Disease.type" style="width:100%" >
+            <select style="float: right;" class="col" ng-disabled="true" ng-model="diagnosis.name" ng-options=" Disease.typeName for Disease in Diseases track by Disease.type">
             <!-- <p style="text-align:right;width:50%">{{diagnosis.name}}</p> -->
         </div>
 
         <div class="row" ng-if="diagnosis.showProgress">
             <div class="col">疾病进程</div>
-            <select class="col" ng-disabled="true" ng-model="diagnosis.progress" ng-options=" DiseaseDetail.name for DiseaseDetail in diagnosis.DiseaseDetails track by DiseaseDetail.code" style="width:100%">
+            <select class="col" ng-disabled="true" ng-model="diagnosis.progress" ng-options=" DiseaseDetail.name for DiseaseDetail in diagnosis.DiseaseDetails track by DiseaseDetail.code">
             </select>
         </div>
 
@@ -37,7 +37,7 @@
         <div class="row">
             <div  class="col" >是否高血压</div>
             <!-- <p style="text-align:right;width:50%">{{diagnosis.hypertension||"未诊断"}}</p> -->
-            <select  class="col" ng-disabled="true" ng-model="diagnosis.hypertension" ng-options="Hyper.Name for Hyper in Hypers track by Hyper.Type" style="width:100%">
+            <select  class="col" ng-disabled="true" ng-model="diagnosis.hypertension" ng-options="Hyper.Name for Hyper in Hypers track by Hyper.Type">
             </select>
         </div>
 

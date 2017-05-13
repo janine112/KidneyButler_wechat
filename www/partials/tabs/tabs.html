@@ -1,38 +1,41 @@
+<ion-nav-bar class="bar-dark nav-title-slide-ios7 green-bg" style="" >
+  <ion-nav-back-button class="button-icon ion-arrow-left-c">
+  </ion-nav-back-button>
+  <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right" >
+    <button class="button button-clear" ng-click="GoToMessage() " head-red-point='HasUnreadMessages'><i class="icon iconfont icon-lingdang"></i></button>
+  </ion-nav-buttons>
+</ion-nav-bar>
 
-    <ion-nav-bar class="bar-dark nav-title-slide-ios7" style="" >
-      <ion-nav-buttons side="left">
-            <a class="button button-icon icon ion-qr-scanner" ng-click="QRscan()"></a>
-        </ion-nav-buttons>
-      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right" >
+  <!-- <ion-nav-bar class="bar-positive green-bg" style="" >
+      &lt;!&ndash; <ion-nav-back-button class="button-icon ion-arrow-left-c" >
+      </ion-nav-back-button> &ndash;&gt;
+      <ion-nav-buttons side="right" >
          <button class="button button-clear" ng-click="GoToMessage() " head-red-point='HasUnreadMessages'><i class="icon ion-email"></i></button>
       </ion-nav-buttons>
-    </ion-nav-bar>
- 
-     
+    </ion-nav-bar>-->
+
+
     <ion-tabs class="tabs-icon-top tabs-color-active-positive bar-footer {{$root.hideTabs}}">
-      <ion-tab title="任务" icon-off="ion-ios-paper" icon-on="ion-ios-paper" href="#/tab/tasklist">
+      <ion-tab title="任务" class="m-tabs" icon-off=" iconfont icon-renwu" icon-on="iconfont icon-renwu" href="#/tab/tasklist">
         <ion-nav-view name="tab-tasks"></ion-nav-view>
       </ion-tab>
-
-      <ion-tab title="咨询" icon-off="ion-chatbubbles" icon-on="ion-chatbubbles" ng-click="gotomyDoctors()">
+      <ion-tab title="咨询" class="m-tabs" icon-off="iconfont icon-zixun " icon-on="iconfont icon-zixun tab-icon-fount" ng-click="gotomyDoctors()">
         <ion-nav-view name="tab-consult"></ion-nav-view>
       </ion-tab>
-
-      <ion-tab title="论坛" icon-off="ion-ios-people" icon-on="ion-ios-people" href="#/tab/forum">
+      <ion-tab title="论坛" class="m-tabs" icon-off="iconfont icon-luntan" icon-on="iconfont icon-luntan" href="#/tab/forum">
         <ion-nav-view name="tab-forum"></ion-nav-view>
       </ion-tab>
 
-      <ion-tab title="我的" icon-off="ion-ios-body" icon-on="ion-ios-body" ng-click="gotomine()" ><!-- badge=unreadMessageSum badge-style="tabs-calm" -->
+      <ion-tab title="我的" class="m-tabs" icon-off=" iconfont icon-ren" icon-on="iconfont icon-ren" ng-click="gotomine()" >
         <ion-nav-view name="tab-mine"></ion-nav-view>
       </ion-tab>
-
       <!-- <ion-tab title="其他" icon-off="ion-ios-search" icon-on="ion-ios-search-strong" href="#/tab/others">
         <ion-nav-view name="tab-others"></ion-nav-view>
       </ion-tab> -->
     </ion-tabs>
 
-  
-     
+
+
 
 
 

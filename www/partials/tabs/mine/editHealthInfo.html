@@ -1,13 +1,13 @@
 <ion-view cache-view="false" title="健康信息" >
 
-  <ion-nav-bar class="bar-dark nav-title-slide-ios7 green-bg" style="" >
+  <!-- <ion-nav-bar class="bar-dark nav-title-slide-ios7 green-bg" style="" > -->
     <ion-nav-buttons side="left">
       <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="Goback()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right">
             <button class="button button-clear"  ng-if="!canEdit"  ng-click="edit() "><i class="icon ion-edit"></i></button>
     </ion-nav-buttons>
-  </ion-nav-bar>
+  <!-- </ion-nav-bar> -->
 
   <ion-content padding="true" style="top: 43px">
     
@@ -21,33 +21,32 @@
 
     <label ng-if="!canEdit" class="item item-input">
         <span class="input-label"><i class="icon ion-asterisk c-red" ></i>时间日期</span>
-        <input  ng-disabled="!canEdit" ng-model="health.date" dateformat type="text">
+        <input  style="text-align: right;" ng-disabled="!canEdit" ng-model="health.date" dateformat type="text">
     </label>
 
     <ionic-datepicker ng-if="canEdit" input-obj="datepickerObject4" class="item item-input">
         <span class="input-label"><i class="icon ion-asterisk c-red" ></i>时间日期</span>
-        <input  ng-model="health.date" dateformat type="text">
+        <input  style="text-align: right;" ng-model="health.date" dateformat type="text">
     </ionic-datepicker>
 
     <label class="item item-input">
-          <span class="input-label" ><i class="icon ion-asterisk" style="color:red;font-size:6px"></i>文字描述</span>
-          <input  ng-disabled="!canEdit" ng-model="health.text"  type="text">
+          <span class="input-label" ><i class="icon ion-asterisk c-red"></i>文字描述</span>
+          <input  style="text-align: right;" ng-disabled="!canEdit" ng-model="health.text"  type="text">
     </label>
 
       
 
-    <ion-item style="border:none; text-align:center; margin-top:30px" >
-         <div  ng-repeat="filepath in health.imgurl track by $index">
-          <img ng-src="{{filepath}}"  name="Photo" ng-click="showoriginal(filepath)"  style="height:30%; width:30%"  /><i ng-if="canEdit" class="icon ion-close-circled" style="width: 10%;float: right" ng-click="deleteimg($index)"></i>
-      </div>
-         <div ng-if="canEdit">
-           <button class="button button-clear" style="color:#666" ng-click="onClickCamera($event)" ><i class="icon ion-camera"></i>上传图片</button>
-         </div>
-         
+    <ion-item class="row row-wrap" style="border:none; text-align:center; height:100%;margin-top:30px" >
+        <div  class="col col-33" ng-repeat="filepath in health.imgurl track by $index">
+          <img ng-src="{{filepath}}"  name="Photo" ng-click="showoriginal(filepath)"  style="height:90%; width:90%"  /><i ng-if="canEdit" class="icon ion-close-circled" style="width: 5%;float: right;" ng-click="deleteimg($index)"></i>
+        </div>
+             
     </ion-item>
-
+    <div style="text-align: center;" ng-if="canEdit">
+           <button class="button button-clear" style="color:#666" ng-click="onClickCamera($event)" ><i class="icon ion-camera"></i>上传图片</button>
+    </div>
   </ion-list>
-    <button ng-if="canEdit" style="margin-top:10px" class="button button-block button-balanced" ng-click ="HealthInfoSetup()">
+    <button ng-if="canEdit" style="margin-top:10px" class="button button-block green-bg font-white" ng-click ="HealthInfoSetup()">
             保存
       </button>
   </ion-content>

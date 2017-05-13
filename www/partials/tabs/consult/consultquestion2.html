@@ -1,32 +1,29 @@
 <ion-view cache-view="false" title="肾病信息">
   <ion-nav-bar class="bar-positive green-bg" align-title="center">
-<!--     <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="$ionicGoBack()"></button>
-    </ion-nav-buttons> -->
-<!--     <ion-nav-buttons side="right">
-      <span class="button  button-icon" ng-click ="nexttoquestion()">
-        下一步
+    <!-- <ion-nav-buttons side="left">
+      <button class="button button-icon" ng-click="backtoBasic()">上一步</button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+      <button class="button  button-icon" ng-click ="nexttoquestion()">
+        继续
       </button>
     </ion-nav-buttons> -->
   </ion-nav-bar>
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div>
-  <ion-content  style="">
+  <ion-content  class="padding">
 
     <div  class="list">
       <ionic-datepicker padding="true" input-obj="datepickerObject4" class="item item-input" style="border: 0;border-bottom: 1px solid #ddd;margin: 0">
-        <span class="input-label">
           <i class="iconfont icon-shijian" style="font-size: 24px;vertical-align: top;margin-right: 5px"></i>
+          <span class="input-label">
           慢性肾病首次发病时间
         </span>
         <input  ng-model="Questionare.LastDiseaseTime" dateformat  type="text">
       </ionic-datepicker>
     <div>
-      <!-- <ionic-datepicker padding="true"  class="item item-input" style="border: 0;border-bottom: 1px solid #ddd;margin: 0"> -->
-        <span class="input-label">
-          <i class="iconfont icon-keshishouyaohuizhen" style="font-size: 24px;vertical-align: middle;margin-right: 5px"></i>
-          最近一次就诊信息
-        </span>
-      <!-- </ionic-datepicker> -->
+    
+    <div  style="text-align:center;font-size:15px;font-weight: bold;margin-bottom:10px;margin-top: 10px"><i class="iconfont icon-keshishouyaohuizhen" style="font-size: 24px;vertical-align: middle;margin-right: 5px"></i>最近就诊信息</div>        
+          
       <label class="item item-input" style="margin:  0 10px;border-left: 0;border-right: 0;border-top: 0">
         <span class="input-label" style="margin-left:8px ">就诊医院</span>
         <input  ng-model="Questionare.LastHospital"  type="text">
@@ -42,15 +39,11 @@
         <input  ng-model="Questionare.LastDiagnosis"  type="text">
       </label>
     </div>
-    <!-- <div class="row row-wrap"> -->
-      <!-- <div class="col col-20" ng-repeat="image in images track by $index">
-          <img ng-src={{image}} class='img-responsive' style="width: 90%;height:90%" ng-click="showoriginal($index)" /> <i class="icon ion-close-circled" style="width: 10%;float: right" ng-click="deleteimg($index)"></i>
-      </div> -->
-      <!-- <ionic-datepicker padding="true"  class="item item-input" style="border: 0;border-bottom: 1px solid #ddd;margin: 0"> -->
-        <span class="input-label">
-          <i class="iconfont icon-xiangji" style="font-size: 24px;vertical-align: middle;margin-right: 5px"></i>
-          添加健康信息
-        </span>
+    
+
+    <div  style="text-align:center;font-size:15px;font-weight: bold;margin-bottom:10px;margin-top: 10px"> <i class="iconfont icon-xiangji" style="font-size: 24px;vertical-align: middle;margin-right: 5px"></i>
+          添加健康信息</div>   
+        
       <!-- </ionic-datepicker> -->
       <ion-list>
       <ion-item ng-repeat="item in items" ng-click="gotoEditHealth($event,item)" >
@@ -111,10 +104,10 @@
 
 
 
-    <button style="margin-top:0" class="button button-block button-balanced" ng-click ="nexttoquestion()">
+    <button style="margin-top:0" class="button button-block green-bg font-white" ng-click ="nexttoquestion()">
             下一步
       </button>
-      <button style="margin-top:0" class="button button-block button-balanced" class="button button-clear" ng-click="backtoBasic()">上一步
+      <button style="margin-top:0" class="button button-block green-bg font-white" class="button button-clear" ng-click="backtoBasic()">上一步
       </button>
 
 

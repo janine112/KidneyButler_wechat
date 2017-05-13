@@ -18,31 +18,30 @@
 .mg-10 {
   margin-top: 10px !important;
 }
-
+.mt-40{
+  margin-top: 40px!important;
+}
 .mg-top-5 {
   margin-top: 5px !important;
 }
-
 .mg-20 {
   margin-top: 20px !important;
 }
-
 .mg-top {
   margin-top: 5px !important;
 }
-
 .mg-left10 {
   margin-left: 10px !important;
 }
-
 .mg-left20 {
   margin-left: 20px !important;
 }
-
 .mg-right10 {
   margin-right: 10px !important;
 }
-
+.bb{
+  border-bottom: 1px solid #f2f2f2;
+}
 .font-white {
   color: white !important;
   text-align: center;
@@ -54,17 +53,14 @@
   color: #ea790a!important;
   font-size: 12px;
 }
-
 .c-red {
   color: red !important;
   font-size: 10px;
 }
-
 .ion-iphone1 {
   font-size: 20px;
   margin-left: 5px;
 }
-
 .font-33c {
   color: #333333 !important;
   font-size: 18px;
@@ -93,9 +89,6 @@
   font-size: 24px;
 
 }
-
-
-
 /*消息*/
 .all-message-cont{
 
@@ -121,39 +114,14 @@
   height: 28px;
   line-height: 28px;
   text-align: center;
-  padding: 0 5%;
+  padding: 0 10%;
 }
 .all-doctors-select select:last-child{
   border-right: 0;
 }
-
 .all-doctors-select select option{
   text-align: center;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .right:after {
   -webkit-font-smoothing: antialiased;
   font-smoothing: antialiased;
@@ -173,7 +141,6 @@
   line-height: 1;
   speak: none;
 }
-
 .title {
   color: white !important;
 }
@@ -184,7 +151,51 @@
   color: white;
 }
 .select-style{
-   text-align: center!important;
+  text-align: center!important;
   border: none!important;
-
+}
+.schedual-border {
+  border-left:1px solid #6ac4f8;
+  border-top: 1px solid #6ac4f8;
+  background-repeat: no-repeat;
+  background-size: 15px 15px;
+  background-position: center;
+}
+.schedual-border-right {
+  border-left:1px solid #6ac4f8;
+  border-top: 1px solid #6ac4f8;
+  border-right: 1px solid #6ac4f8;
+  background-repeat: no-repeat;
+  background-size: 15px 15px;
+  background-position: center;
+}
+.schedual-border-bottom{
+  border-left:1px solid #6ac4f8;
+  border-top: 1px solid #6ac4f8;
+  border-bottom: 1px solid #6ac4f8;
+  background-repeat: no-repeat;
+  background-size: 15px 15px;
+  background-position: center;
+}
+.schedual-border-all{
+  border-left:1px solid #6ac4f8;
+  border-top: 1px solid #6ac4f8;
+  border-bottom: 1px solid #6ac4f8;
+  border-right: 1px solid #6ac4f8;
+  background-repeat: no-repeat;
+  background-size: 15px 15px;
+  background-position: center;
+}
+.stats-task .active{
+  background: #6ac4f8;
+}
+.task-jd{
+  width: 50%;
+  height: 15px;
+  background: #cccccc;
+}
+.task-jd span{
+  display: block;
+  background: #5de6a2;
+  height: 100%;
 }
