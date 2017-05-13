@@ -3564,12 +3564,13 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             if(newv) {
                 loadWatcher();
                 var lastMsg=$scope.msgs[$scope.msgs.length-1];
+                if(lastMsg.fromID==$scope.params.UID) return;
                 return News.insertNews({userId:lastMsg.targetID,sendBy:lastMsg.fromID,type:'11',readOrNot:1});
             }
         });
         $scope.getMsg(15).then(function(data){
             $scope.msgs=data;
-            toBottom(true,250);
+            toBottom(true,400);
         });
     });
     $scope.$on('$ionicView.enter', function() {
@@ -3992,7 +3993,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
             $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
-                toBottom(true,200);
+                toBottom(true,300);
             })
         }else{
             $scope.msgs.push(msg);
