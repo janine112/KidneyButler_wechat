@@ -1,9 +1,9 @@
 <ion-view title="个人信息" >
 
   <ion-nav-bar class="bar-positive green-bg" align-title="center">
-    <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-ios-arrow-left fc-ff"  ng-if="CanBack()" ng-click="Goback()">返回</button>
-    </ion-nav-buttons>
+    <ion-nav-buttons side="left" >
+         <button class="button button-clear" ng-if="CanBack()" ng-click="Goback()"><i class="icon ion-ios-arrow-back font-white"></i></button>
+      </ion-nav-buttons>
     <ion-nav-buttons side="right">
             <button class="button button-clear"  ng-if="!canEdit"  ng-click="edit() "><i class="icon ion-edit"></i></button>
         </ion-nav-buttons>
@@ -59,6 +59,15 @@
                 <span class="tick" ng-if="canEdit">
                     <i style="color:#6ac4f8;" ng-if="userForm.UserKidney.$valid" class="icon ion-checkmark-circled placeholder-icon"></i>
                     <i style="color:#FB6753;" ng-if="userForm.UserKidney.$error.required" class="icon ion-alert-circled placeholder-icon"></i>
+                </span>
+            </label>
+
+            <label  class="item item-input item-select-custom" ng-if="showProgress">
+                <div class="input-label" style="margin-left:13px ">疾病进程</div>
+                    <select ng-model="User.class_info" ng-options=" DiseaseDetail.name for DiseaseDetail in DiseaseDetails track by DiseaseDetail.code">
+                    </select>
+                    <span class="tick" ng-if="canEdit">
+                    <i style="color:#6ac4f8;"  class="icon ion-checkmark-circled placeholder-icon"></i>
                 </span>
             </label>
 
@@ -165,7 +174,7 @@
         </form>
 
         <div ng-if="canEdit">
-            <button  ng-disabled="!(userForm.$valid)" style="margin-top:10px" class="button button-block green-bg font-white" ng-click ="infoSetup(User)">
+            <button  ng-disabled="!(userForm.$valid)" style="margin:20px auto;width: 80%" class="button button-block green-bg font-white" ng-click ="infoSetup(User)">
                         保存
             </button>
         </div>

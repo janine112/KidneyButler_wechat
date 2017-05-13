@@ -1,7 +1,8 @@
 <ion-nav-bar class="bar-dark nav-title-slide-ios7 green-bg" style="" >
-  <ion-nav-back-button class="button-icon ion-arrow-left-c">
-  </ion-nav-back-button>
-  <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right" >
+  <ion-nav-buttons side="left" >
+    <button class="button button-icon icon ion-qr-scanner" ng-click="QRscan()"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right" >
     <button class="button button-clear" ng-click="GoToMessage() " head-red-point='HasUnreadMessages'><i class="icon iconfont icon-lingdang"></i></button>
   </ion-nav-buttons>
 </ion-nav-bar>

@@ -2,7 +2,9 @@
 
     <ion-nav-bar class="bar-positive green-bg" align-title="center">
         <ion-nav-buttons side="left">
-            <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="Goback()"></button>
+            <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-ios-arrow-back font-white"></i></button>
+
+            <!-- <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="Goback()"></button> -->
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content>
@@ -10,18 +12,18 @@
     
 
      <div class="card">
-         <div class="item item-avatar"> 
-            <img ng-src="{{doctor.photoUrl  || 'img/doctor3.PNG'}}">
+         <div class="item item-thumbnail-left"> 
+            <img style="border-radius: 100%;top: 40%;margin-top: -40px" ng-src="{{doctor.photoUrl  || 'img/doctor3.PNG'}}">
             <span>{{doctor.name}}</span>
             <span style="float: right">{{doctor.department}}</span>
             <p>{{doctor.workUnit}}</p>
             <p>职称:{{doctor.title}}</p>
             <p>性别：{{{1:"男",2:"女",undefined:"未填写"}[doctor.gender]}}</p>
             <p style="font-size: 12px">收费：<span>咨询{{doctor.charge1}}元</span><span style="margin-left: 20px">问诊{{doctor.charge2}}元</span></p>
-            <div class="row row-below-avatar" style="font-size: 12px;color:#2B67F5;">
-                <span class="col"><i class="icon ion-star"></i>{{doctor.score.toFixed(2)||"无"}}</span>
-                <span class="col">咨询量：{{doctor.count1}}</span>
-                <span class="col">问诊量：{{doctor.count2}}</span>
+            <div class="row row-below-avatar" style="font-size: 14px;color:#2B67F5;">
+                <span class="col font-c"><i class="icon ion-star"></i>{{doctor.score.toFixed(2)||"无"}}</span>
+                <span class="col font-c">咨询量：{{doctor.count1}}</span>
+                <span class="col font-c">问诊量：{{doctor.count2}}</span>
             </div>
             
         </div>

@@ -8,17 +8,17 @@
 
     <div class="card" ng-click="getDoctorDetail($event,doctor.userId)" ng-if="hasDoctor">
 
-        <div class="item item-avatar"> 
-            <img ng-src="{{doctor.photoUrl  || 'img/doctor3.PNG'}}">
+        <div class="item item-thumbnail-left"> 
+            <img style="border-radius: 100%;top: 40%;margin-top: -40px" ng-src="{{doctor.photoUrl  || 'img/doctor3.PNG'}}">
             <span>{{doctor.name}}</span>
             <span style="float: right">{{doctor.department}}</span>
             <p>医院：{{doctor.workUnit}}</p>
             <p style="font-size: 12px">职称:{{doctor.title}}</p>
             <p style="font-size: 12px">收费：<span>咨询{{doctor.charge1}}元</span><span style="margin-left: 20px">问诊{{doctor.charge2}}元</span></p>
-            <div class="row row-below-avatar" style="font-size: 12px;color:#2B67F5;">
-                <span class="col"><i class="icon ion-star"></i>{{doctor.score.toFixed(2)||"无"}}</span>
-                <span class="col">咨询量：{{doctor.count1}}</span>
-                <span class="col">问诊量：{{doctor.count2}}</span>
+            <div class="row row-below-avatar" style="font-size: 14px;color:#2B67F5;">
+                <span class="col font-c"><i class="icon ion-star"></i>{{doctor.score.toFixed(2)||"无"}}</span>
+                <span class="col font-c">咨询量：{{doctor.count1}}</span>
+                <span class="col font-c">问诊量：{{doctor.count2}}</span>
             </div>
         </div>
 

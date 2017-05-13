@@ -4193,7 +4193,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //健康信息--PXY
-.controller('HealthInfoCtrl', ['$scope','$timeout','$state','$ionicHistory','$ionicPopup','HealthInfo','Storage','Health','Dict',function($scope, $timeout,$state,$ionicHistory,$ionicPopup,HealthInfo,Storage,Health,Dict) {
+.controller('HealthInfoCtrl', ['$ionicLoading','$scope','$timeout','$state','$ionicHistory','$ionicPopup','HealthInfo','Storage','Health','Dict',function($ionicLoading,$scope, $timeout,$state,$ionicHistory,$ionicPopup,HealthInfo,Storage,Health,Dict) {
   //$scope.barwidth="width:0%";
   var patientId = Storage.get('UID')
 
@@ -4219,16 +4219,21 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         {
           if (data.results != "" && data.results!= null)
           {
-            $scope.items = data.results
+            $scope.items = data.results;
             for (var i = 0; i < $scope.items.length; i++){
-              $scope.items[i].acture = $scope.items[i].insertTime
+              $scope.items[i].acture = $scope.items[i].insertTime;
               // $scope.items[i].time = $scope.items[i].time.substr(0,10)
               // if ($scope.items[i].url != ""&&$scope.items[i].url!=null)
               // {
               //   $scope.items[i].url = [$scope.items[i].url]
               // }
             }
-          };
+          }else{
+            $ionicLoading.show({
+                template: '您还没有健康信息，可通过右上角加号添加！',
+                duration:1000
+            });
+          }
         },
         function(err)
         {
@@ -5146,7 +5151,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 .controller('DoctorCtrl', ['Storage','$ionicLoading','$scope','$state','$ionicPopup','$ionicHistory','Dict','Patient','$location','Doctor','Counsels','wechat','order','Account','$http','CONFIG','payment',function(Storage,$ionicLoading,$scope, $state,$ionicPopup,$ionicHistory,Dict,Patient,$location,Doctor,Counsels,wechat,order,Account,$http,CONFIG,payment) {
   //$scope.barwidth="width:0%";
   $scope.Goback = function(){
-    $ionicHistory.goBack();
+    $state.go('tab.myDoctors');
+    // $ionicHistory.goBack();
   }
   //清空搜索框
   $scope.searchCont = {};
@@ -5987,7 +5993,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 .controller('aboutCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory', function($scope, $timeout,$state,Storage,$ionicHistory) {
    
   $scope.Goback = function(){
-    $ionicHistory.goBack();
+    // console.log(123);
+    $state.go('tab.mine');
+    // $ionicHistory.goBack();
   }
   
 }])
