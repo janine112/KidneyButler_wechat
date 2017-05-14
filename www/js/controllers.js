@@ -132,7 +132,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     $state.go('phonevalid',{phonevalidType:'reset'});
   } 
   
-  User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
+  User.getUserIDbyOpenId({openId:Storage.get('openid')}).then(function(data)
   {
       if (angular.isDefined(data.UserId) == true)
       {
