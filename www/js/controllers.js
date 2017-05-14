@@ -1653,14 +1653,15 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                var task = $scope.Tasks.Measure[num];
                if(task.code == "BloodPressure")//console.log(task);  
                {
+                  var i = Description.length()
                   var temp = {
                                 "patientId": UserId,
                                 "type": VitalSignTbl[task.code].type,
                                 "code": VitalSignTbl[task.code].code,
                                 "date": dateNowStr,
                                 "datatime": new Date(),
-                                "datavalue": Description.split('/')[0],
-                                "datavalue2": Description.split('/')[1],
+                                "datavalue": Description[i-1].split('/')[0],
+                                "datavalue2": Description[i-1].split('/')[1],
                                 "unit":task.Unit
                               };
                                      
@@ -6095,7 +6096,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 //肾病保险主页面--TDY
-.controller('insuranceCtrl', ['$scope', '$state', '$ionicHistory',function ($scope, $state,$ionicHistory) {
+.controller('insuranceCtrl', ['$scope', '$state', '$ionicHistory','insurance',function ($scope, $state,$ionicHistory,insurance) {
   var show = false;
 
   $scope.isShown = function() {
@@ -6123,7 +6124,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   }
 
   $scope.submitintension = function(){
-    alert("您的信息已发送到后台，在24小时内会有相关人员与您联系")
+    var temp = {
+      "patientId":Storage.get('UID'),
+      "status":1,
+      "data": new Date()
+    }
+    insruance.setPrefer(temp).then(function(data){
+
+    },
+    function(err){
+
+    })
   }
 
   $scope.cancel = function(){
