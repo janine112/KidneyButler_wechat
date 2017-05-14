@@ -447,7 +447,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                       var codePromise = User.changePassword({phoneNo:Storage.get('USERNAME'),password:setPassword.newPass});
                       codePromise.then(function(data){
                           if(data.results==0){
-                              Storage.set('USERNAME',phone);
+                              // Storage.set('USERNAME',phone);
                               $scope.logStatus ="重置密码成功！";
                               $timeout(function(){$state.go('signin');} , 500);
                           }else{
