@@ -47,7 +47,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                                 }
                               },
                            {
-                                text: '<b>確定</b>',
+                                text: '確定',
                                 type: 'button-positive',
                                 onTap: function(e) {
                                     Storage.set('validMode',0)
