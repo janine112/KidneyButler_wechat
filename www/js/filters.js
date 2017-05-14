@@ -8,23 +8,24 @@ angular.module('kidney.filters', [])
         return $filter('date')(msgTime, 'M/d/yy h:mm a');
     }
 }])
-.filter('dateFormat',[function(){
+.filter('dateFormat',['$filter',function($filter){
     return function(date,format){
         var d=new Date(date)
         var ret=""
         if(date==null)
-        	return "-"
+            return "-"
         switch(format)
         {
-        	case "YYYY-MM-DD":
-        		ret=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
-        		break;
-        	case "MM-DD-YYYY":
-        		ret=(d.getMonth()+1)+'-'+d.getDate()+'-'+d.getFullYear();
-        		break;
-        	case "YYYY-MM-DD h:m":
-        		ret=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes();
-        		break;
+            case "YYYY-MM-DD":
+                ret=$filter('date')(d,'yyyy-MM-dd');
+                break;
+            case "MM-DD-YYYY":
+                ret=$filter('date')(d,'MM-dd-yyyy');
+                break;
+            case "YYYY-MM-DD h:m":
+                ret=$filter('date')(d,'yyyy-MM-dd HH:mm');
+                
+                break;
         }
         return ret;
     }
