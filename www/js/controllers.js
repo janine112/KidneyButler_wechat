@@ -163,7 +163,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //手机号码验证--PXY
-.controller('phonevalidCtrl', ['$scope','$state','$interval', '$stateParams','Storage','User','$timeout', 'Patient',function($scope, $state,$interval,$stateParams,Storage,User,$timeout,Patient) {
+.controller('phonevalidCtrl', ['$scope','$state','$interval', '$stateParams','Storage','User','$timeout', 'Patient','$ionicPopup',function($scope, $state,$interval,$stateParams,Storage,User,$timeout,Patient,$ionicPopup) {
   //$scope.barwidth="width:0%";
   // Storage.set("personalinfobackstate","register")
   
@@ -265,7 +265,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         sendSMS(Verify.Phone);
                     }
                 }else if(data.results == 1){
-                    sendSMS(Verify.Phone);
+                    $scope.logStatus = "该用户不存在！请返回登录页面进行注册！"
+                    return;
                 }
             },function(){
                 $scope.logStatus="连接超时！";
@@ -307,14 +308,33 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                               User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                                   if(data.msg == "success!")
                                   {
-                                    User.getAgree({userId:tempuserId}).then(function(res){
-                                        if(res.results.agreement=="0"){
-                                            $state.go('tab.tasklist');
-                                        }else{
-                                            $state.go('agreement',{last:'signin'});
-                                        }
-                                    },function(err){
-                                        console.log(err);
+                                    // User.getAgree({userId:tempuserId}).then(function(res){
+                                    //     if(res.results.agreement=="0"){
+                                    //         $state.go('tab.tasklist');
+                                    //     }else{
+                                    //         $state.go('agreement',{last:'signin'});
+                                    //     }
+                                    // },function(err){
+                                    //     console.log(err);
+                                    // })
+                                    $ionicPopup.show({   
+                                         title: '微信账号绑定手机账号成功，您的初试密码是123456，是否重置密码？',
+                                         buttons: [
+                                           { 
+                                                text: '取消',
+                                                type: 'button-positive',
+                                                onTap: function(e) {
+                                                    $state.go('signin')
+                                                }
+                                              },
+                                           {
+                                                text: '<b>確定</b>',
+                                                type: 'button-positive',
+                                                onTap: function(e) {
+                                                    $state.go('setpassword',{phonelalidType:"reset"})
+                                                }
+                                           },
+                                           ]
                                     })
                                   }
                               },function(){
@@ -1214,9 +1234,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 .controller('tasklistCtrl', ['$scope','$timeout','$state','$cordovaBarcodeScanner','Storage','$ionicHistory', '$ionicPopup', '$ionicModal', 'Compliance', '$window', 'Task', 'Patient', 'VitalSign', function($scope, $timeout,$state,$cordovaBarcodeScanner,Storage,$ionicHistory,$ionicPopup,$ionicModal,Compliance, $window, Task, Patient, VitalSign) {
   
   //初始化
-    //$scope.barwidth="width:0%";
+    // $scope.barwidth="width:0%";
     var UserId = Storage.get('UID');
-    //UserId = "Test12"; //U201702071766
+    //UserId = "Test13"; //
+
     $scope.Tasks = {}; //任务
     $scope.HemoBtnFlag = false; //血透排班设置标志    
     var OverTimeTaks = [];
@@ -1632,26 +1653,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                var task = $scope.Tasks.Measure[num];
                if(task.code == "BloodPressure")//console.log(task);  
                {
-                  var temp1 = {
+                  var temp = {
                                 "patientId": UserId,
                                 "type": VitalSignTbl[task.code].type,
-                                "code": "收缩压",
+                                "code": VitalSignTbl[task.code].code,
                                 "date": dateNowStr,
                                 "datatime": new Date(),
                                 "datavalue": Description.split('/')[0],
+                                "datavalue2": Description.split('/')[1],
                                 "unit":task.Unit
                               };
-                   var temp2 = {
-                                "patientId": UserId,
-                                "type": VitalSignTbl[task.code].type,
-                                "code": "舒张压",
-                                "date": dateNowStr,
-                                "datatime": new Date(),
-                                "datavalue": Description.split('/')[1],
-                                "unit":task.Unit
-                              };
-                   InsertVitalSign(temp1);  
-                   InsertVitalSign(temp2);  
+                                     
                } 
                else
                {
@@ -1664,8 +1676,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                 "datavalue": Description,
                                 "unit":task.Unit
                               }
-                 InsertVitalSign(temp);        
-               }             
+                        
+               }  
+               InsertVitalSign(temp);            
            }                 
         }        
     }
@@ -2584,29 +2597,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
        })
     }
 
-  //获取二维码信息
-    $scope.scanbarcode = function () {
-      console.log(Storage.get("UID"))
-      $cordovaBarcodeScanner.scan().then(function(imageData) {
-          // alert(imageData.text);
-          Patient.bindingMyDoctor({"patientId":Storage.get("UID"),"doctorId":imageData.text}).then(function(res){
-            if(res.result=="修改成功"){
-              $ionicPopup.alert({
-               title: '绑定成功！'
-              }).then(function(res) {
-                $state.go('tab.myDoctors');
-              });
-            }else if(res.result=="不存在的医生ID！"){
-              $ionicPopup.alert({
-               title: '不存在的医生ID！'
-              })
-            }
-         },function(){                    
-         })
-      }, function(error) {
-          console.log("An error happened -> " + error);
-      });
-    };
+  
 
 }])
 
@@ -2615,7 +2606,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   
   //初始化
     var UserId = Storage.get('UID'); 
-    //UserId = "Test12"; 
+    //UserId = "Test13"; 
     $scope.Tasks = {};
     $scope.OKBtnFlag = true;
     $scope.EditFlag = false;
@@ -4495,7 +4486,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               {
                 console.log(data.data);
                 // $scope.canEdit= false;
-                // $ionicHistory.goBack()
+                $ionicHistory.goBack()
               },
               function(err)
               {
