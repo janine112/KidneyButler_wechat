@@ -363,6 +363,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         url: '/mine',
         views: {
           'tab-mine': {
+            cache: false,
             templateUrl: 'partials/tabs/mine/mine.html',
             controller: 'MineCtrl'
           }
@@ -374,6 +375,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         url: '/mine/DiagnosisInfo',
         views: {
           'tab-mine': {
+            cache: false,
             templateUrl: 'partials/tabs/mine/diagnosisInfo.html',
             controller: 'DiagnosisCtrl'
           }
@@ -385,6 +387,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         url: '/mine/ConsultRecord',
         views: {
           'tab-mine': {
+            cache: false,
             templateUrl: 'partials/tabs/mine/consultRecord.html',
             controller: 'ConsultRecordCtrl'
           }
@@ -396,6 +399,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         url: '/mine/HealthInfo',
         views: {
           'tab-mine': {
+            cache: false,
             templateUrl: 'partials/tabs/mine/HealthInfo.html',
             controller: 'HealthInfoCtrl'
           }
@@ -420,6 +424,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         url: '/mine/Account/',
         views: {
           'tab-mine': {
+            cache: false,
             templateUrl: 'partials/tabs/mine/money.html',
             controller: 'MoneyCtrl'
           }
@@ -454,6 +459,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         url: '/mine/taskSet/',
         views: {
           'tab-mine': {
+            cache: false,
             templateUrl: 'partials/tabs/task/taskSet.html',
             controller: 'TaskSetCtrl'
           }
