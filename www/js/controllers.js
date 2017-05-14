@@ -3841,7 +3841,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 newsType:11,
                 content:notice
             }
-            socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
+            socket.emit('message',{msg:msgJson,to:$scope.params.chatId,role:'patient'});
         }
     }
     function noMore(){
@@ -4125,7 +4125,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             // $scope.pushMsg(msgJson);
             // toBottom(true);
         // }
-        socket.emit('message',{msg:msgJson,to:$scope.params.chatId});
+        socket.emit('message',{msg:msgJson,to:$scope.params.chatId,role:'patient'});
         toBottom(true);
     }
     function onSendSuccess(res) {
@@ -7139,7 +7139,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 content:msgContent
             }
             socket.emit('newUser',{user_name:$scope.BasicInfo.name,user_id:patientId});
-            socket.emit('message',{msg:msgJson,to:DoctorId});
+            socket.emit('message',{msg:msgJson,to:DoctorId,role:'patient'});
             socket.on('messageRes',function(messageRes){
                 socket.off('messageRes');
                 socket.emit('disconnect');
@@ -7183,7 +7183,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                             .then(function(con){
                                 console.log(con);
                                 socket.emit('newUser',{user_name:'陈江华'.name,user_id:DoctorId});
-                                socket.emit('message',{msg:msgTeam,to:team.teamId});
+                                socket.emit('message',{msg:msgTeam,to:team.teamId,role:'patient'});
                                 socket.on('messageRes',function(messageRes){
                                     socket.off('messageRes');
                                     socket.emit('disconnect');
