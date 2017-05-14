@@ -822,6 +822,12 @@ angular.module('kidney.services', ['ionic','ngResource'])
         })
     }
 
+    var insurance = function(){
+        return $resource(CONFIG.baseUrl + ':path/:route',{path:'insurance'},{
+            setPrefer:{method:'GET', params:{route: 'setPrefer'}, timeout: 100000},
+            getPrefer:{method:'GET', params:{route: 'getPrefer'}, timeout: 100000}
+        })
+    }
     serve.abort = function ($scope) {
         abort.resolve();
         $interval(function () {
@@ -845,6 +851,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             serve.wechat = wechat();
             serve.jm = jm();
             serve.order = order();
+            serve.insurance = insurance();
         }, 0, 1);
     };
     serve.Dict = Dict();
@@ -866,6 +873,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.wechat = wechat();
     serve.jm = jm();
     serve.order = order();
+    serve.insurance = insurance();
     return serve;
 }])
 
@@ -2035,6 +2043,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  url:'patient_class'
            // }
     self.settingConfig = function(params){
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.settingConfig(
             params,
@@ -2050,6 +2059,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  code:'3'
             // }
     self.getUserInfo = function(params){
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.getUserInfo(
             params,
@@ -2066,6 +2076,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  name:
             // }
     self.download = function(params){
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.download(
             params,
@@ -2082,6 +2093,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  orderno:通过insertOrder得到的订单号
             // }
     self.addOrder = function(params){
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.addOrder(
             params,
@@ -2098,6 +2110,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  name:
             // }
     self.messageTemplate = function(params){
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.messageTemplate(
             params,
@@ -2317,4 +2330,40 @@ angular.module('kidney.services', ['ionic','ngResource'])
       return defer.promise;
     }
   };
+}])
+
+.factory('insurance', ['$q', 'Data', function($q, Data){
+    var self = this;
+    //params->{
+            //  url:'patient_class'
+           // }
+    self.setPrefer = function(params){
+        var deferred = $q.defer();
+        Data.insurance.setPrefer(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //params->{
+            //  code:'3'
+            // }
+    self.getPrefer = function(params){
+        var deferred = $q.defer();
+        Data.insurance.getPrefer(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+
+    return self;
 }])

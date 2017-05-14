@@ -693,6 +693,12 @@ input.hasTick {
   margin-right: 10%;
 }
 
+.row-below-avatar{
+  text-align: center;
+  position:absolute;
+  left: 0px;
+  top: 75%;
+}
 
 .item-select-custom {
   position: relative; }
