@@ -1217,9 +1217,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 .controller('tasklistCtrl', ['$scope','$timeout','$state','$cordovaBarcodeScanner','Storage','$ionicHistory', '$ionicPopup', '$ionicModal', 'Compliance', '$window', 'Task', 'Patient', 'VitalSign', function($scope, $timeout,$state,$cordovaBarcodeScanner,Storage,$ionicHistory,$ionicPopup,$ionicModal,Compliance, $window, Task, Patient, VitalSign) {
   
   //初始化
-    //$scope.barwidth="width:0%";
+    // $scope.barwidth="width:0%";
     var UserId = Storage.get('UID');
-    //UserId = "Test12"; //U201702071766
+    //UserId = "Test13"; //
+
     $scope.Tasks = {}; //任务
     $scope.HemoBtnFlag = false; //血透排班设置标志    
     var OverTimeTaks = [];
@@ -1635,26 +1636,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                var task = $scope.Tasks.Measure[num];
                if(task.code == "BloodPressure")//console.log(task);  
                {
-                  var temp1 = {
+                  var temp = {
                                 "patientId": UserId,
                                 "type": VitalSignTbl[task.code].type,
-                                "code": "收缩压",
+                                "code": VitalSignTbl[task.code].code,
                                 "date": dateNowStr,
                                 "datatime": new Date(),
                                 "datavalue": Description.split('/')[0],
+                                "datavalue2": Description.split('/')[1],
                                 "unit":task.Unit
                               };
-                   var temp2 = {
-                                "patientId": UserId,
-                                "type": VitalSignTbl[task.code].type,
-                                "code": "舒张压",
-                                "date": dateNowStr,
-                                "datatime": new Date(),
-                                "datavalue": Description.split('/')[1],
-                                "unit":task.Unit
-                              };
-                   InsertVitalSign(temp1);  
-                   InsertVitalSign(temp2);  
+                                     
                } 
                else
                {
@@ -1667,8 +1659,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                 "datavalue": Description,
                                 "unit":task.Unit
                               }
-                 InsertVitalSign(temp);        
-               }             
+                        
+               }  
+               InsertVitalSign(temp);            
            }                 
         }        
     }
@@ -2587,33 +2580,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
        })
     }
 
-  //获取二维码信息
-    $scope.scanbarcode = function () {
-      console.log(Storage.get("UID"))
-      $cordovaBarcodeScanner.scan().then(function(imageData) {
-          // alert(imageData.text);
-          Patient.bindingMyDoctor({"patientId":Storage.get("UID"),"doctorId":imageData.text}).then(function(res){
-            if(res.result=="修改成功"){
-              $ionicPopup.alert({
-               title: '绑定成功！'
-              }).then(function(res) {
-                $state.go('tab.myDoctors');
-              });
-            }else if(res.result=="不存在的医生ID！"){
-              $ionicPopup.alert({
-               title: '不存在的医生ID！'
-              })
-            }
-         },function(){                    
-         })
-      }, function(error) {
-          console.log("An error happened -> " + error);
-      });
-    };
-
-    $scope.gotoinsurance = function () {
-      $state.go('insurance')
-    };
+  
 
 }])
 
@@ -2622,7 +2589,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   
   //初始化
     var UserId = Storage.get('UID'); 
-    //UserId = "Test12"; 
+    //UserId = "Test13"; 
     $scope.Tasks = {};
     $scope.OKBtnFlag = true;
     $scope.EditFlag = false;
