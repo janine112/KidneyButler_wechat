@@ -1653,15 +1653,16 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                var task = $scope.Tasks.Measure[num];
                if(task.code == "BloodPressure")//console.log(task);  
                {
-                  var i = Description.split(',').length()
+                  var array = Description.split('，')
+                  var i = array.length
                   var temp = {
                                 "patientId": UserId,
                                 "type": VitalSignTbl[task.code].type,
                                 "code": VitalSignTbl[task.code].code,
                                 "date": dateNowStr,
                                 "datatime": new Date(),
-                                "datavalue": Description.split(',')[i-1].split('/')[0],
-                                "datavalue2": Description.split(',')[i-1].split('/')[1],
+                                "datavalue": array[i-1].split('/')[0],
+                                "datavalue2": array[i-1].split('/')[1],
                                 "unit":task.Unit
                               };
                                      
