@@ -266,6 +266,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     }
                 }else if(data.results == 1){
                     $scope.logStatus = "该用户不存在！请返回登录页面进行注册！"
+                    return;
                 }
             },function(){
                 $scope.logStatus="连接超时！";
