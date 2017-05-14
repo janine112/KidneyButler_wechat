@@ -7197,8 +7197,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         })                
 
                     });
+                }else{
+                    $state.go('tab.consult-chat',{chatId:DoctorId});
                 }
-                
             });
           
         }
