@@ -2,6 +2,29 @@
 .green-bg {
   background: #6ac4f8 !important;
 }
+.popup-buttons{
+  min-height: 55px!important;
+}
+.button.button-positive{
+  background: #6ac4f8 !important;
+}
+.popup-buttons .button{
+  margin-right: 80px!important;
+  min-height: 35px!important;
+}
+.popup-buttons .button:last-child{
+  margin-right: 0!important;
+}
+.popup-body{
+  padding: 0!important;
+}
+.popup-container textarea{
+  padding:10px;
+}
+.popup-body span{
+  display: inline-block;
+  padding: 10px;
+}
 .green-white-bg {
   background: white !important;
 }
