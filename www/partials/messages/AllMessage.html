@@ -16,7 +16,7 @@
         <img ng-src="img/icon_paymessage.png" image-red-point="!pay.readOrNot">
         <div class="row">
             <h2 class="col">支付消息</h2>
-            <span class="col">{{pay.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
+            <span class="col" style="font-size: 12px">{{pay.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
         </div>
         <span class="row" style="margin-left:5px;">{{pay.description}}</span>
       </ion-item>
@@ -26,7 +26,7 @@
         <img ng-src="img/icon_warning.png" image-red-point="!alert.readOrNot">
         <div class="row">
             <h2 class="col">警报消息</h2>
-            <span class="col">{{alert.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
+            <span class="col" style="font-size: 12px">{{alert.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
         </div>
         <span class="row" style="margin-left:5px;">{{alert.description}}</span>
       </ion-item>
@@ -37,7 +37,7 @@
         <img ng-src="img/icon_renwu.png" image-red-point="!task.readOrNot">
         <div class="row">
             <h2 class="col">任务消息</h2>
-            <span class="col">{{task.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
+            <span class="col" style="font-size: 12px">{{task.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
         </div>
         <span class="row" style="margin-left:5px;">{{task.description}}</span>
       </ion-item>
@@ -47,7 +47,7 @@
         <img ng-src="img/security.png" image-red-point="!insurance.readOrNot">
         <div class="row">
             <h2 class="col" >保险消息</h2>
-            <span class="col">{{insurance.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
+            <span class="col" style="font-size: 12px">{{insurance.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
         </div>
         <span class="row" style="margin-left:5px;">{{insurance.description}}</span>
       </ion-item>
@@ -61,7 +61,7 @@
         <img ng-src="{{chat.docPhoto}}" image-red-point="!chat.readOrNot">
         <div class="row">
             <h2 class="col">{{chat.docName}}</h2>
-            <span class="col">{{chat.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
+            <span class="col" style="font-size: 12px">{{chat.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
         </div>
         <span class="row" style="margin-left:5px;">{{chat.description}}</span>
       </ion-item>
