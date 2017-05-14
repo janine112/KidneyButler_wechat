@@ -2043,6 +2043,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  url:'patient_class'
            // }
     self.settingConfig = function(params){
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.settingConfig(
             params,
@@ -2058,6 +2059,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  code:'3'
             // }
     self.getUserInfo = function(params){
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.getUserInfo(
             params,
@@ -2074,6 +2076,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  name:
             // }
     self.download = function(params){
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.download(
             params,
@@ -2090,6 +2093,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  orderno:通过insertOrder得到的订单号
             // }
     self.addOrder = function(params){
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.addOrder(
             params,
@@ -2106,6 +2110,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             //  name:
             // }
     self.messageTemplate = function(params){
+        params.role = "patient";
         var deferred = $q.defer();
         Data.wechat.messageTemplate(
             params,
