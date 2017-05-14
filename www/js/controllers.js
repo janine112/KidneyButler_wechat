@@ -196,7 +196,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 unablebutton();
                 if(data.mesg.substr(0,8)=="您的邀请码已发送"){
                     $scope.logStatus = "您的验证码已发送，重新获取请稍后";
-                }else{
+                }else if (data.results == 1){
+                    $scope.logStatus = "验证码发送失败，请稍后再试";
+                }
+                else{
                     $scope.logStatus ="验证码发送成功！";
                 }
             },function(err){
@@ -6097,7 +6100,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 //肾病保险主页面--TDY
-.controller('insuranceCtrl', ['$scope', '$state', '$ionicHistory','insurance',function ($scope, $state,$ionicHistory,insurance) {
+.controller('insuranceCtrl', ['$scope', '$state', '$ionicHistory','insurance','Storage','$filter',function ($scope, $state,$ionicHistory,insurance,Storage,$filter) {
   var show = false;
 
   $scope.isShown = function() {
@@ -6125,13 +6128,18 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   }
 
   $scope.submitintension = function(){
+    var time = new Date()
+    time =  $filter("date")(time, "yyyy-MM-dd HH:mm:ss");
     var temp = {
       "patientId":Storage.get('UID'),
       "status":1,
-      "data": new Date()
+      "date": time.substr(0,10)
     }
-    insruance.setPrefer(temp).then(function(data){
-
+    insurance.setPrefer(temp).then(function(data){
+      if (data.results == "success")
+      {
+        alert("已收到您的保险意向，工作人员将尽快与您联系！")
+      }
     },
     function(err){
 
