@@ -1189,7 +1189,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   $scope.QRscan = function(){
     // alert(1)
     var config = "";
-    var path = $location.absUrl.split('#')[0]
+    var path = $location.absUrl().split('#')[0]
+    //var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -3263,7 +3264,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   };      
   $scope.choosePhotos = function() {
     var config = "";
-    var path = $location.absUrl.split('#')[0]
+    var path = $location.absUrl().split('#')[0]
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -3320,7 +3321,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     $scope.isShow=true;
     $scope.takePicture = function() {
       var config = "";
-      var path = $location.absUrl.split('#')[0]
+      var path = $location.absUrl().split('#')[0]
       wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -3574,7 +3575,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     $scope.input = {
         text: ''
     }
-    var path = $location.absUrl.split('#')[0]
+    var path = $location.absUrl().split('#')[0]
     // $scope.msgs = [];
     $scope.scrollHandle = $ionicScrollDelegate.$getByHandle('myContentScroll');
     function toBottom(animate,delay){
@@ -4670,7 +4671,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   };      
   $scope.choosePhotos = function() {
     var config = "";
-    var path = $location.absUrl.split('#')[0]
+    var path = $location.absUrl().split('#')[0]
     wechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -4728,7 +4729,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   $scope.isShow=true;
   $scope.takePicture = function() {
       var config = "";
-      var path = $location.absUrl.split('#')[0]
+      var path = $location.absUrl().split('#')[0]
       wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -5710,7 +5711,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       console.log(err)
     })
     // var config = "";
-    // var path = $location.absUrl.split('#')[0]
+    // var path = $location.absUrl().split('#')[0]
     // wechat.settingConfig({url:path}).then(function(data){
     //   // alert(data.results.timestamp)
     //   config = data.results;
