@@ -6325,7 +6325,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   }
 }])
 //咨询问卷--TDY
-.controller('consultquestionCtrl', ['$ionicLoading','Task','$scope', '$ionicPopup','$ionicModal','$state', 'Dict','Storage', 'Patient', 'VitalSign','$filter','$stateParams','$ionicPopover','Camera','Counsels','JM','CONFIG','Health','Account',function ($ionicLoading,Task,$scope,$ionicPopup, $ionicModal,$state,Dict,Storage,Patient,VitalSign,$filter,$stateParams,$ionicPopover,Camera,Counsels,JM,CONFIG,Health,Account) {
+.controller('consultquestionCtrl', ['$ionicLoading','Task','$scope', '$ionicPopup','$ionicModal','$state', 'Dict','Storage', 'Patient', 'VitalSign','$filter','$stateParams','$ionicPopover','Camera','Counsels','JM','CONFIG','Health','Account','Communication','jmapi',function ($ionicLoading,Task,$scope,$ionicPopup, $ionicModal,$state,Dict,Storage,Patient,VitalSign,$filter,$stateParams,$ionicPopover,Camera,Counsels,JM,CONFIG,Health,Account,Communication,jmapi) {
   $scope.showProgress = false
   $scope.showSurgicalTime = false
   var patientId = Storage.get('UID')
@@ -7042,6 +7042,16 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
             Storage.rm('tempquestionare')
             Storage.rm('tempimgrul')
+            var msgContent={
+                counsel:data.results,
+                type:'card',
+                counselId:data.results.counselId,
+                patientId:patientId,
+                patientName:$scope.BasicInfo.name,
+                doctorId:DoctorId,
+                fromId:patientId,
+                targetId:DoctorId
+            };
             var msgJson={
                 contentType:'custom',
                 fromName:thisPatient.name,
@@ -7055,24 +7065,70 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 status:'send_going',
                 createTimeInMillis: Date.now(),
                 newsType:'11',
-                content:{
-                    counsel:data.results,
-                    type:'card',
-                    counselId:data.results.counselId,
-                    patientId:patientId,
-                    patientName:$scope.BasicInfo.name,
-                    doctorId:DoctorId,
-                    fromId:patientId,
-                    targetId:DoctorId
-                }
+                content:msgContent
             }
             socket.emit('newUser',{user_name:$scope.BasicInfo.name,user_id:patientId});
             socket.emit('message',{msg:msgJson,to:DoctorId});
-            socket.on('messageRes',function(data){
-              socket.off('messageRes');
-              socket.emit('disconnect');
-              $state.go('tab.consult-chat',{chatId:DoctorId});
-            })
+            socket.on('messageRes',function(messageRes){
+                socket.off('messageRes');
+                socket.emit('disconnect');
+                if(DoctorId=='U201612291283'){
+                    Communication.getTeam({teamId:'10050278'})
+                    .then(function(response){
+                        var team = response.results,
+                            idarr = [];
+                        team.members.forEach(function(member){
+                            this.push(member.userId);
+                        },idarr);
+                        jmapi.groups(DoctorId,idarr,thisPatient.name + '-' +team.name,'consultatioin_open')
+                        .then(function(res){
+                            var d = {
+                                teamId: team.teamId,
+                                counselId: data.results.counselId,
+                                sponsorId: DoctorId,
+                                patientId: patientId,
+                                consultationId: res.results.gid,
+                                status: '1'
+                            }
+                            msgContent.consultationId=res.results.gid;
+                            var msgTeam={
+                                contentType:'custom',
+                                fromID:DoctorId,
+                                fromName:'陈江华',
+                                fromUser:{
+                                    avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+DoctorId+'_myAvatar.jpg'
+                                },
+                                targetID:team.teamId,
+                                teamId:team.teamId,
+                                targetName:team.name,
+                                targetType:'group',
+                                status:'send_going',
+                                newsType:'13',
+                                createTimeInMillis: Date.now(),
+                                content:msgContent
+                            }
+
+                            Communication.newConsultation(d)
+                            .then(function(con){
+                                console.log(con);
+                                socket.emit('newUser',{user_name:'陈江华'.name,user_id:DoctorId});
+                                socket.emit('message',{msg:msgTeam,to:team.teamId});
+                                socket.on('messageRes',function(messageRes){
+                                    socket.off('messageRes');
+                                    socket.emit('disconnect');
+                                    $state.go('tab.consult-chat',{chatId:DoctorId});
+                                });
+                            },function(er){
+                                console.error(err);
+                            })
+                        },function(err){
+                            console.error(err);
+                        })                
+
+                    });
+                }
+                
+            });
           
         }
         console.log(data.results)
