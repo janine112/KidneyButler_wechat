@@ -2609,6 +2609,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       });
     };
 
+    $scope.gotoinsurance = funciton(){
+      $state.go('insurance')
+    }
+
 }])
 
 //任务设置--GL

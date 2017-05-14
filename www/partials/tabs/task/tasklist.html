@@ -3,7 +3,7 @@
     <ion-content class="padding">
         <ion-refresher pulling-text="下拉刷新" spinner='ripple' refreshing-text="。。。" on-refresh="Refresh()">
         </ion-refresher>
-        <div style="text-align: center;" ><img src="img/banner1@2x.png" style="width: 100%" href="#/insurance"></div>
+        <div style="text-align: center;" ><img src="img/banner1@2x.png" style="width: 100%" ng-click="gotoinsurance()"></div>
         <ion-list>
             <a class="item green-bg font-white" style="border: 0;font-size: 14px;border-bottom: 1px solid #fff;margin-bottom: 0" ng-click="open==true?open=false:open=true" ng-model="open">
             测量任务
