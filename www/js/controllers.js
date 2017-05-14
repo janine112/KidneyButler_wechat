@@ -308,15 +308,17 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                               User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                                   if(data.msg == "success!")
                                   {
-                                    User.getAgree({userId:tempuserId}).then(function(res){
-                                        if(res.results.agreement=="0"){
-                                            $state.go('tab.tasklist');
-                                        }else{
-                                            $state.go('agreement',{last:'signin'});
-                                        }
-                                    },function(err){
-                                        console.log(err);
-                                    })
+                                    // User.getAgree({userId:tempuserId}).then(function(res){
+                                    //     if(res.results.agreement=="0"){
+                                    //         $state.go('tab.tasklist');
+                                    //     }else{
+                                    //         $state.go('agreement',{last:'signin'});
+                                    //     }
+                                    // },function(err){
+                                    //     console.log(err);
+                                    // })
+                                    $scope.logStatus = "绑定成功，请重新登录！";
+                                    $timeout(function(){$state.go('signin')},1000);
                                   }
                               },function(){
                                   $scope.logStatus = "连接超时！";
