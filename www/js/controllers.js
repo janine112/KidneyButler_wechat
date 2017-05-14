@@ -355,7 +355,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                                 text: '確定',
                                                 type: 'button-positive',
                                                 onTap: function(e) {
-                                                    $state.go('setpassword',{phonelalidType:"reset"})
+                                                    $state.go('setpassword',{phonevalidType:"reset"})
                                                 }
                                            },
                                            ]
