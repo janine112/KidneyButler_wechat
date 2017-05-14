@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.directives','kidney.filters','ngCordova','ngFileUpload'])
 
-.run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM,$location,wechat,User) {
+.run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM,$location,wechat,User,Patient) {
   $ionicPlatform.ready(function() {
     socket = io.connect('ws://121.196.221.44:4050/chat');
     
@@ -25,6 +25,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           wechatData = data.results
           console.log(wechatData)
           Storage.set('openid',wechatData.openid)
+          Storage.set('wechathead',wechatData.headimgurl)
           // alert(wechatData.openid)
           // alert(wechatData.nickname)
           User.logIn({username:wechatData.openid,password:wechatData.openid,role:"patient"}).then(function(data){
@@ -76,6 +77,17 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                     Storage.set('TOKEN',data.results.token);//token作用目前还不明确
                     Storage.set('isSignIn',"Yes");
                     Storage.set('UID',data.results.userId);
+                    Patient.getPatientDetail({userId:Storage.get("UID")}).then(function(res){
+                      console.log(Storage.get("UID"))
+                      // console.log(res.results)
+                      console.log(res.results.photoUrl)
+                      // console.log(angular.fromJson(res.results))
+                      if(res.results.photoUrl==undefined||res.results.photoUrl==""){
+                        Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:wechatData.headimgurl}).then(function(r){
+                          console.log(r);
+                        })
+                      }
+                    })
                     User.getAgree({userId:data.results.userId}).then(function(res){
                         if(res.results.agreement=="0"){
                             $state.go('tab.tasklist');

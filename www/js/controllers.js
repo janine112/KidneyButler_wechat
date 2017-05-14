@@ -1,6 +1,6 @@
 angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','ionic-datepicker','kidney.directives'])//,'ngRoute'
 //登录--PXY
-.controller('SignInCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','jmapi', '$location','wechat','$sce',function($scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,jmapi,$location,wechat,$sce) {
+.controller('SignInCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','jmapi', '$location','wechat','$sce','Patient',function($scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,jmapi,$location,wechat,$sce,Patient) {
   //$scope.barwidth="width:0%";
   $scope.navigation_login=$sce.trustAsResourceUrl("http://patientdiscuss.haihonghospitalmanagement.com/member.php?mod=logging&action=logout&formhash=xxxxxx");
   // Storage.set("personalinfobackstate","logOn");
@@ -132,6 +132,27 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     $state.go('phonevalid',{phonevalidType:'reset'});
   } 
   
+  User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
+  {
+      if (angular.isDefined(data.UserId) == true)
+      {
+          Patient.getPatientDetail({userId:Storage.get("UID")}).then(function(res){
+            console.log(Storage.get("UID"))
+            // console.log(res.results)
+            console.log(res.results.photoUrl)
+            // console.log(angular.fromJson(res.results))
+            if(res.results.photoUrl==undefined||res.results.photoUrl==""){
+              Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:Storage.get('wechathead')}).then(function(r){
+                console.log(r);
+              })
+            }
+          })
+      }
+  },function(err)
+  {
+      console.log(err)
+  })
+
 }])
 
 .controller('AgreeCtrl', ['$stateParams','$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','jmapi', function($stateParams,$scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,jmapi) {
