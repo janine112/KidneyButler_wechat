@@ -163,7 +163,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //手机号码验证--PXY
-.controller('phonevalidCtrl', ['$scope','$state','$interval', '$stateParams','Storage','User','$timeout', 'Patient',function($scope, $state,$interval,$stateParams,Storage,User,$timeout,Patient) {
+.controller('phonevalidCtrl', ['$scope','$state','$interval', '$stateParams','Storage','User','$timeout', 'Patient','$ionicPopup',function($scope, $state,$interval,$stateParams,Storage,User,$timeout,Patient,$ionicPopup) {
   //$scope.barwidth="width:0%";
   // Storage.set("personalinfobackstate","register")
   
@@ -317,8 +317,25 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                     // },function(err){
                                     //     console.log(err);
                                     // })
-                                    $scope.logStatus = "绑定成功，请重新登录！";
-                                    $timeout(function(){$state.go('signin')},1000);
+                                    $ionicPopup.show({   
+                                         title: '微信账号绑定手机账号成功，您的初试密码是123456，是否重置密码？',
+                                         buttons: [
+                                           { 
+                                                text: '取消',
+                                                type: 'button-positive',
+                                                onTap: function(e) {
+                                                    $state.go('signin')
+                                                }
+                                              },
+                                           {
+                                                text: '<b>確定</b>',
+                                                type: 'button-positive',
+                                                onTap: function(e) {
+                                                    $state.go('setpassword')
+                                                }
+                                           },
+                                           ]
+                                    })
                                   }
                               },function(){
                                   $scope.logStatus = "连接超时！";
