@@ -7207,7 +7207,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       if($stateParams.counselId!=undefined&&$stateParams.counselId!=""&&$stateParams.counselId!=null){
         console.log($stateParams.counselId)
         Comment.getCommentsByC({counselId:$stateParams.counselId}).then(function(data){
-          if(data.results.length=0){
+          if(data.results.length!=0){
             // //初始化
             $scope.comment.score=data.results[0].totalScore/2
             $scope.comment.commentContent=data.results[0].content
@@ -7255,6 +7255,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               //提交結束之後不能繼續修改
               $scope.$broadcast('changeratingstar',$scope.comment.score,true);
               $scope.editable=true;
+              setTimeout(function(){
+                  $scope.Goback();
+              },500);
             }
 
 
