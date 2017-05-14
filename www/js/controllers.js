@@ -5879,7 +5879,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 },function(err){
                   console.log(err)
                 })
-                $state.go("tab.consultquestion1",{DoctorId:id,counselType:1});
+                $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:1});
               }
             })
           }else{
