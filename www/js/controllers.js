@@ -4826,21 +4826,24 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 //增值服务--PXY
 .controller('MoneyCtrl', ['$scope','$state','$ionicHistory','Account','Storage','Patient',function($scope, $state,$ionicHistory,Account,Storage,Patient) {
-  //$scope.barwidth="width:0%";
+  // $scope.barwidth="width:0%";
   var PID = Storage.get('UID')
   var docid=""
   $scope.Goback = function(){
     $state.go('tab.mine')
   }
-  $scope.TimesRemain ="0";
+  // $scope.TimesRemain ="0";
+  $scope.TimesRemainZX="0";
+  $scope.TimesRemainWZ="0";
   $scope.freeTimesRemain ="0";
   //20170504 zxf
   var LoadMyAccount = function(){
     Account.getCounts({patientId:Storage.get('UID')}).then(
     function(data)
     {
+        console.log(data);
       $scope.freeTimesRemain=data.result.freeTimes;
-      $scope.TimesRemain=data.result.totalCount; 
+      // $scope.TimesRemain=data.result.totalCount;
     },
     function(err)
     {
@@ -4848,21 +4851,23 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     }
   );
   }
-
-   $scope.$on('$ionicView.enter', function() {
-        LoadMyAccount();
-    })
-
-   $scope.do_refresher = function(){
-        LoadMyAccount();
-        $scope.$broadcast("scroll.refreshComplete");
-
-   }
-
-
-
+  //0515 zxf
+  Account.getCountsRespective({patientId:Storage.get('UID')}).then(function(data){
+    $scope.TimesRemainZX=data.result.count1;
+    $scope.TimesRemainWZ=data.result.count2;
+  },function(err){
+    console.log(err);
+  })
   
+ $scope.$on('$ionicView.enter', function() {
+      LoadMyAccount();
+  })
 
+ $scope.do_refresher = function(){
+      LoadMyAccount();
+      $scope.$broadcast("scroll.refreshComplete");
+
+ }
 }])
 
 //消息中心--PXY

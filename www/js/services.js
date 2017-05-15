@@ -1,3 +1,26 @@
+angular.module('ionic-datepicker.service', [])
+
+  .service('IonicDatepickerService', function () {
+
+    this.monthsList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    this.getYearsList = function (from, to) {
+      console.log(from, to)
+      var yearsList = [];
+      var minYear = 1900;
+      var maxYear = new Date().getFullYear() + 1;
+
+      minYear = from ? new Date(from).getFullYear() : minYear;
+      maxYear = to ? new Date(to).getFullYear() : maxYear;
+
+      for (var i = maxYear; i >= minYear; i--) {
+        yearsList.push(i);
+      }
+
+      return yearsList;
+    };
+});
+
 angular.module('kidney.services', ['ionic','ngResource'])
 
 // 客户端配置
@@ -766,7 +789,8 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getCounts:{method:'GET', params:{route: 'getCounts'}, timeout: 100000},
             modifyCounts:{method:'POST', params:{route: 'modifyCounts'}, timeout: 100000},
             rechargeDoctor:{method:'POST', params:{route: 'rechargeDoctor'}, timeout: 100000},
-            updateFreeTime:{method:'POST', params:{route: 'updateFreeTime'}, timeout: 100000}
+            updateFreeTime:{method:'POST', params:{route: 'updateFreeTime'}, timeout: 100000},
+            getCountsRespective:{method:'GET', params:{route: 'getCountsRespective'}, timeout: 100000}
         });
     }
 
@@ -1962,19 +1986,32 @@ angular.module('kidney.services', ['ionic','ngResource'])
         });
         return deferred.promise;
     };
-
+    //
     self.updateFreeTime = function(params){
-         var deferred = $q.defer();
-         Data.Account.updateFreeTime(
-             params,
-             function(data, headers){
-                 deferred.resolve(data);
-             },
-             function(err){
-                 deferred.reject(err);
-         });
-         return deferred.promise;
-     };
+        var deferred = $q.defer();
+        Data.Account.updateFreeTime(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+    //
+    self.getCountsRespective = function(params){
+        var deferred = $q.defer();
+        Data.Account.getCountsRespective(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
     return self;
 }])
 .factory('VitalSign', ['$q', 'Data', function($q, Data){
