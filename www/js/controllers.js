@@ -5474,29 +5474,44 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               cancelText:"取消"
             }).then(function(res){
               if(res){
-                var payresult = pay(Storage.get('UID'),id,'01','咨询',doctor.charge1*100)
-                //chargedoc
-                if (payresult == "chooseWXPay:ok")
-                {
-                  Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:1}).then(function(data){
-                    console.log(data)
-                  },function(err){
-                    console.log(err)
-                  })
-                  //plus doc answer count  patientId:doctorId:modify
-                  Account.modifyCounts({patientId:Storage.get('UID'),doctorId:id,modify:3}).then(function(data){
-                    console.log(data)
-                  },function(err){
-                    console.log(err)
-                  })
-                  $state.go("tab.consultquestion1",{DoctorId:id,counselType:1});
-                }
-                else{
-                  $ionicLoading.show({ 
-                      template: '付款失败，请重新支付！', duration: 2000 
-                  });
-                }
-                
+                var time = new Date()
+                time =  $filter("date")(time, "yyyy-MM-dd HH:mm:ss");
+                var neworder = {
+                              userId:Storage.get('UID'),
+                              money:1,
+                              goodsInfo:{
+                                class:'01',
+                                name:'咨询',
+                                notes:id
+                              },
+                              paystatus:0,
+                              paytime:time
+                            }
+                payment.payment(neworder).then(function(data){
+                  console.log(data) //data.errMsg:"chooseWXPay:ok"时支付成功
+                  if (data.errMsg == "chooseWXPay:ok")
+                  {
+                    Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:1}).then(function(data){
+                      console.log(data)
+                    },function(err){
+                      console.log(err)
+                    })
+                    //plus doc answer count  patientId:doctorId:modify
+                    Account.modifyCounts({patientId:Storage.get('UID'),doctorId:id,modify:3}).then(function(data){
+                      console.log(data)
+                    },function(err){
+                      console.log(err)
+                    })
+                    $state.go("tab.consultquestion1",{DoctorId:id,counselType:1});
+                  }
+                  else{
+                    $ionicLoading.show({ 
+                        template: '付款失败，请重新支付！', duration: 2000 
+                    });
+                  }
+                },function(err){
+                  console.log(err)
+                })
               }
             })
           }
