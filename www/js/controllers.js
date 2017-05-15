@@ -6197,7 +6197,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                           }
                       }
                       socket.emit('newUser',{user_name:Storage.get('UID'),user_id:Storage.get('UID')});
-                      socket.emit('message',{msg:msgJson,to:id,role:'patient'});
+                      socket.emit('message',{msg:msgJson,to:DoctorId,role:'patient'});
                       socket.on('messageRes',function(data){
                         socket.off('messageRes');
                         socket.emit('disconnect');
