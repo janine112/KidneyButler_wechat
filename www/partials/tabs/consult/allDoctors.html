@@ -43,7 +43,7 @@
       
     
     <ion-list style="position: absolute;top:89px;width: 95%">
-        <ion-item ng-repeat="doctor in doctors" class="card" ng-click="getDoctorDetail($event,doctor.userId)">
+        <ion-item ng-repeat="doctor in doctors" class="card" ng-click="getDoctorDetail($event,doctor.userId,doctor)">
 
             <div class="item item-thumbnail-left"> 
             <img style="border-radius: 100%;top: 40%;margin-top: -40px" ng-src="{{doctor.photoUrl  || 'img/doctor3.PNG'}}">
