@@ -3569,7 +3569,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //聊天 XJZ 
-.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication','Counsels','$ionicPopup','Account','News','Doctor','payment', function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication,Counsels,$ionicPopup,Account,News,Doctor,payment) {
+.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication','Counsels','$ionicPopup','Account','News','Doctor','payment', '$filter',function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication,Counsels,$ionicPopup,Account,News,Doctor,payment,$filter) {
     $scope.input = {
         text: ''
     }
@@ -4113,17 +4113,18 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         });
         overwarn.then(function(confirm){
             if(confirm){
-                var t = new Date(),
-                    neworder = {
+                var t = new Date();
+                t = $filter("date")(t, "yyyy-MM-dd HH:mm:ss");
+                var neworder = {
                     userId:$scope.params.UID,
                     money:1,
                     goodsInfo:{
                       class:'01',
-                      name:'咨询',
-                      notes:'测试'
+                      name:$scope.params.counsel.doctorId.name,
+                      notes:$scope.params.chatId
                     },
                     paystatus:0,
-                    paytime: t..toLocaleString().substr(0,10)
+                    paytime: t
                 }
                 payment.payment()
                 .then(function(res){
