@@ -9,8 +9,7 @@
 
   <ion-content  style="" class="all-message-cont">
 
-    <ion-list>
-      <div class="card">
+      <div class="card" ng-if="pay||alert||task||insurance">
       <!-- 支付消息 -->
       <ion-item class="item item-avatar" ng-if="pay" ng-click="getMessageDetail(pay)">
         <img ng-src="img/icon_paymessage.png" image-red-point="!pay.readOrNot">
@@ -66,13 +65,12 @@
         <span class="row" style="margin-left:5px;">{{chat.description}}</span>
       </ion-item>
 
-
-    </ion-list>
-    <div class="card" ng-if="(pay=='')&&(alert=='')&&(task=='')&&(insurance=='')&&(chats.length==0)">
+      <div class="card" ng-if="(!pay)&&(!alert)&&(!task)&&(!insurance)&&(chats.length==0)">
         <div class="item item-text-wrap">
             暂时没有消息
         </div>
-    </div>
+      </div>
+        
     <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
   </ion-content>
 

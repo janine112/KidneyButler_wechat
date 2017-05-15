@@ -49,14 +49,12 @@
         
       </ion-item>
     </ion-list>
-    <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
-    
-    
-    
-    
-
-
-           
+    <div class="card" ng-if="noDiags">
+        <div class="item item-text-wrap">
+            暂时没有诊断信息
+        </div>
+      </div>
+    <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>  
   </ion-content>
           
 </ion-view>

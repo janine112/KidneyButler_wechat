@@ -23,12 +23,12 @@
 
 
     </ion-list>
+    <div class="card" ng-if="noConsult">
+        <div class="item item-text-wrap">
+            暂时没有咨询记录
+        </div>
+    </div>
     <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
-    
-    
-    
-
-
            
   </ion-content>
           
