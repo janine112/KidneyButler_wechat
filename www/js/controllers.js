@@ -3569,7 +3569,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 
 //聊天 XJZ 
-.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication','Counsels','$ionicPopup','Account','News','Doctor', function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication,Counsels,$ionicPopup,Account,News,Doctor) {
+.controller('ChatCtrl',['$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice','$http','CONFIG','Patient','Storage','wechat','$location','$q','Communication','Counsels','$ionicPopup','Account','News','Doctor','payment', '$filter',function($scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice,$http,CONFIG,Patient,Storage,wechat,$location,$q,Communication,Counsels,$ionicPopup,Account,News,Doctor,payment,$filter) {
     $scope.input = {
         text: ''
     }
@@ -3626,11 +3626,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         Counsels.getStatus({doctorId:$state.params.chatId,patientId:Storage.get('UID')})
             .then(function(data)
             {
-                Storage.set('STATUSNOW',data.result.status);
+                // Storage.set('STATUSNOW',data.result.status);
                 $scope.params.counseltype = data.result.type=='3'?'2':data.result.type;
 
                 $scope.params.counsel = data.result;
-                console.log(data)
+                // console.log(data)
                 // if(data.result.status==0)//没有未结束的问诊，再看看有没有未结束的咨询
                 // {   Storage.set('STATUSNOW',data.result.status);
                 //   $scope.params.counseltype=2;
@@ -3730,8 +3730,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     // if ($scope.params.counseltype == 1 && Storage.get('STATUSNOW') == 1) {
                         Counsels.getStatus({ doctorId: $state.params.chatId, patientId: Storage.get('UID')})
                             .then(function(data) {
-                                console.log(data)
-                                Storage.set('STATUSNOW', data.result.status);
+                                console.log(data)；
+                                $scope.counselstatus=data.result.status;
+                                // Storage.set('STATUSNOW', data.result.status);
                             }, function(err) {
                                 console.log(err)
                             })
@@ -4097,28 +4098,74 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         return msgJson;
     }
     function nomoney(){
-        var alertPopup = $ionicPopup.alert({
-             title: '本次咨询已结束',
-           });
+        // var alertPopup = $ionicPopup.alert({
+        //      title: '本次咨询已结束',
+        //    });
 
            // alertPopup.then(function(res) {
            //   console.log('Thank you for not eating my delicious ice cream cone');
            // });
-      // var overwarn = $ionicPopup.confirm({
-      //                   title:"咨询结束",
-      //                   template:"咨询已结束",
-      //                   okText:"确认",
-      //                   cancelText:"取消"
-      //               });
-      //               overwarn.then(function(res){
-      //                   if(res){
-      //                      //患者知道已经结束了点击了确定
-      //                   }
+        var overwarn = $ionicPopup.confirm({
+            title:"您没有提问次数了",
+            template:"是否要再次购买，一次购买增加3次提问",
+            okText:"确认",
+            cancelText:"取消"
+        });
+        overwarn.then(function(confirm){
+            if(confirm){
+                var t = new Date();
+                t = $filter("date")(t, "yyyy-MM-dd HH:mm:ss");
+                var neworder = {
+                    userId:$scope.params.UID,
+                    money:1,
+                    goodsInfo:{
+                      class:'01',
+                      name:$scope.params.counsel.doctorId.name,
+                      notes:$scope.params.chatId
+                    },
+                    paystatus:0,
+                    paytime: t
+                }
+                payment.payment()
+                .then(function(res){
+                    console.log(res);
+                    $ionicLoading.show({
+                        template:'咨询提问购买成功',
+                        duration:1000
+                    });
+                    var msgJson={
+                        contentType:type,
+                        fromID:$scope.params.UID,
+                        fromName:thisPatient.name,
+                        fromUser:{
+                            avatarPath:''
+                        },
+                        targetID:$scope.params.chatId,
+                        targetName:$scope.params.counsel.doctorId.name,
+                        targetType:'single',
+                        status:'send_going',
+                        createTimeInMillis: Date.now(),
+                        newsType:'11',
+                        content:{
+                            type:'counsel-payment'
+                        }
+                    }
+                    socket.emit('message',{msg:msgJson,to:$scope.params.chatId,role:'patient'});
+                    $scope.counselstatus='1';
+                },function(err){
+                    $ionicLoading.show({
+                        template:'购买失败',
+                        duration:2000
+                    });
+                    console.error(err);
+                })
+               //患者知道已经结束了点击了确定
+            }
 
-      //               })
+        })
     }
     function sendmsg(content,type){
-        if(Storage.get('STATUSNOW')!=1) return nomoney();
+        if($scope.counselstatus!=1) return nomoney();
         var msgJson=msgGen(content,type);
         // if(type=='text'){
             // $scope.pushMsg(msgJson);
