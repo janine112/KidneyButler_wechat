@@ -5598,7 +5598,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 time =  $filter("date")(time, "yyyy-MM-dd HH:mm:ss");
                 var neworder = {
                               userId:Storage.get('UID'),
-                              money:(doctor.charge2-doctor.charge1)*100,
+                              money:doctor.charge2*100 - doctor.charge1*100,
                               goodsInfo:{
                                 class:'03',
                                 name:'升级',
@@ -5705,7 +5705,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   time =  $filter("date")(time, "yyyy-MM-dd HH:mm:ss");
                   var neworder = {
                                 userId:Storage.get('UID'),
-                                money:(doctor.charge2-doctor.charge1)*100,
+                                money:doctor.charge2*100 - doctor.charge1*100,
                                 goodsInfo:{
                                   class:'03',
                                   name:'升级',
@@ -6149,7 +6149,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 time =  $filter("date")(time, "yyyy-MM-dd HH:mm:ss");
                 var neworder = {
                               userId:Storage.get('UID'),
-                              money:($scope.doctor.charge2-$scope.doctor.charge1)*100,
+                              money:$scope.doctor.charge2*100 - $scope.doctor.charge1*100,
                               goodsInfo:{
                                 class:'03',
                                 name:'升级',
@@ -6256,7 +6256,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   time =  $filter("date")(time, "yyyy-MM-dd HH:mm:ss");
                   var neworder = {
                                 userId:Storage.get('UID'),
-                                money:($scope.doctor.charge2-$scope.doctor.charge1)*100,
+                                money:$scope.doctor.charge2*100 - $scope.doctor.charge1*100,
                                 goodsInfo:{
                                   class:'03',
                                   name:'升级',
