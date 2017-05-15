@@ -6,7 +6,7 @@
   <!-- <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->
   <ion-content padding="true" style="">
 
-    <div class="card" ng-click="getDoctorDetail($event,doctor.userId)" ng-if="hasDoctor">
+    <div class="card" ng-click="getDoctorDetail($event,doctor.userId,doctor)" ng-if="hasDoctor">
 
         <div class="item item-thumbnail-left"> 
             <img style="border-radius: 100%;top: 40%;margin-top: -40px" ng-src="{{doctor.photoUrl  || 'img/doctor3.PNG'}}">

@@ -2288,11 +2288,11 @@ angular.module('kidney.services', ['ionic','ngResource'])
     return self;
 }])
 
-.factory('payment',['$q','wechat','Storage','$http','order',function($q,wechat,Storage,$http,order){
+.factory('payment',['$q','wechat','Storage','$http','order','$location',function($q,wechat,Storage,$http,order,$location){
   return {
     payment:function(neworder){
       var config = "";
-      var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
+      var path = $location.absUrl().split('#')[0]
       var defer = $q.defer()
       wechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
