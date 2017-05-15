@@ -3730,7 +3730,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     // if ($scope.params.counseltype == 1 && Storage.get('STATUSNOW') == 1) {
                         Counsels.getStatus({ doctorId: $state.params.chatId, patientId: Storage.get('UID')})
                             .then(function(data) {
-                                console.log(data)；
+                                console.log(data);
                                 $scope.counselstatus=data.result.status;
                                 // Storage.set('STATUSNOW', data.result.status);
                             }, function(err) {
