@@ -4174,7 +4174,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 "template_id": "DWrM__2UuaLxYf5da6sKOQA_hlmYhlsazsaxYX59DtE",
                 "data": {
                     "first": {
-                        "value": "您有一个新的"+($scope.params.counseltype==1?'咨询':'问诊')+"消息，请马上处理",
+                        "value": "您有一个新的"+($scope.params.counseltype==1?'咨询':'问诊')+"消息，请及时处理",
                         "color": "#173177"
                     },
                     "keyword1": {
