@@ -3925,16 +3925,6 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             $scope.imageHandle = $ionicScrollDelegate.$getByHandle('imgScrollHandle');
         });
     }
-    // $scope.zoomMin = 1;
-    // $scope.imageUrl = '';
-    // $scope.sound = {};
-    // $ionicModal.fromTemplateUrl('partials/tabs/consult/msg/imageViewer.html', {
-    //     scope: $scope
-    // }).then(function(modal) {
-    //     $scope.modal = modal;
-    //     // $scope.modal.show();
-    //     $scope.imageHandle = $ionicScrollDelegate.$getByHandle('imgScrollHandle');
-    // });
 
     function onImageLoad(path) {
         $scope.$apply(function() {
@@ -3952,17 +3942,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         $scope.imageHandle.zoomTo(1, true);
         $scope.imageUrl = CONFIG.mediaUrl + (args[2].src_thumb || args[2].localId_thumb);
         $scope.modal.show();
-        // if (args[1] == 'img') {
-            // window.JMessage.getOriginImageInSingleConversation($state.params.chatId, args[3], onImageLoad, onImageLoadFail);
-        // } else {
-            // getImage(url,onImageLoad,onImageLoadFail)
-            // $scope.imageUrl = args[3];
-        // }
     })
     $scope.closeModal = function() {
         $scope.imageHandle.zoomTo(1, true);
         $scope.modal.hide();
-        // $scope.modal.remove()
     };
     $scope.switchZoomLevel = function() {
         if ($scope.imageHandle.getScrollPosition().zoom != $scope.zoomMin)
@@ -3997,17 +3980,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         event.stopPropagation();
         $state.go('tab.consult-comment',{counselId:$scope.params.counsel.counselId,doctorId:$scope.params.chatId,patientId:$scope.params.counsel.patientId.userId});
     })
-    //病例Panel
-    // $scope.togglePanel = function() {
-    //     $scope.params.hidePanel = !$scope.params.hidePanel;
-    // }
-    $scope.content = {
-        pics: [
-            'img/avatar.png',
-            'img/max.png',
-            'img/mike.png'
-        ]
-    }
+
     $scope.viewPic = function(url) {
             $scope.imageHandle.zoomTo(1, true);
             $scope.imageUrl = url;
@@ -4194,7 +4167,42 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         viewUpdate(10);
     }
     $scope.submitMsg = function() {
-            sendmsg($scope.input.text,'text');
+        var template = {
+            "userId": $scope.params.chatId, //医生的UID
+            "role": "doctor",
+            "postdata": {
+                "template_id": " DWrM__2UuaLxYf5da6sKOQA_hlmYhlsazsaxYX59DtE",
+                "data": {
+                    "first": {
+                        "value": "您有一个新的"+($scope.params.counseltype==1?'咨询':'问诊')+"消息，请马上处理",
+                        "color": "#173177"
+                    },
+                    "keyword1": {
+                        "value": $scope.params.counsel.counselId, //咨询ID
+                        "color": "#173177"
+                    },
+                    "keyword2": {
+                        "value": $scope.params.counsel.patientId.name, //患者信息（姓名，性别，年龄）
+                        "color": "#173177"
+                    },
+                    "keyword3": {
+                        "value": $scope.params.counsel.help, //问题描述
+                        "color": "#173177"
+                    },
+                    "keyword4": {
+                        "value": $scope.params.counsel.time.substr(0,10), //提交时间
+                        "color": "#173177"
+                    },
+
+                    "remark": {
+                        "value": "感谢您的使用！",
+                        "color": "#173177"
+                    }
+                }
+            }
+        }
+        wechat.messageTemplate(template);
+        sendmsg($scope.input.text,'text');
         $scope.input.text = '';
             
         }
