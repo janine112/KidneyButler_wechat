@@ -2287,9 +2287,13 @@ angular.module('kidney.services', ['ionic','ngResource'])
     return self;
 }])
 
-.factory('payment',['$q','wechat','Storage','$http','order','$location',function($q,wechat,Storage,$http,order,$location){
+.factory('payment',['$q','wechat','Storage','$http','order','$location','$ionicLoading',function($q,wechat,Storage,$http,order,$location,$ionicLoading){
   return {
     payment:function(neworder){
+      $ionicLoading.show({
+        template:"请稍候",
+        duration:10000
+      })
       var config = "";
       var path = $location.absUrl().split('#')[0]
       var defer = $q.defer()
@@ -2332,16 +2336,18 @@ angular.module('kidney.services', ['ionic','ngResource'])
                           result.data.ip = "121.196.221.44"
                         }
                         wechat.addOrder({openid:Storage.get('openid'),orderNo:data.results.orderNo,ip:result.data.ip}).then(function(data){
-                          wx.chooseWXPay({
-                            timestamp: data.results.timestamp,
-                            nonceStr: data.results.nonceStr,
-                            package: data.results.package,
-                            signType: data.results.signType,
-                            paySign: data.results.paySign,
-                            success: function(res) {
-                              defer.resolve(res);
-                            }
-                          })
+                            $ionicLoading.hide();
+                              wx.chooseWXPay({
+                                timestamp: data.results.timestamp,
+                                nonceStr: data.results.nonceStr,
+                                package: data.results.package,
+                                signType: data.results.signType,
+                                paySign: data.results.paySign,
+                                success: function(res) {
+                                  defer.resolve(res);
+                                }
+                              })
+                          }
                         },function(err){
                             defer.reject(err);
                         })
