@@ -2347,7 +2347,6 @@ angular.module('kidney.services', ['ionic','ngResource'])
                                   defer.resolve(res);
                                 }
                               })
-                          }
                         },function(err){
                             defer.reject(err);
                         })
