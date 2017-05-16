@@ -1211,31 +1211,31 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             jsApiList: ['scanQRCode'],
             success: function(res) {
                 wx.scanQRCode({
-                  needResult:1,
+                  needResult:0,
                   scanType: ['qrCode','barCode'],
                   success: function(res) {
-                    var result = res.resultStr;
-                    Patient.bindingMyDoctor({"patientId":Storage.get("UID"),"doctorId":result}).then(function(res){
-                      if(res.result=="修改成功"){
-                        $ionicPopup.alert({
-                         title: '绑定成功'
-                        }).then(function(res) {
-                          if ($location.absUrl().indexOf('myDoctors') != -1)
-                          {
-                            $window.location.reload();
-                          }
-                          else
-                          {
-                            $state.go('tab.myDoctors');
-                          }
-                        });
-                      }else if(res.result=="不存在的医生ID！"){
-                        $ionicPopup.alert({
-                         title: '不存在的医生ID！'
-                        })
-                      }
-                   },function(){                    
-                   })
+                   //  var result = res.resultStr;
+                   //  Patient.bindingMyDoctor({"patientId":Storage.get("UID"),"doctorId":result}).then(function(res){
+                   //    if(res.result=="修改成功"){
+                   //      $ionicPopup.alert({
+                   //       title: '绑定成功'
+                   //      }).then(function(res) {
+                   //        if ($location.absUrl().indexOf('myDoctors') != -1)
+                   //        {
+                   //          $window.location.reload();
+                   //        }
+                   //        else
+                   //        {
+                   //          $state.go('tab.myDoctors');
+                   //        }
+                   //      });
+                   //    }else if(res.result=="不存在的医生ID！"){
+                   //      $ionicPopup.alert({
+                   //       title: '不存在的医生ID！'
+                   //      })
+                   //    }
+                   // },function(){                    
+                   // })
                   }
                 })
             }
