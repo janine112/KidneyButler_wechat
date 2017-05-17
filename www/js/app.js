@@ -38,7 +38,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                   else
                   {
                     $ionicPopup.show({   
-                         title: '由于系统更新，如您已拥有手机账号，请重新进行验证并绑定微信账号。',
+                         title: '由于系统更新，如您已拥有手机账号，请重新进行验证并绑定微信账号。如果您是首次使用，请点击取消后进行注册！',
                          buttons: [
                            { 
                                 text: '取消',

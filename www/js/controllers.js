@@ -281,7 +281,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 if(data.results == 0){
                     tempuserId = data.UserId
                     if(data.roles.indexOf('patient') == -1){
-                        $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或转移到肾病守护者进行操作";
+                        $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或返回登录页面进行注册！";
                         return;
                     }else {
                         $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
