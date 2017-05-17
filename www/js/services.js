@@ -2294,10 +2294,10 @@ angular.module('kidney.services', ['ionic','ngResource'])
         template:"平台处于试用期，6月1日前咨询问诊服务免费",
         duration:2000
       })
-      res = {
+      var res = {
         "errMsg":"chooseWXPay:ok"
       }
-      defer.resolve(res);
+      return res
       // var config = "";
       // var path = $location.absUrl().split('#')[0]
       // var defer = $q.defer()
@@ -2372,7 +2372,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
       // },function(err){
       //   defer.reject(err);
       // })
-      return defer.promise;
+      // return defer.promise;
     }
   };
 }])
