@@ -24,24 +24,25 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           // alert(1)
           wechatData = data.results
           console.log(wechatData)
-          if (wechatData.unionid)
-          {
-            Storage.set('openid',wechatData.unionid)
-          }
-          User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
-          {
-              if (angular.isDefined(data.phoneNo) == true)
-              {
-                  User.setOpenId({phoneNo:data.phoneNo,openId:Storage.get('openid')}).then(function(data){
-                      console.log("替换openid");
-                  },function(){
-                      console.log("连接超时！");
-                  })
-              }
-          },function(err)
-          {
-              console.log(err)
-          })
+          Storage.set('openid',wechatData.openid)
+          // if (wechatData.unionid)
+          // {
+          //   Storage.set('openid',wechatData.unionid)
+          // }
+          // User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
+          // {
+          //     if (angular.isDefined(data.phoneNo) == true)
+          //     {
+          //         User.setOpenId({phoneNo:data.phoneNo,openId:Storage.get('openid')}).then(function(data){
+          //             console.log("替换openid");
+          //         },function(){
+          //             console.log("连接超时！");
+          //         })
+          //     }
+          // },function(err)
+          // {
+          //     console.log(err)
+          // })
           Storage.set('wechathead',wechatData.headimgurl)
           // alert(wechatData.openid)
           // alert(wechatData.nickname)
