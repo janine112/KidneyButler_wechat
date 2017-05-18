@@ -91,7 +91,18 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     Storage.set('UID',data.results.userId);
                     User.getAgree({userId:data.results.userId}).then(function(res){
                         if(res.results.agreement=="0"){
-                            $timeout(function(){$state.go('tab.tasklist');},500);
+                            Patient.getPatientDetail({userId:Storage.geti('UID')}).then(function(data){
+                              if (data.results != null)
+                              {
+                                $timeout(function(){$state.go('tab.tasklist');},500);
+                              }
+                              else
+                              {
+                                $state.go('userdetail',{last:'register'});
+                              }
+                            },function(err){
+                                console.log(err);
+                            })
                         }else{
                             $timeout(function(){$state.go('agreement',{last:'signin'});},500);
                         }
@@ -155,14 +166,25 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
 }])
 
-.controller('AgreeCtrl', ['$stateParams','$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','jmapi', function($stateParams,$scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,jmapi) {
+.controller('AgreeCtrl', ['$stateParams','$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','jmapi', 'Patient',function($stateParams,$scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,jmapi,Patient) {
     $scope.YesIdo = function(){
         console.log('yesido');
         if($stateParams.last=='signin'){
             User.updateAgree({userId:Storage.get('UID'),agreement:"0"}).then(function(data){
                 if(data.results!=null){
                     jmapi.users(Storage.get('UID'));
-                    $timeout(function(){$state.go('tab.tasklist');},500);
+                    Patient.getPatientDetail({userId:Storage.geti('UID')}).then(function(data){
+                      if (data.results != null)
+                      {
+                        $timeout(function(){$state.go('tab.tasklist');},500);
+                      }
+                      else
+                      {
+                        $state.go('userdetail',{last:'register'});
+                      }
+                    },function(err){
+                        console.log(err);
+                    })
                 }else{
                     console.log("用户不存在!");
                 }

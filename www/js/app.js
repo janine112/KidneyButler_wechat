@@ -90,7 +90,18 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                     })
                     User.getAgree({userId:data.results.userId}).then(function(res){
                         if(res.results.agreement=="0"){
-                            $state.go('tab.tasklist');
+                            Patient.getPatientDetail({userId:Storage.geti('UID')}).then(function(data){
+                              if (data.results != null)
+                              {
+                                $state.go('tab.tasklist');
+                              }
+                              else
+                              {
+                                $state.go('userdetail',{last:'register'});
+                              }
+                            },function(err){
+                                console.log(err);
+                            })
                         }else{
                             $state.go('agreement',{last:'signin'});
                         }
