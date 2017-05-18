@@ -24,11 +24,28 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           // alert(1)
           wechatData = data.results
           console.log(wechatData)
-          Storage.set('openid',wechatData.openid)
+          if (wechatData.unionid)
+          {
+            Storage.set('openid',wechatData.unionid)
+          }
+          User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
+          {
+              if (angular.isDefined(data.phoneNo) == true)
+              {
+                  User.setOpenId({phoneNo:data.phoneNo,openId:Storage.get('openid')}).then(function(data){
+                      console.log("替换openid");
+                  },function(){
+                      console.log("连接超时！");
+                  })
+              }
+          },function(err)
+          {
+              console.log(err)
+          })
           Storage.set('wechathead',wechatData.headimgurl)
           // alert(wechatData.openid)
           // alert(wechatData.nickname)
-          User.logIn({username:wechatData.openid,password:wechatData.openid,role:"patient"}).then(function(data){
+          User.logIn({username:Storage.get('openid'),password:Storage.get('openid'),role:"patient"}).then(function(data){
                 if(data.results==1){
                   if(data.msg == "No authority!")
                   {
