@@ -279,7 +279,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         if($stateParams.phonevalidType=='register'){
             User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                 if(data.results == 0){
-                    $scope.logStatus = "该手机号码已经注册！";
+                    if (data.roles.indexOf('patient') == -1)
+                    {
+                        sendSMS(Verify.Phone);
+                    }
+                    else{
+                        $scope.logStatus = "该手机号码已经注册！";
+                    }
+                    
                 }else if(data.results == 1){
                     sendSMS(Verify.Phone);
                 }
