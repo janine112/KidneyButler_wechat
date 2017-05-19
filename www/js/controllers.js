@@ -91,7 +91,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     Storage.set('UID',data.results.userId);
                     User.getAgree({userId:data.results.userId}).then(function(res){
                         if(res.results.agreement=="0"){
-                            Patient.getPatientDetail({userId:Storage.geti('UID')}).then(function(data){
+                            Patient.getPatientDetail({userId:Storage.get('UID')}).then(function(data){
                               if (data.results != null)
                               {
                                 $timeout(function(){$state.go('tab.tasklist');},500);
