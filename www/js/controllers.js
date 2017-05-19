@@ -352,7 +352,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                             if (isregisted == true)
                             {
                               User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
-                                  if(data.msg == "success!")
+                                  if(data.results == "success!")
                                   {
                                     // User.getAgree({userId:tempuserId}).then(function(res){
                                     //     if(res.results.agreement=="0"){
@@ -1042,7 +1042,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                                     if (angular.isDefined(Storage.get('openid')) == true)
                                                     {
                                                       User.setOpenId({phoneNo:Storage.get('USERNAME'),openId:Storage.get('openid')}).then(function(data){
-                                                          if(data.msg == "success!")
+                                                          if(data.results == "success!")
                                                           {
                                                             if (angular.isDefined($scope.User.weight) == true)
                                                             {
@@ -1122,7 +1122,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                       if (back == "implement" && angular.isDefined(Storage.get('openid')) == true)
                       {
                         User.setOpenId({phoneNo:Storage.get('USERNAME'),openId:Storage.get('openid')}).then(function(data){
-                            if(data.msg == "success!")
+                            if(data.results == "success!")
                             {
                               $scope.User.gender = $scope.User.gender.Type
                                     $scope.User.bloodType = $scope.User.bloodType.Type
