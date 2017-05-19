@@ -2295,19 +2295,20 @@ angular.module('kidney.services', ['ionic','ngResource'])
         duration:2000
       })
       res = {
-        "errMsg":"chooseWXPay:ok"
+        "errMsg":"chooseWXPay:ok",
+        "money":0
       }
       var defer = $q.defer()
       defer.resolve(res);
+      // var defer = $q.defer()
       // var config = "";
       // var path = $location.absUrl().split('#')[0]
-      // var defer = $q.defer()
       // wechat.settingConfig({url:path}).then(function(data){
       //   // alert(data.results.timestamp)
       //   config = data.results;
       //   config.jsApiList = ['chooseWXPay']
-      //   // alert(config.jsApiList)
-      //   // alert(config.debug)
+        // alert(config.jsApiList)
+        // alert(config.debug)
       //   console.log(angular.toJson(config))
       //   wx.config({
       //     debug:false,
