@@ -2747,6 +2747,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
        })
     }
 
+    $scope.gotoinsurance = function(){
+      $state.go('insurance');
+    }
   
 
 }])
