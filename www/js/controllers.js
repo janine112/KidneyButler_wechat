@@ -173,7 +173,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             User.updateAgree({userId:Storage.get('UID'),agreement:"0"}).then(function(data){
                 if(data.results!=null){
                     jmapi.users(Storage.get('UID'));
-                    Patient.getPatientDetail({userId:Storage.geti('UID')}).then(function(data){
+                    Patient.getPatientDetail({userId:Storage.get('UID')}).then(function(data){
                       if (data.results != null)
                       {
                         $timeout(function(){$state.go('tab.tasklist');},500);
@@ -1124,7 +1124,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         User.setOpenId({phoneNo:Storage.get('USERNAME'),openId:Storage.get('openid')}).then(function(data){
                             if(data.results == "success!")
                             {
-                              $scope.User.gender = $scope.User.gender.Type
+                                    $scope.User.userId = Storage.get('UID');
+                                    $scope.User.gender = $scope.User.gender.Type
                                     $scope.User.bloodType = $scope.User.bloodType.Type
                                     $scope.User.hypertension = $scope.User.hypertension.Type
                                     if ($scope.User.class == "ckd5期未透析"){
@@ -1138,9 +1139,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                     $scope.User.class = $scope.User.class.type;
                                     // $scope.User.class = $scope.User.class.typeName;
                                     // console.log($scope.User);
-                                    Patient.editPatientDetail($scope.User).then(function(data){
+                                    Patient.newPatientDetail($scope.User).then(function(data){
                                         //保存成功
-                                        if(data.result=="修改成功"){
+                                        if(data.result=="新建成功"){
                                             console.log(data.results);
                                             var patientId = Storage.get('UID');
                                             var task = distinctTask(data.results.class,data.results.operationTime,data.results.class_info);
