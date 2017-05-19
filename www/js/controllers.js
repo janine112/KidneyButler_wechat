@@ -5656,7 +5656,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     },function(err){
                       console.log(err)
                     })
-                    Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,money:0}).then(function(data){
+                    Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:4,money:0}).then(function(data){
                       console.log(data)
                     },function(err){
                       console.log(err)
@@ -5699,7 +5699,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     if (data.errMsg == "chooseWXPay:ok")
                     {
                       chargemoney = data.money
-                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,money:chargemoney}).then(function(data){
+                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:1,money:chargemoney}).then(function(data){
                         console.log(data)
                       },function(err){
                         console.log(err)
@@ -5776,7 +5776,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                       if(data.result=="修改成功"){
                         //确认新建咨询之后 给医生账户转积分 其他新建都在最后提交的时候转账 但是升级是在这里完成转账
                         //chargedoc
-                        Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,money:chargemoney}).then(function(data){
+                        Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:3,money:chargemoney}).then(function(data){
                           console.log(data)
                         },function(err){
                           console.log(err)
@@ -5897,7 +5897,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                       if (data.errMsg == "chooseWXPay:ok")
                       {
                         chargemoney = data.money
-                        Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,money:chargemoney}).then(function(data){
+                        Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:3,money:chargemoney}).then(function(data){
                           console.log(data)
                         },function(err){
                           console.log(err)
@@ -5953,7 +5953,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                       if (data.errMsg == "chooseWXPay:ok")
                       {
                         chargemoney = data.money
-                        Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,money:chargemoney}).then(function(data){
+                        Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:2,money:chargemoney}).then(function(data){
                           console.log(data)
                         },function(err){
                           console.log(err)
@@ -6132,7 +6132,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   },function(err){
                     console.log(err)
                   })
-                  Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,money:0}).then(function(data){
+                  Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:4,money:0}).then(function(data){
                     console.log(data)
                   },function(err){
                     console.log(err)
@@ -6169,7 +6169,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   if (data.errMsg == "chooseWXPay:ok")
                   {
                     chargemoney = data.money
-                    Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,money:chargemoney}).then(function(data){
+                    Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:1,money:chargemoney}).then(function(data){
                       console.log(data)
                     },function(err){
                       console.log(err)
@@ -6239,7 +6239,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     if(data.result=="修改成功"){
                       //确认新建咨询之后 给医生账户转积分 其他新建都在最后提交的时候转账 但是升级是在这里完成转账
                       //chargedoc
-                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,money:chargemoney}).then(function(data){
+                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:3,money:chargemoney}).then(function(data){
                         console.log(data)
                       },function(err){
                         console.log(err)
@@ -6341,7 +6341,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     if (data.errMsg == "chooseWXPay:ok")
                     {
                       chargemoney = data.money
-                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,money:chargemoney}).then(function(data){
+                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:3,money:chargemoney}).then(function(data){
                         console.log(data)
                       },function(err){
                         console.log(err)
@@ -6391,7 +6391,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     if (data.errMsg == "chooseWXPay:ok")
                     {
                       chargemoney = data.money
-                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,money:chargemoney}).then(function(data){
+                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:2,money:chargemoney}).then(function(data){
                         console.log(data)
                       },function(err){
                         console.log(err)
