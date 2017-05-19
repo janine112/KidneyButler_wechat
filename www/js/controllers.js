@@ -4075,7 +4075,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     $scope.$on('gopingjia', function(event, args) {
         event.stopPropagation();
         $state.go('tab.consult-comment',{counselId:$scope.params.counsel.counselId,doctorId:$scope.params.chatId,patientId:$scope.params.counsel.patientId.userId});
-    })
+    });
 
     $scope.viewPic = function(url) {
             $scope.imageHandle.zoomTo(1, true);
@@ -4244,7 +4244,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         // })
     }
     function sendmsg(content,type){
-        if($scope.counselstatus!=1) return nomoney();
+        // if($scope.counselstatus!=1) return nomoney();
         var msgJson=msgGen(content,type);
         // if(type=='text'){
             // $scope.pushMsg(msgJson);
@@ -4263,6 +4263,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         viewUpdate(10);
     }
     $scope.submitMsg = function() {
+        if($scope.counselstatus!=1) return nomoney();
         var template = {
             "userId": $scope.params.chatId, //医生的UID
             "role": "doctor",
@@ -4304,7 +4305,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         }
         //get image
     $scope.getImage = function(type) {
-         var ids=['',''];
+        if($scope.counselstatus!=1) return nomoney();
+        var ids=['',''];
         if(type=='cam') var st=['camera'];
         else var st = ['album'];
         wx.chooseImage({
@@ -4381,7 +4383,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
     })
     $scope.$on('keyboardhide', function(event) {
-        socket.close();
+        // socket.close();
         $scope.params.helpDivHeight = 0;
         // $ionicScrollDelegate.scrollBottom();
     })
