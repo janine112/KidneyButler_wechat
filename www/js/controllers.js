@@ -1183,7 +1183,9 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                             $scope.logStatus = "连接超时！";
                         })
                       }
-                     $ionicPopup.show({
+                      else
+                      {
+                        $ionicPopup.show({
                             template: '肾病类型及高血压等诊断信息的修改会影响肾病管理方案，建议在医生指导下修改，请谨慎！',
                             title: '保存确认',
                             //subTitle: '2',
@@ -1256,6 +1258,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                               }
                             ]
                           });
+                      }
+                     
                     
 
                 }
