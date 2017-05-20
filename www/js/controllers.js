@@ -6001,7 +6001,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       },function(err){
         console.log(err)
       })
-    }
+    
   }
 
   $scope.getDoctorDetail = function(id) {
