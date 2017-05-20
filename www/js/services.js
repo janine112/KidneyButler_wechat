@@ -852,6 +852,12 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getPrefer:{method:'GET', params:{route: 'getPrefer'}, timeout: 100000}
         })
     }
+
+    var Expense =function(){
+        return $resource(CONFIG.baseUrl + ':path/:route',{path:'expense'},{
+            rechargeDoctor:{method:'POST', params:{route: 'rechargeDoctor'}, timeout: 100000},
+        });
+    }
     serve.abort = function ($scope) {
         abort.resolve();
         $interval(function () {
@@ -876,6 +882,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             serve.jm = jm();
             serve.order = order();
             serve.insurance = insurance();
+            serve.Expense = Expense();
         }, 0, 1);
     };
     serve.Dict = Dict();
@@ -898,6 +905,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.jm = jm();
     serve.order = order();
     serve.insurance = insurance();
+    serve.Expense = Expense();
     return serve;
 }])
 
@@ -2072,6 +2080,25 @@ angular.module('kidney.services', ['ionic','ngResource'])
         return deferred.promise;
     };
     return self;
+}])
+
+.factory('Expense', ['$q', 'Data', function($q, Data){
+    var self = this;
+    //params->0:{userId:'p01'}
+    self.rechargeDoctor = function(params){
+        var deferred = $q.defer();
+        Data.Expense.rechargeDoctor(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+
+return self;
 }])
 
 .factory('wechat', ['$q', 'Data', function($q, Data){

@@ -10,19 +10,19 @@
   <!-- <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->
   <ion-content class="padding">
 
-    <ion-list>
-        <ion-item ng-repeat="item in items" class="item item-avatar" ng-click="getConsultRecordDetail($event,item.userId)">
-            <img  ng-src="{{item.photoUrl || 'img/doctor3.PNG'}}">
+    <div class="list bg-fa">
+        <a  class="item item-avatar context-pading m-b5 br-none fc-4c" ng-repeat="item in items |orderBy:['readOrNot','-lastMsgDate']" class="item item-avatar" ng-click="getConsultRecordDetail($event,item.userId)">
+            <img  ng-src="{{item.photoUrl || 'img/DefaultAvatar.jpg'}} " image-red-point="!item.readOrNot">
             <div class="row">
                 <h2 class="col">{{item.name}}</h2>
                 <span class="col">{{item.lastMsgDate|dateFormat:"YYYY-MM-DD h:m"}}</span>
             </div>
            
             <span class="row" style="margin-left:5px;">{{item.latestMsg}}</span>
-        </ion-item>
+        </a>
 
 
-    </ion-list>
+    </div>
     <div class="card" ng-if="noConsult">
         <div class="item item-text-wrap">
             暂时没有咨询记录

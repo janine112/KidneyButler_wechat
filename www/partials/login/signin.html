@@ -1,21 +1,16 @@
 <ion-view title="登录">
-  <ion-nav-bar class="bar-dark nav-title-slide-ios7 green-bg"  >
-
-  </ion-nav-bar>
-  <!-- <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2px;background-color: #33cd5f;{{barwidth}}" ></div> -->
   <ion-content padding="true" class="green-white-bg">
-    <!--  <div class="row" >
-       <div class="col text-center" >
-         <div style="max-width:500px"> -->
 
     <div class="list list-inset" style="margin-bottom:0;margin-top: 30px">
       <label class="item item-input green-edite-css" >
         <span class="input " style="margin-right:16px"><i class="icon ion-iphone"></i></span>
         <input type="tel"  ng-model="logOn.username" placeholder="手机号" >
+        <button-clear-input input="logOn.username"></button-clear-input>
       </label>
       <label class="item item-input green-edite-css mg-10 ">
         <span class="input" style="margin-right:16px"><i class="icon ion-ios-locked-outline"></i></span>
         <input type="password" ng-model="logOn.password" placeholder="密 码" >
+        <button-clear-input input="logOn.password"></button-clear-input>
       </label>
     </div>
     <div class="row" style="padding:0;margin-top: 5px" >
