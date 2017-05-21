@@ -754,7 +754,9 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getAgree:{method:'GET', params:{route: 'getUserAgreement',userId:'@userId'}, timeout: 100000},
             updateAgree:{method:'POST', params:{route: 'updateUserAgreement'}, timeout: 100000},
             getUserIDbyOpenId:{method:'GET', params:{route: 'getUserIDbyOpenId'}, timeout: 100000},
-            setOpenId:{method:'POST', params:{route: 'setOpenId'}, timeout: 100000}
+            setOpenId:{method:'POST', params:{route: 'setOpenId'}, timeout: 100000},
+            getMessageOpenId:{method:'GET', params:{route: 'getMessageOpenId'}, timeout: 100000},
+            setMessageOpenId:{method:'GET', params:{route: 'setMessageOpenId'}, timeout: 100000}
         });
     }
 
@@ -1308,6 +1310,34 @@ angular.module('kidney.services', ['ionic','ngResource'])
     self.setOpenId = function(params){
         var deferred = $q.defer();
         Data.User.setOpenId(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    }
+
+    //params->{type:"",userId:"U201703310032"}type:(1:doctorwechat,2:patientwechat,3:doctorapp,4:patientapp,5:test)
+    self.getMessageOpenId = function(params){
+        var deferred = $q.defer();
+        Data.User.getMessageOpenId(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    }
+
+    //params->{type:"",openId:"",userId:""}type:(1:doctorwechat,2:patientwechat,3:doctorapp,4:patientapp,5:test)
+    self.setMessageOpenId = function(params){
+        var deferred = $q.defer();
+        Data.User.setMessageOpenId(
             params,
             function(data, headers){
                 deferred.resolve(data);

@@ -1013,7 +1013,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
                     User.register({phoneNo:Storage.get('USERNAME'),password:Storage.get('PASSWORD'),role:"patient"}).then(function(data){
                         if(data.results==0){
-
+                            
                             var patientId = data.userNo;
                             Storage.set('UID',patientId);
                             //注册论坛
