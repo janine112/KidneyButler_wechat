@@ -48,7 +48,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           // alert(wechatData.nickname)
           User.logIn({username:Storage.get('openid'),password:Storage.get('openid'),role:"patient"}).then(function(data){
                 if(data.results==1){
-                  if(data.msg == "No authority!")
+                  if(data.mesg == "No authority!")
                   {
                     alert("您没有权限登陆肾事管家，如您是医生，请登录肾病守护者")
                     $state.go('signin')

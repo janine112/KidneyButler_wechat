@@ -77,6 +77,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         $scope.logStatus = "账号或密码错误！";
                         return;
                     }
+                    else if(data.mesg== "No authority!"){
+                        $scope.logStatus = "没有患者权限，请注册患者或进入肾健康守护者进行操作！";
+                        return;
+                    }
                     else{
                       $scope.logStatus = "账号密码错误！";
                       return;
