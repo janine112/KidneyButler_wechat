@@ -4998,7 +4998,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   $scope.showoriginal=function(resizedpath){
     // $scope.openModal();
     // console.log(resizedpath)
-    var originalfilepath="http://121.196.221.44:8052/uploads/photos/"+resizedpath
+    var originalfilepath=resizedpath
     console.log(originalfilepath)
     // $scope.healthinfoimgurl=originalfilepath;
     $scope.imageHandle.zoomTo(1, true);
