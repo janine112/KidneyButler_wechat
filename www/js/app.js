@@ -39,7 +39,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                         console.log("连接超时！");
                     })
                     User.getMessageOpenId({type:2,userId:data.UserId}).then(function(res){
-                        if (res == null)
+                        if (res.results == undefined || res.results == null)
                         {
                           User.setMessageOpenId({type:2,userId:data.UserId,openId:wechatData.openid}).then(function(res){
                               console.log("setopenid");
