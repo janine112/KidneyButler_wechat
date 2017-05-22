@@ -5761,7 +5761,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   }
 
   $scope.consult = function(DoctorId,docname){
-    Counsels.getStatus({doctorId:id,patientId:Storage.get('UID')})
+    Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID')})
     .then(function(data){
       //zxf 判断条件重写
       if(data.result!="请填写咨询问卷!"&&data.result.status==1){//有尚未完成的咨询或者问诊
