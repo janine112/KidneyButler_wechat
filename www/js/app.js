@@ -30,6 +30,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           {
             User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
             {
+                var tempuserId = data.UserId
                 if (angular.isDefined(data.phoneNo) == true)
                 {
                     User.setOpenId({phoneNo:data.phoneNo,openId:Storage.get('openid')}).then(function(res){
@@ -37,15 +38,23 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                     },function(){
                         console.log("连接超时！");
                     })
-                    User.setMessageOpenId({type:2,userId:data.UserId,openId:wechatData.openid}).then(function(res){
-                        console.log("setopenid");
-                    },function(){
-                        console.log("连接超时！");
-                    })
+                    
                 }
             },function(err)
             {
                 console.log(err)
+            })
+            User.getMessageOpenId({type:2,userId:tempuserId}).then(function(res){
+                if (res == null)
+                {
+                  User.setMessageOpenId({type:2,userId:tempuserId,openId:wechatData.openid}).then(function(res){
+                      console.log("setopenid");
+                  },function(){
+                      console.log("连接超时！");
+                  })
+                }
+            },function(){
+                console.log("连接超时！");
             })
           }
           Storage.set('wechathead',wechatData.headimgurl)
