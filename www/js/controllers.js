@@ -369,15 +369,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                               User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                                   if(data.results == "success!")
                                   {
-                                    // User.getAgree({userId:tempuserId}).then(function(res){
-                                    //     if(res.results.agreement=="0"){
-                                    //         $state.go('tab.tasklist');
-                                    //     }else{
-                                    //         $state.go('agreement',{last:'signin'});
-                                    //     }
-                                    // },function(err){
-                                    //     console.log(err);
-                                    // })
+                                    User.setMessageOpenId({type:2,userId:tempuserId,openId:Storage.get('messageopenid')}).then(function(res){
+                                        console.log("setopenid");
+                                    },function(){
+                                        console.log("连接超时！");
+                                    })
                                     $ionicPopup.show({   
                                          title: '微信账号绑定手机账号成功，您的初试密码是123456，是否重置密码？',
                                          buttons: [
@@ -1059,6 +1055,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                                       User.setOpenId({phoneNo:Storage.get('USERNAME'),openId:Storage.get('openid')}).then(function(data){
                                                           if(data.results == "success!")
                                                           {
+                                                            User.setMessageOpenId({type:2,userId:patientId,openId:Storage.get('messageopenid')}).then(function(res){
+                                                                console.log("setopenid");
+                                                            },function(){
+                                                                console.log("连接超时！");
+                                                            })
                                                             if (angular.isDefined($scope.User.weight) == true)
                                                             {
                                                               VitalSign.insertVitalSign({patientId:patientId, type: "Weight",code: "Weight_1", date:now.substr(0,10),datatime:now,datavalue:$scope.User.weight,unit:"kg"}).then(function(data){
@@ -1139,6 +1140,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         User.setOpenId({phoneNo:Storage.get('USERNAME'),openId:Storage.get('openid')}).then(function(data){
                             if(data.results == "success!")
                             {
+                                    User.setMessageOpenId({type:2,userId:Storage.get('UID'),openId:Storage.get('messageopenid')}).then(function(res){
+                                        console.log("setopenid");
+                                    },function(){
+                                        console.log("连接超时！");
+                                    })
                                     $scope.User.userId = Storage.get('UID');
                                     $scope.User.gender = $scope.User.gender.Type
                                     $scope.User.bloodType = $scope.User.bloodType.Type
