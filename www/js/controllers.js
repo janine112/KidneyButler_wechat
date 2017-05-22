@@ -5713,7 +5713,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                 goodsInfo:{
                                   class:'01',
                                   name:'咨询',
-                                  notes:id
+                                  notes:DoctorId
                                 },
                                 paystatus:0,
                                 paytime:time
@@ -5785,7 +5785,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                               goodsInfo:{
                                 class:'03',
                                 name:'升级',
-                                notes:id
+                                notes:DoctorId
                               },
                               paystatus:0,
                               paytime:time
@@ -5911,7 +5911,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                   goodsInfo:{
                                     class:'03',
                                     name:'升级',
-                                    notes:id
+                                    notes:DoctorId
                                   },
                                   paystatus:0,
                                   paytime:time
@@ -5967,7 +5967,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                   goodsInfo:{
                                     class:'02',
                                     name:'问诊',
-                                    notes:id
+                                    notes:DoctorId
                                   },
                                   paystatus:0,
                                   paytime:time
