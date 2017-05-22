@@ -4292,7 +4292,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             "userId": $scope.params.chatId, //医生的UID
             "role": "doctor",
             "postdata": {
-                "template_id": "DWrM__2UuaLxYf5da6sKOQA_hlmYhlsazsaxYX59DtE",
+                "template_id": "cVLIgOb_JvtFGQUA2KvwAmbT5B3ZB79cRsAM4ZKKK0k",
                 "data": {
                     "first": {
                         "value": "您有一个新的"+($scope.params.counseltype==1?'咨询':'问诊')+"消息，请及时处理",

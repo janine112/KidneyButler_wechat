@@ -122,7 +122,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                     })
                     User.getAgree({userId:data.results.userId}).then(function(res){
                         if(res.results.agreement=="0"){
-                            Patient.getPatientDetail({userId:Storage.geti('UID')}).then(function(data){
+                            Patient.getPatientDetail({userId:Storage.get('UID')}).then(function(data){
                               if (data.results != null)
                               {
                                 $state.go('tab.tasklist');
