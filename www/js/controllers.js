@@ -5729,12 +5729,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         console.log(err)
                       })
                       //plus doc answer count  patientId:doctorId:modify
-                      Account.modifyCounts({patientId:Storage.get('UID'),doctorId:id,modify:3}).then(function(data){
+                      Account.modifyCounts({patientId:Storage.get('UID'),doctorId:DoctorId,modify:3}).then(function(data){
                         console.log(data)
                       },function(err){
                         console.log(err)
                       })
-                      $state.go("tab.consultquestion1",{DoctorId:id,counselType:1});
+                      $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:1});
                     }
                     else{
                       $ionicLoading.show({ 
@@ -5795,7 +5795,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   if (data.errMsg == "chooseWXPay:ok")
                   {
                     chargemoney = data.money
-                    Counsels.changeType({doctorId:id,patientId:Storage.get('UID'),type:1,changeType:"true"}).then(function(data){
+                    Counsels.changeType({doctorId:DoctorId,patientId:Storage.get('UID'),type:1,changeType:"true"}).then(function(data){
                       console.log(data.result)
                       if(data.result=="修改成功"){
                         //确认新建咨询之后 给医生账户转积分 其他新建都在最后提交的时候转账 但是升级是在这里完成转账
@@ -5806,7 +5806,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                           console.log(err)
                         })
                         //plus doc answer count  patientId:doctorId:modify
-                        Account.modifyCounts({patientId:Storage.get('UID'),doctorId:id,modify:999}).then(function(data){
+                        Account.modifyCounts({patientId:Storage.get('UID'),doctorId:DoctorId,modify:999}).then(function(data){
                           console.log(data)
                         },function(err){
                           console.log(err)
@@ -5873,7 +5873,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             }
           }
         }else{//没有进行中的问诊咨询 查看是否已经付过费
-          Account.getCounts({patientId:Storage.get('UID'),doctorId:id}).then(function(data){
+          Account.getCounts({patientId:Storage.get('UID'),doctorId:DoctorId}).then(function(data){
             console.log(data.result.count)
             if(data.result.count==999){//上次有购买问诊 但是没有新建问诊
               if($scope.consultable==1){
@@ -5927,13 +5927,13 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                           console.log(err)
                         })
                         //plus doc answer count  patientId:doctorId:modify
-                        Account.modifyCounts({patientId:Storage.get('UID'),doctorId:id,modify:999}).then(function(data){
+                        Account.modifyCounts({patientId:Storage.get('UID'),doctorId:DoctorId,modify:999}).then(function(data){
                           console.log(id+Storage.get('UID'))
                           console.log(data)
                         },function(err){
                           console.log(err)
                         })
-                        $state.go("tab.consultquestion1",{DoctorId:id,counselType:2});//这里的type是2不是3 因为还没有新建成功，
+                        $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:2});//这里的type是2不是3 因为还没有新建成功，
                       }
                       else{
                         $ionicLoading.show({ 
@@ -5983,12 +5983,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                           console.log(err)
                         })
                         //plus doc answer count  patientId:doctorId:modify
-                        Account.modifyCounts({patientId:Storage.get('UID'),doctorId:id,modify:2}).then(function(data){
+                        Account.modifyCounts({patientId:Storage.get('UID'),doctorId:DoctorId,modify:2}).then(function(data){
                           console.log(data)
                         },function(err){
                           console.log(err)
                         })
-                        $state.go("tab.consultquestion1",{DoctorId:id,counselType:2});
+                        $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:2});
                       }
                       else{
                         $ionicLoading.show({ 
