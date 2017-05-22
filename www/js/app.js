@@ -24,31 +24,45 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
           // alert(1)
           wechatData = data.results
           console.log(wechatData)
-          Storage.set('openid',wechatData.openid)
-          // if (wechatData.unionid)
-          // {
-          //   Storage.set('openid',wechatData.unionid)
-          // }
-          // User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
-          // {
-          //     if (angular.isDefined(data.phoneNo) == true)
-          //     {
-          //         User.setOpenId({phoneNo:data.phoneNo,openId:Storage.get('openid')}).then(function(data){
-          //             console.log("替换openid");
-          //         },function(){
-          //             console.log("连接超时！");
-          //         })
-          //     }
-          // },function(err)
-          // {
-          //     console.log(err)
-          // })
+          Storage.set('openid',wechatData.unionid)
+          Storage.set('messageopenid',wechatData.openid)
+          if (wechatData.unionid&&wechatData.openid)
+          {
+            User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
+            {
+                var tempuserId = data.UserId
+                if (angular.isDefined(data.phoneNo) == true)
+                {
+                    User.setOpenId({phoneNo:data.phoneNo,openId:Storage.get('openid')}).then(function(res){
+                        console.log("替换openid");
+                    },function(){
+                        console.log("连接超时！");
+                    })
+                    User.getMessageOpenId({type:2,userId:data.UserId}).then(function(res){
+                        if (res.results == undefined || res.results == null)
+                        {
+                          User.setMessageOpenId({type:2,userId:data.UserId,openId:wechatData.openid}).then(function(res){
+                              console.log("setopenid");
+                          },function(){
+                              console.log("连接超时！");
+                          })
+                        }
+                    },function(){
+                        console.log("连接超时！");
+                    })
+                }
+            },function(err)
+            {
+                console.log(err)
+            })
+
+          }
           Storage.set('wechathead',wechatData.headimgurl)
           // alert(wechatData.openid)
           // alert(wechatData.nickname)
           User.logIn({username:Storage.get('openid'),password:Storage.get('openid'),role:"patient"}).then(function(data){
                 if(data.results==1){
-                  if(data.msg == "No authority!")
+                  if(data.mesg == "No authority!")
                   {
                     alert("您没有权限登陆肾事管家，如您是医生，请登录肾病守护者")
                     $state.go('signin')
@@ -106,9 +120,21 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                         })
                       }
                     })
+                    User.getMessageOpenId({type:2,userId:Storage.get("UID")}).then(function(res){
+                        if (res.results == undefined || res.results == null)
+                        {
+                          User.setMessageOpenId({type:2,userId:Storage.get("UID"),openId:Storage.get('messageopenid')}).then(function(res){
+                              console.log("setopenid");
+                          },function(){
+                              console.log("连接超时！");
+                          })
+                        }
+                    },function(){
+                        console.log("连接超时！");
+                    })
                     User.getAgree({userId:data.results.userId}).then(function(res){
                         if(res.results.agreement=="0"){
-                            Patient.getPatientDetail({userId:Storage.geti('UID')}).then(function(data){
+                            Patient.getPatientDetail({userId:Storage.get('UID')}).then(function(data){
                               if (data.results != null)
                               {
                                 $state.go('tab.tasklist');

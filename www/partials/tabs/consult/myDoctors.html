@@ -1,7 +1,4 @@
 <ion-view cache-view="false" title="我的医生" show-tabs>
-    <ion-nav-buttons side="left">
-        <button class='button button-clear' ng-click="scanbarcode()"><i class='icon ion-qr-scanner font-white'></i></button>
-    </ion-nav-buttons>
     <ion-nav-buttons side="right" >
         <button class="button button-clear" ng-click="GoToMessage() " head-red-point='HasUnreadMessages'><i class="icon iconfont icon-lingdang"></i></button>
     </ion-nav-buttons>
@@ -29,8 +26,8 @@
         </div>
 
         <div class="row" style="color:#181544;font-size:14px;font-weight:bold;text-align: center;">
-            <span ng-click="question(doctor.userId)" class="col"><i class="icon iconfont icon-zixun2"></i>咨询</span>
-            <span ng-click="consult(doctor.userId)" class="col"><i class="icon iconfont icon-baojifuben""></i>问诊</span>
+            <span ng-click="question(doctor.userId,doctor.name)" class="col"><i class="icon iconfont icon-zixun2"></i>咨询</span>
+            <span ng-click="consult(doctor.userId,doctor.name)" class="col"><i class="icon iconfont icon-baojifuben"></i>问诊</span>
         </div>
 
     </div>

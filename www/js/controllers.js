@@ -77,6 +77,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         $scope.logStatus = "账号或密码错误！";
                         return;
                     }
+                    else if(data.mesg== "No authority!"){
+                        $scope.logStatus = "没有患者权限，请注册患者或进入肾健康守护者进行操作！";
+                        return;
+                    }
+                    else{
+                      $scope.logStatus = "账号密码错误！";
+                      return;
+                    }
                 }
                 else if(data.results.mesg=="login success!"){
                     //jmessage login
@@ -279,7 +287,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         if($stateParams.phonevalidType=='register'){
             User.getUserId({phoneNo:Verify.Phone}).then(function(data){
                 if(data.results == 0){
-                    $scope.logStatus = "该手机号码已经注册！";
+                    if (data.roles.indexOf('patient') == -1)
+                    {
+                        sendSMS(Verify.Phone);
+                    }
+                    else{
+                        $scope.logStatus = "该手机号码已经注册！";
+                    }
+                    
                 }else if(data.results == 1){
                     sendSMS(Verify.Phone);
                 }
@@ -354,15 +369,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                               User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                                   if(data.results == "success!")
                                   {
-                                    // User.getAgree({userId:tempuserId}).then(function(res){
-                                    //     if(res.results.agreement=="0"){
-                                    //         $state.go('tab.tasklist');
-                                    //     }else{
-                                    //         $state.go('agreement',{last:'signin'});
-                                    //     }
-                                    // },function(err){
-                                    //     console.log(err);
-                                    // })
+                                    User.setMessageOpenId({type:2,userId:tempuserId,openId:Storage.get('messageopenid')}).then(function(res){
+                                        console.log("setopenid");
+                                    },function(){
+                                        console.log("连接超时！");
+                                    })
                                     $ionicPopup.show({   
                                          title: '微信账号绑定手机账号成功，您的初试密码是123456，是否重置密码？',
                                          buttons: [
@@ -998,7 +1009,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
                     User.register({phoneNo:Storage.get('USERNAME'),password:Storage.get('PASSWORD'),role:"patient"}).then(function(data){
                         if(data.results==0){
-
+                            
                             var patientId = data.userNo;
                             Storage.set('UID',patientId);
                             //注册论坛
@@ -1044,6 +1055,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                                       User.setOpenId({phoneNo:Storage.get('USERNAME'),openId:Storage.get('openid')}).then(function(data){
                                                           if(data.results == "success!")
                                                           {
+                                                            User.setMessageOpenId({type:2,userId:patientId,openId:Storage.get('messageopenid')}).then(function(res){
+                                                                console.log("setopenid");
+                                                            },function(){
+                                                                console.log("连接超时！");
+                                                            })
                                                             if (angular.isDefined($scope.User.weight) == true)
                                                             {
                                                               VitalSign.insertVitalSign({patientId:patientId, type: "Weight",code: "Weight_1", date:now.substr(0,10),datatime:now,datavalue:$scope.User.weight,unit:"kg"}).then(function(data){
@@ -1124,6 +1140,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                         User.setOpenId({phoneNo:Storage.get('USERNAME'),openId:Storage.get('openid')}).then(function(data){
                             if(data.results == "success!")
                             {
+                                    User.setMessageOpenId({type:2,userId:Storage.get('UID'),openId:Storage.get('messageopenid')}).then(function(res){
+                                        console.log("setopenid");
+                                    },function(){
+                                        console.log("连接超时！");
+                                    })
                                     $scope.User.userId = Storage.get('UID');
                                     $scope.User.gender = $scope.User.gender.Type
                                     $scope.User.bloodType = $scope.User.bloodType.Type
@@ -3541,14 +3562,15 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     }
 
     var RefreshCounSelRecords = function(){
-        var promise = Patient.getCounselRecords({userId:Storage.get('UID')});
+        var MyId = Storage.get('UID');
+        var promise = Patient.getCounselRecords({userId:MyId});
         promise.then(function(data){
             console.log(data);
             if(data.results!=""){
 
                 FilteredDoctors = FilterDoctor(data.results);
                 console.log(FilteredDoctors);
-                News.getNews({userId:Storage.get('UID'),type:11}).then(
+                News.getNews({userId:MyId,type:11}).then(
                     function(data){
                         console.log(data.results);
                         if(data.results){
@@ -3557,10 +3579,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                     if(FilteredDoctors[x].userId==data.results[y].sendBy||FilteredDoctors[x].userId==data.results[y].userId){
                                         FilteredDoctors[x].lastMsgDate = data.results[y].time;
                                         FilteredDoctors[x].latestMsg = data.results[y].description;
+                                        data.results[y].url = JSON.parse(data.results[y].url);
+                                        FilteredDoctors[x].readOrNot = data.results[y].readOrNot || ( MyId == data.results[y].url.fromID ? 1:0);
                                     }
                                 }
                             }
-                            
+
                         }
                         $scope.items = FilteredDoctors;
                         console.log(FilteredDoctors);
@@ -4268,7 +4292,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             "userId": $scope.params.chatId, //医生的UID
             "role": "doctor",
             "postdata": {
-                "template_id": "DWrM__2UuaLxYf5da6sKOQA_hlmYhlsazsaxYX59DtE",
+                "template_id": "cVLIgOb_JvtFGQUA2KvwAmbT5B3ZB79cRsAM4ZKKK0k",
                 "data": {
                     "first": {
                         "value": "您有一个新的"+($scope.params.counseltype==1?'咨询':'问诊')+"消息，请及时处理",
@@ -4974,7 +4998,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   $scope.showoriginal=function(resizedpath){
     // $scope.openModal();
     // console.log(resizedpath)
-    var originalfilepath="http://121.196.221.44:8052/uploads/photos/"+resizedpath
+    var originalfilepath=resizedpath
     console.log(originalfilepath)
     // $scope.healthinfoimgurl=originalfilepath;
     $scope.imageHandle.zoomTo(1, true);
@@ -5385,7 +5409,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 //医生列表--PXY
-.controller('DoctorCtrl', ['Storage','$ionicLoading','$scope','$state','$ionicPopup','$ionicHistory','Dict','Patient','$location','Doctor','Counsels','wechat','order','Account','$http','CONFIG','payment','$filter',function(Storage,$ionicLoading,$scope, $state,$ionicPopup,$ionicHistory,Dict,Patient,$location,Doctor,Counsels,wechat,order,Account,$http,CONFIG,payment,$filter) {
+.controller('DoctorCtrl', ['Storage','$ionicLoading','$scope','$state','$ionicPopup','$ionicHistory','Dict','Patient','$location','Doctor','Counsels','wechat','order','Account','$http','CONFIG','payment','$filter','Expense',function(Storage,$ionicLoading,$scope, $state,$ionicPopup,$ionicHistory,Dict,Patient,$location,Doctor,Counsels,wechat,order,Account,$http,CONFIG,payment,$filter,Expense) {
   //$scope.barwidth="width:0%";
   $scope.Goback = function(){
     $state.go('tab.myDoctors');
@@ -5558,15 +5582,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   }
 
   $scope.consultable=1;
-  $scope.question = function(DoctorId){
-    // var path = '#/tab/DoctorDetail/' + id;
-    // console.log(path)
-    // console.log(ele.target.nodeName);
-    if(ele.target.nodeName =="IMG"){
-        console.log(id);
-      $state.go('tab.DoctorDetail',{DoctorId:id});
-    }
-    else if (ele.target.innerText == '咨询') {
+  var chargemoney = 0;
+  $scope.question = function(DoctorId,docname){
       Counsels.getStatus({doctorId:id,patientId:Storage.get('UID')})
       .then(function(data){
         //zxf 判断条件重写
@@ -5663,6 +5680,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     },function(err){
                       console.log(err)
                     })
+                    Expense.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:1,doctorName:docname,money:0}).then(function(data){
+                      console.log(data)
+                    },function(err){
+                      console.log(err)
+                    })
                   },function(err){
                     console.log(err)
                   })
@@ -5700,7 +5722,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     console.log(data) //data.errMsg:"chooseWXPay:ok"时支付成功
                     if (data.errMsg == "chooseWXPay:ok")
                     {
-                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:1}).then(function(data){
+                      chargemoney = data.money
+                      Expense.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:1,doctorName:docname,money:chargemoney}).then(function(data){
                         console.log(data)
                       },function(err){
                         console.log(err)
@@ -5737,7 +5760,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     })
   }
 
-  $scope.consult = function(DoctorId){
+  $scope.consult = function(DoctorId,docname){
     Counsels.getStatus({doctorId:id,patientId:Storage.get('UID')})
     .then(function(data){
       //zxf 判断条件重写
@@ -5771,12 +5794,13 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   console.log(data) //data.errMsg:"chooseWXPay:ok"时支付成功
                   if (data.errMsg == "chooseWXPay:ok")
                   {
+                    chargemoney = data.money
                     Counsels.changeType({doctorId:id,patientId:Storage.get('UID'),type:1,changeType:"true"}).then(function(data){
                       console.log(data.result)
                       if(data.result=="修改成功"){
                         //确认新建咨询之后 给医生账户转积分 其他新建都在最后提交的时候转账 但是升级是在这里完成转账
                         //chargedoc
-                        Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:3}).then(function(data){
+                        Expense.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:3,doctorName:docname,money:chargemoney}).then(function(data){
                           console.log(data)
                         },function(err){
                           console.log(err)
@@ -5896,7 +5920,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                       console.log(data) //data.errMsg:"chooseWXPay:ok"时支付成功
                       if (data.errMsg == "chooseWXPay:ok")
                       {
-                        Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:3}).then(function(data){
+                        chargemoney = data.money
+                        Expense.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:3,doctorName:docname,money:chargemoney}).then(function(data){
                           console.log(data)
                         },function(err){
                           console.log(err)
@@ -5951,8 +5976,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                       console.log(data) //data.errMsg:"chooseWXPay:ok"时支付成功
                       if (data.errMsg == "chooseWXPay:ok")
                       {
-                        //chargedoc
-                        Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:id,type:2}).then(function(data){
+                        chargemoney = data.money
+                        Expense.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:2,doctorName:docname,money:chargemoney}).then(function(data){
                           console.log(data)
                         },function(err){
                           console.log(err)
@@ -5986,7 +6011,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       },function(err){
         console.log(err)
       })
-    }
+    
   }
 
   $scope.getDoctorDetail = function(id) {
@@ -6060,84 +6085,122 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         console.log(err);
       }
     )
-
-   $scope.question = function(){
+  var chargemoney = 0;
+  $scope.consultable=1
+   $scope.question = function(DoctorId,docname){
     Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID')})
       .then(function(data){
         //zxf 判断条件重写
         if(data.result!="请填写咨询问卷!"&&data.result.status==1){//有尚未完成的咨询或者问诊
           if(data.result.type==1){
-            $ionicPopup.confirm({
-              title:"咨询确认",
-              template:"您有尚未结束的咨询，点击确认继续上一次咨询！",
-              okText:"确认",
-              cancelText:"取消"
-            }).then(function(res){
-                if(res){
-                    $state.go("tab.consult-chat",{chatId:DoctorId,type:1,status:1}); 
-                }
-            })
+            if($scope.consultable==1){
+              $scope.consultable=0
+              $ionicPopup.confirm({
+                title:"咨询确认",
+                template:"您有尚未结束的咨询，点击确认继续上一次咨询！",
+                okText:"确认",
+                cancelText:"取消"
+              }).then(function(res){
+                  if(res){
+                    $scope.consultable=1
+                    $state.go("tab.consult-chat",{chatId:DoctorId,type:1,status:1});
+                  }else{
+                    $scope.consultable=1
+                  }
+              })
+            }
           }else{
-            $ionicPopup.confirm({
-              title:"咨询确认",
-              template:"您有尚未结束的问诊，点击确认继续上一次问诊！",
-              okText:"确认",
-              cancelText:"取消"
-            }).then(function(res){
-                if(res){
-                    $state.go("tab.consult-chat",{chatId:DoctorId,type:data.result.type,status:1}); 
-                }
+            if($scope.consultable==1){
+              $scope.consultable=0
+              $ionicPopup.confirm({
+                title:"咨询确认",
+                template:"您有尚未结束的问诊，点击确认继续上一次问诊！",
+                okText:"确认",
+                cancelText:"取消"
+              }).then(function(res){
+                  if(res){
+                    $scope.consultable=1
+                    $state.go("tab.consult-chat",{chatId:DoctorId,type:data.result.type,status:1});
+                  }else{
+                    $scope.consultable=1
+                  }
 
-            })
+              })
+            }
           }
         }else{//没有进行中的问诊咨询 查看是否已经付过费
           // console.log("fj;akfmasdfzjl")
           Account.getCounts({patientId:Storage.get('UID'),doctorId:DoctorId}).then(function(data){
           console.log(data.result.freeTimes)
           if(data.result.count==999){//上次有购买问诊 但是没有新建问诊
-            $ionicPopup.confirm({
-              title:"咨询确认",
-              template:"您上次付费的问诊尚未新建成功，点击确认继续填写完善上次的咨询问卷，进入问诊后，您询问该医生的次数不限，最后由医生结束此次问诊，请尽可能在咨询问卷以及问诊过程中详细描述病情和需求。",
-              okText:"确认",
-              cancelText:"取消"
-            }).then(function(res){
-              if(res){
-                $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:2});
-              }
-            })
+            if($scope.consultable==1){
+              $scope.consultable=0
+              $ionicPopup.confirm({
+                title:"咨询确认",
+                template:"您上次付费的问诊尚未新建成功，点击确认继续填写完善上次的咨询问卷，进入问诊后，您询问该医生的次数不限，最后由医生结束此次问诊，请尽可能在咨询问卷以及问诊过程中详细描述病情和需求。",
+                okText:"确认",
+                cancelText:"取消"
+              }).then(function(res){
+                if(res){
+                  $scope.consultable=1
+                  $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:2});
+                }else{
+                  $scope.consultable=1
+                }
+              })
+            }
           }else if(data.result.count==3){
-            $ionicPopup.confirm({
-              title:"咨询确认",
-              template:"您上次付费的咨询尚未新建成功，点击确认继续填写完善上次的咨询问卷，进入咨询后，根据您提供的问卷描述，医生会最多作三次回答，之后此次咨询自动结束，请谨慎组织语言，尽可能在咨询问卷以及咨询过程中详细描述病情和需求。",
-              okText:"确认",
-              cancelText:"取消"
-            }).then(function(res){
-              if(res){
-                $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:1});
-              }
-            })
+            if($scope.consultable==1){
+              $scope.consultable=0
+              $ionicPopup.confirm({
+                title:"咨询确认",
+                template:"您上次付费的咨询尚未新建成功，点击确认继续填写完善上次的咨询问卷，进入咨询后，根据您提供的问卷描述，医生会最多作三次回答，之后此次咨询自动结束，请谨慎组织语言，尽可能在咨询问卷以及咨询过程中详细描述病情和需求。",
+                okText:"确认",
+                cancelText:"取消"
+              }).then(function(res){
+                if(res){
+                  $scope.consultable=1
+                  $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:1});
+                }else{
+                  $scope.consultable=1
+                }
+              })
+            }
           }else if(data.result.freeTimes>0){//判断是否已经花过钱了，花过但是还没有新建咨询成功 那么跳转问卷
-            $ionicPopup.confirm({
-              title:"咨询确认",
-              template:"您还有剩余免费咨询次数，进入咨询后，根据您提供的问卷描述，医生会最多作三次回答，之后此次咨询自动结束，请谨慎组织语言，尽可能在咨询问卷以及咨询过程中详细描述病情和需求。点击确认进入免费咨询",
-              okText:"确认",
-              cancelText:"取消"
-            }).then(function(res){
-              if(res){
-                //免费咨询次数减一 count+3
-                Account.updateFreeTime({patientId:Storage.get('UID')}).then(function(data){
-                  Account.modifyCounts({patientId:Storage.get('UID'),doctorId:id,modify:3}).then(function(data){
+            if($scope.consultable==1){
+              $scope.consultable=0
+              $ionicPopup.confirm({
+                title:"咨询确认",
+                template:"您还有剩余免费咨询次数，进入咨询后，根据您提供的问卷描述，医生会最多作三次回答，之后此次咨询自动结束，请谨慎组织语言，尽可能在咨询问卷以及咨询过程中详细描述病情和需求。点击确认进入免费咨询",
+                okText:"确认",
+                cancelText:"取消"
+              }).then(function(res){
+                if(res){
+                  $scope.consultable=1
+                  Expense.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:1,doctorName:docname,money:0}).then(function(data){
                     console.log(data)
                   },function(err){
                     console.log(err)
                   })
-                },function(err){
-                  console.log(err)
-                })
-                $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:1});
-              }
-            })
+                  //免费咨询次数减一 count+3
+                  Account.updateFreeTime({patientId:Storage.get('UID')}).then(function(data){
+                    Account.modifyCounts({patientId:Storage.get('UID'),doctorId:DoctorId,modify:3}).then(function(data){
+                      console.log(data)
+                    },function(err){
+                      console.log(err)
+                    })
+                  },function(err){
+                    console.log(err)
+                  })
+                  $state.go("tab.consultquestion1",{DoctorId:DoctorId,counselType:1});
+                }else{
+                  $scope.consultable=1
+                }
+              })
+            }
           }else{
+            if($scope.consultable==1){
+              $scope.consultable=0
             $ionicPopup.confirm({//没有免费也没有回答次数 交钱 充值 加次数
               title:"咨询确认",
               template:"进入咨询后，根据您提供的问卷描述，医生会最多作三次回答，之后此次咨询自动结束，请谨慎组织语言，尽可能在咨询问卷以及咨询过程中详细描述病情和需求。确认付费咨询？",
@@ -6145,6 +6208,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               cancelText:"取消"
             }).then(function(res){
               if(res){
+                $scope.consultable=1
                 var time = new Date()
                 time =  $filter("date")(time, "yyyy-MM-dd HH:mm:ss");
                 var neworder = {
@@ -6162,8 +6226,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   console.log(data) //data.errMsg:"chooseWXPay:ok"时支付成功
                   if (data.errMsg == "chooseWXPay:ok")
                   {
-                    //chargedoc
-                    Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:1}).then(function(data){
+                    chargemoney = data.money
+                    Expense.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:1,doctorName:docname,money:chargemoney}).then(function(data){
                       console.log(data)
                     },function(err){
                       console.log(err)
@@ -6184,8 +6248,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 },function(err){
                   console.log(err)
                 })
+              }else{
+                  $scope.consultable=1
               }
             })
+          }
           }
           // }
         },function(err){
@@ -6197,18 +6264,22 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     })
   }
 
-  $scope.consult = function(){
+  $scope.consult = function(DoctorId,docname){
     Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID')})
       .then(function(data){
         //zxf 判断条件重写
         if(data.result!="请填写咨询问卷!"&&data.result.status==1){//有尚未完成的咨询或者问诊
           if(data.result.type==1){//咨询转问诊
+            if($scope.consultable==1){
+              $scope.consultable=0
             $ionicPopup.confirm({
               title:"问诊确认",
               template:"您有尚未结束的咨询，补齐差价可升级为问诊，问诊中询问医生的次数不限。确认付费升级为问诊？",
               okText:"确认",
               cancelText:"取消"
             }).then(function(res){
+              if(res){
+                $scope.consultable=1
                 var time = new Date()
                 time =  $filter("date")(time, "yyyy-MM-dd HH:mm:ss");
                 var neworder = {
@@ -6226,13 +6297,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   console.log(data) //data.errMsg:"chooseWXPay:ok"时支付成功
                   if (data.errMsg == "chooseWXPay:ok")
                   {
+                    chargemoney = data. money
                   //点击确认 将咨询的type=1 变成type=3
                   Counsels.changeType({doctorId:DoctorId,patientId:Storage.get('UID'),type:1,changeType:"true"}).then(function(data){
                     console.log(data.result)
                     if(data.result=="修改成功"){
                       //确认新建咨询之后 给医生账户转积分 其他新建都在最后提交的时候转账 但是升级是在这里完成转账
                       //chargedoc
-                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:3}).then(function(data){
+                      Expense.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:3,doctorName:docname,money:chargemoney}).then(function(data){
                         console.log(data)
                       },function(err){
                         console.log(err)
@@ -6281,23 +6353,35 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               },function(err){
                 console.log(err)
               })
-            })
-          }else{
-            $ionicPopup.confirm({
-              title:"问诊确认",
-              template:"您有尚未结束的问诊，点击确认继续上一次问诊！",
-              okText:"确认",
-              cancelText:"取消"
-            }).then(function(res){
-                if(res){
-                    $state.go("tab.consult-chat",{chatId:DoctorId,type:data.result.type,status:1}); 
+                }else{
+                  $scope.consultable=1
                 }
             })
+          }
+          }else{
+            if($scope.consultable==1){
+              $scope.consultable=0
+              $ionicPopup.confirm({
+                title:"问诊确认",
+                template:"您有尚未结束的问诊，点击确认继续上一次问诊！",
+                okText:"确认",
+                cancelText:"取消"
+              }).then(function(res){
+                  if(res){
+                    $scope.consultable=1
+                    $state.go("tab.consult-chat",{chatId:DoctorId,type:data.result.type,status:1});
+                  }else{
+                    $scope.consultable=1
+                  }
+              })
+            }
           }
         }else{//没有进行中的问诊咨询 查看是否已经付过费
           Account.getCounts({patientId:Storage.get('UID'),doctorId:DoctorId}).then(function(data){
             console.log(data.result.count)
           if(data.result.count==999){//上次有购买问诊 但是没有新建问诊
+            if($scope.consultable==1){
+                $scope.consultable=0
               $ionicPopup.confirm({
                 title:"问诊确认",
                 template:"您上次付费的问诊尚未新建成功，点击确认继续填写完善上次的咨询问卷，进入问诊后，您询问该医生的次数不限，最后由医生结束此次问诊，请尽可能在咨询问卷以及问诊过程中详细描述病情和需求。",
@@ -6333,7 +6417,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     console.log(data) //data.errMsg:"chooseWXPay:ok"时支付成功
                     if (data.errMsg == "chooseWXPay:ok")
                     {
-                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:3}).then(function(data){
+                      chargemoney = data.money
+                      Expense.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:3,doctorName:docname,money:chargemoney}).then(function(data){
                         console.log(data)
                       },function(err){
                         console.log(err)
@@ -6355,9 +6440,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   },function(err){
                     console.log(err)
                   })
+                }else{
+                    $scope.consultable=1
                 }
               })
+            }
             }else{
+              if($scope.consultable==1){
+                $scope.consultable=0
               $ionicPopup.confirm({//没有免费也没有回答次数 交钱 充值 加次数
                 title:"问诊确认",
                 template:"进入问诊后，您询问该医生的次数不限，最后由医生结束此次问诊，请尽可能在咨询问卷以及问诊过程中详细描述病情和需求。确认付费问诊？",
@@ -6382,8 +6472,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     console.log(data) //data.errMsg:"chooseWXPay:ok"时支付成功
                     if (data.errMsg == "chooseWXPay:ok")
                     {
-                      //chargedoc
-                      Account.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:2}).then(function(data){
+                      chargemoney = data.money
+                      Expense.rechargeDoctor({patientId:Storage.get('UID'),doctorId:DoctorId,type:2,doctorName:docname,money:chargemoney}).then(function(data){
                         console.log(data)
                       },function(err){
                         console.log(err)
@@ -6404,9 +6494,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                   },function(err){
                     console.log(err)
                   })
-                }
+                }else{
+                    $scope.consultable=1
+                  }
               })
             }
+          }
           },function(err){
             console.log(err)
           })

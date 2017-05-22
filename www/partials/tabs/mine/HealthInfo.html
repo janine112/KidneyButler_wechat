@@ -17,7 +17,7 @@
 
   <ion-content  class="padding">
     <ion-list>
-      <div class="card" ng-repeat="item in items | orderBy:'-time'" ng-click="gotoHealthDetail($event,item)">
+      <div class="card" ng-repeat="item in items" ng-click="gotoHealthDetail($event,item)">
         <div class="row">
             <p class="col" style="text-align: left;font-weight: bold;">{{item.label}}</p>
             <p class="col" style="text-align:center;">{{item.time|dateFormat:"YYYY-MM-DD"}}</p>

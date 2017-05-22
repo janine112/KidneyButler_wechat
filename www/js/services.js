@@ -754,7 +754,9 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getAgree:{method:'GET', params:{route: 'getUserAgreement',userId:'@userId'}, timeout: 100000},
             updateAgree:{method:'POST', params:{route: 'updateUserAgreement'}, timeout: 100000},
             getUserIDbyOpenId:{method:'GET', params:{route: 'getUserIDbyOpenId'}, timeout: 100000},
-            setOpenId:{method:'POST', params:{route: 'setOpenId'}, timeout: 100000}
+            setOpenId:{method:'POST', params:{route: 'setOpenId'}, timeout: 100000},
+            getMessageOpenId:{method:'GET', params:{route: 'getMessageOpenId'}, timeout: 100000},
+            setMessageOpenId:{method:'POST', params:{route: 'setMessageOpenId'}, timeout: 100000}
         });
     }
 
@@ -852,6 +854,12 @@ angular.module('kidney.services', ['ionic','ngResource'])
             getPrefer:{method:'GET', params:{route: 'getPrefer'}, timeout: 100000}
         })
     }
+
+    var Expense =function(){
+        return $resource(CONFIG.baseUrl + ':path/:route',{path:'expense'},{
+            rechargeDoctor:{method:'POST', params:{route: 'rechargeDoctor'}, timeout: 100000},
+        });
+    }
     serve.abort = function ($scope) {
         abort.resolve();
         $interval(function () {
@@ -876,6 +884,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
             serve.jm = jm();
             serve.order = order();
             serve.insurance = insurance();
+            serve.Expense = Expense();
         }, 0, 1);
     };
     serve.Dict = Dict();
@@ -898,6 +907,7 @@ angular.module('kidney.services', ['ionic','ngResource'])
     serve.jm = jm();
     serve.order = order();
     serve.insurance = insurance();
+    serve.Expense = Expense();
     return serve;
 }])
 
@@ -1300,6 +1310,34 @@ angular.module('kidney.services', ['ionic','ngResource'])
     self.setOpenId = function(params){
         var deferred = $q.defer();
         Data.User.setOpenId(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    }
+
+    //params->{type:"",userId:"U201703310032"}type:(1:doctorwechat,2:patientwechat,3:doctorapp,4:patientapp,5:test)
+    self.getMessageOpenId = function(params){
+        var deferred = $q.defer();
+        Data.User.getMessageOpenId(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    }
+
+    //params->{type:"",openId:"",userId:""}type:(1:doctorwechat,2:patientwechat,3:doctorapp,4:patientapp,5:test)
+    self.setMessageOpenId = function(params){
+        var deferred = $q.defer();
+        Data.User.setMessageOpenId(
             params,
             function(data, headers){
                 deferred.resolve(data);
@@ -2074,6 +2112,25 @@ angular.module('kidney.services', ['ionic','ngResource'])
     return self;
 }])
 
+.factory('Expense', ['$q', 'Data', function($q, Data){
+    var self = this;
+    //params->0:{userId:'p01'}
+    self.rechargeDoctor = function(params){
+        var deferred = $q.defer();
+        Data.Expense.rechargeDoctor(
+            params,
+            function(data, headers){
+                deferred.resolve(data);
+            },
+            function(err){
+                deferred.reject(err);
+        });
+        return deferred.promise;
+    };
+
+return self;
+}])
+
 .factory('wechat', ['$q', 'Data', function($q, Data){
     var self = this;
     //params->{
@@ -2295,19 +2352,20 @@ angular.module('kidney.services', ['ionic','ngResource'])
         duration:2000
       })
       res = {
-        "errMsg":"chooseWXPay:ok"
+        "errMsg":"chooseWXPay:ok",
+        "money":0
       }
       var defer = $q.defer()
       defer.resolve(res);
+      // var defer = $q.defer()
       // var config = "";
       // var path = $location.absUrl().split('#')[0]
-      // var defer = $q.defer()
       // wechat.settingConfig({url:path}).then(function(data){
       //   // alert(data.results.timestamp)
       //   config = data.results;
       //   config.jsApiList = ['chooseWXPay']
-      //   // alert(config.jsApiList)
-      //   // alert(config.debug)
+        // alert(config.jsApiList)
+        // alert(config.debug)
       //   console.log(angular.toJson(config))
       //   wx.config({
       //     debug:false,
