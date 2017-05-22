@@ -5583,7 +5583,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 
   $scope.consultable=1;
   var chargemoney = 0;
-  $scope.question = function(DoctorId,docname){
+  $scope.question = function(DoctorId,docname,doctor){
       Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID')})
       .then(function(data){
         //zxf 判断条件重写
@@ -5760,7 +5760,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     })
   }
 
-  $scope.consult = function(DoctorId,docname){
+  $scope.consult = function(DoctorId,docname,doctor){
     Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID')})
     .then(function(data){
       //zxf 判断条件重写
@@ -6087,7 +6087,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     )
   var chargemoney = 0;
   $scope.consultable=1
-   $scope.question = function(DoctorId,docname){
+   $scope.question = function(DoctorId,docname,doctor){
     Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID')})
       .then(function(data){
         //zxf 判断条件重写
@@ -6264,7 +6264,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     })
   }
 
-  $scope.consult = function(DoctorId,docname){
+  $scope.consult = function(DoctorId,docname,doctor){
     Counsels.getStatus({doctorId:DoctorId,patientId:Storage.get('UID')})
       .then(function(data){
         //zxf 判断条件重写
