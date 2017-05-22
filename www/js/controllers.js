@@ -6066,7 +6066,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 
-.controller('DoctorDetailCtrl', ['$ionicPopup','$scope','$state','$ionicHistory','$stateParams','$stateParams','Doctor','Counsels','Storage','Account','payment','$filter','$ionicLoading','CONFIG',function($ionicPopup,$scope, $state,$ionicHistory,$stateParams,$stateParams,Doctor,Counsels,Storage,Account,payment,$filter,$ionicLoading,CONFIG) {
+.controller('DoctorDetailCtrl', ['$ionicPopup','$scope','$state','$ionicHistory','$stateParams','$stateParams','Doctor','Counsels','Storage','Account','payment','$filter','$ionicLoading','CONFIG','Expense',function($ionicPopup,$scope, $state,$ionicHistory,$stateParams,$stateParams,Doctor,Counsels,Storage,Account,payment,$filter,$ionicLoading,CONFIG,Expense) {
   $scope.Goback = function(){
     $ionicHistory.goBack();
   }
