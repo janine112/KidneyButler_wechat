@@ -1065,7 +1065,10 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                                           {
                                                             User.setMessageOpenId({type:2,userId:patientId,openId:Storage.get('messageopenid')}).then(function(res){
                                                                 console.log("setopenid");
-                                                                if (angular.isDefined($scope.User.weight) == true)
+                                                            },function(){
+                                                                console.log("连接超时！");
+                                                            })
+                                                            if (angular.isDefined($scope.User.weight) == true)
                                                             {
                                                               VitalSign.insertVitalSign({patientId:patientId, type: "Weight",code: "Weight_1", date:now.substr(0,10),datatime:now,datavalue:$scope.User.weight,unit:"kg"}).then(function(data){
                                                                   // $scope.User.weight = data.results;
@@ -1077,17 +1080,12 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                                                       template: '注册失败',
                                                                       duration:1000
                                                                   });
-                                                                  $state.go('signin');
                                                                   console.log("插入体重"+err);
                                                               });
                                                             }
                                                             else{
                                                               $state.go('signin');
                                                             }
-                                                            },function(){
-                                                                console.log("连接超时！");
-                                                            })
-                                                            
                                                           }
                                                       },function(){
                                                           $scope.logStatus = "连接超时！";
