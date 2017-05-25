@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.directives','kidney.filters','ngCordova','ngFileUpload'])
 
-.run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM,$location,wechat,User,Patient) {
+.run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM,$location,wechat,User,Patient,$q) {
   $ionicPlatform.ready(function() {
     socket = io.connect('ws://121.196.221.44:4050/chat');
     
@@ -14,8 +14,17 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
     // alert(temp)
     if (angular.isDefined(temp[1]) == true)
     {
-        var code = temp[1].split('#')[0]
-        Storage.set('code',code)
+        if (angular.isDefined(temp[2]) == true)
+        {
+            var code = temp[1].split('&')[0]
+            var state = temp[2].split('#')[0]
+            Storage.set('code',code)
+        }
+        else
+        {
+            var code = temp[1].split('#')[0]
+            Storage.set('code',code)
+        }
     }
     var wechatData = ""
     if (angular.isDefined(code) == true)
@@ -109,65 +118,87 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                     Storage.set('TOKEN',data.results.token);//token作用目前还不明确
                     Storage.set('isSignIn',"Yes");
                     Storage.set('UID',data.results.userId);
-                    Patient.getPatientDetail({userId:Storage.get("UID")}).then(function(res){
-                      console.log(Storage.get("UID"))
-                      // console.log(res.results)
-                      console.log(res.results.photoUrl)
-                      // console.log(angular.fromJson(res.results))
-                      if(res.results.photoUrl==undefined||res.results.photoUrl==""){
-                        Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:wechatData.headimgurl}).then(function(r){
-                          console.log(r);
-                        })
-                      }
-                    })
-                    User.getMessageOpenId({type:2,userId:Storage.get("UID")}).then(function(res){
-                        if (res.results == undefined || res.results == null)
-                        {
-                          User.setMessageOpenId({type:2,userId:Storage.get("UID"),openId:Storage.get('messageopenid')}).then(function(res){
-                              console.log("setopenid");
-                          },function(){
-                              console.log("连接超时！");
-                          })
-                        }
-                    },function(){
-                        console.log("连接超时！");
-                    })
-                    User.getAgree({userId:data.results.userId}).then(function(res){
-                        if(res.results.agreement=="0"){
-                            Patient.getPatientDetail({userId:Storage.get('UID')}).then(function(data){
-                              if (data.results != null)
-                              {
-                                $state.go('tab.tasklist');
-                              }
-                              else
-                              {
-                                $state.go('userdetail',{last:'register'});
-                              }
-                            },function(err){
-                                console.log(err);
-                            })
-                        }else{
-                            $state.go('agreement',{last:'signin'});
-                        }
-                    },function(err){
-                        console.log(err);
-                    })
                     
+                    var results = [];
+                    var errs = [];
 
+                    var params = state.split('_');
+                    if(params.length && params[0]=='patient'){
+                        if(params[1]=='11') $state.go('tab.consult-chat',{chatId:params[3]});
+                    }else{
+                        $q.all([
+                            User.getAgree({ userId: data.results.userId }).then(function(res) {
+                                results.push(res)
+                            }, function(err) {
+                                errs.push(err)
+                            }),
+                            User.setMessageOpenId({ type: 2, userId: Storage.get("UID"), openId: Storage.get('messageopenid') }).then(function(res) {
+                                results.push(res)
+                            }, function(err) {
+                                errs.push(err)
+                            }),
+                            Patient.getPatientDetail({ userId: Storage.get('UID') }).then(function(res) {
+                                results.push(res)
+                            }, function(err) {
+                                errs.push(err)
+                            })
+                        ]).then(function() {
+                            console.log(results)
+                            var a, b, c;
+                            for (var i in results) {
+                                if (results[i].results.agreement != undefined) {
+                                    a = i;
+                                } else if (results[i].recentDiagnosis != undefined) {
+                                    b = i;
+                                } else {
+                                    c = i;
+                                }
+                            }
+                            if (results[a].results.agreement == "0") {
+                                if (results[b].results != null) {
+                                    if (results[b].results.photoUrl == undefined || results[b].results.photoUrl == "") {
+                                        Patient.editPatientDetail({ userId: Storage.get("UID"), photoUrl: wechatData.headimgurl }).then(function(r) {
+                                            $state.go('tab.tasklist');
+                                        })
+                                    } else {
+                                        $state.go('tab.tasklist');
+                                    }
+                                } else {
+                                    $state.go('userdetail', { last: 'register' });
+                                }
+                            } else {
+                                $state.go('agreement', { last: 'signin' });
+                            }
+                        });
+                    }
+                }
+                else
+                {
+                  $state.go('signin');
                 }
 
             },function(err){
                 if(err.results==null && err.status==0){
                     $scope.logStatus = "网络错误！";
+                    $state.go('signin');
                     return;
                 }
                 if(err.status==404){
                     $scope.logStatus = "连接服务器失败！";
+                    $state.go('signin')
                     return;
                 }
-
+                $state.go('signin')
             });
+        },function(err){
+            console.log(err)
+            $state.go('signin')
+            // alert(2);
         });
+    }
+    else
+    {
+      $state.go('signin')
     }
 
     // var isSignIN=Storage.get("isSignIN");
@@ -572,7 +603,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
       controller: 'insurancestaffCtrl'
     });
 
-  $urlRouterProvider.otherwise('/signin');
+  // $urlRouterProvider.otherwise('/signin');
 
 
 
