@@ -7516,7 +7516,6 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 }
             }
             wechat.messageTemplate(template);
-            
 
             Storage.rm('tempquestionare')
             Storage.rm('tempimgrul')
