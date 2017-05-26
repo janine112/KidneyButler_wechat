@@ -6765,7 +6765,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   }
 }])
 //咨询问卷--TDY
-.controller('consultquestionCtrl', ['$ionicLoading','Task','$scope', '$ionicPopup','$ionicModal','$state', 'Dict','Storage', 'Patient', 'VitalSign','$filter','$stateParams','$ionicPopover','Camera','Counsels','JM','CONFIG','Health','Account','Communication','jmapi',function ($ionicLoading,Task,$scope,$ionicPopup, $ionicModal,$state,Dict,Storage,Patient,VitalSign,$filter,$stateParams,$ionicPopover,Camera,Counsels,JM,CONFIG,Health,Account,Communication,jmapi) {
+.controller('consultquestionCtrl', ['$ionicLoading','Task','$scope', '$ionicPopup','$ionicModal','$state', 'Dict','Storage', 'Patient', 'VitalSign','$filter','$stateParams','$ionicPopover','Camera','Counsels','JM','CONFIG','Health','Account','Communication','jmapi','wechat',function ($ionicLoading,Task,$scope,$ionicPopup, $ionicModal,$state,Dict,Storage,Patient,VitalSign,$filter,$stateParams,$ionicPopover,Camera,Counsels,JM,CONFIG,Health,Account,Communication,jmapi,wechat) {
   $scope.showProgress = false
   $scope.showSurgicalTime = false
   var patientId = Storage.get('UID')
@@ -7478,6 +7478,44 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         console.log(data);
         if (data.result == "新建成功")
         {
+            var actionUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfa2216ac422fb747&redirect_uri=http://proxy.haihonghospitalmanagement.com/go&response_type=code&scope=snsapi_userinfo&state=doctor_11_'+ data.results.status+'_'+patientId+'_'+data.results.counselId+ '&#wechat_redirect';
+            var template = {
+                "userId": $scope.params.chatId, //医生的UID
+                "role": "doctor",
+                "postdata": {
+                    "template_id": "cVLIgOb_JvtFGQUA2KvwAmbT5B3ZB79cRsAM4ZKKK0k",
+                    "url":actionUrl,
+                    "data": {
+                        "first": {
+                            "value": "您有一个新的"+(data.results.type==1?'咨询':'问诊')+"消息，请及时处理",
+                            "color": "#173177"
+                        },
+                        "keyword1": {
+                            "value": data.results.counselId, //咨询ID
+                            "color": "#173177"
+                        },
+                        "keyword2": {
+                            "value": thisPatient.name, //患者信息（姓名，性别，年龄）
+                            "color": "#173177"
+                        },
+                        "keyword3": {
+                            "value": data.results.help, //问题描述
+                            "color": "#173177"
+                        },
+                        "keyword4": {
+                            "value": data.results.time.substr(0,10), //提交时间
+                            "color": "#173177"
+                        },
+
+                        "remark": {
+                            "value": "感谢您的使用！",
+                            "color": "#173177"
+                        }
+                    }
+                }
+            }
+            wechat.messageTemplate(template);
+            
             $scope.submitable=true;
 
             Storage.rm('tempquestionare')
