@@ -3997,7 +3997,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         console.log(args)
         event.stopPropagation();
         $scope.imageHandle.zoomTo(1, true);
-        $scope.imageUrl = CONFIG.mediaUrl + (args[2].src_thumb || args[2].localId_thumb);
+        $scope.imageUrl = CONFIG.mediaUrl + (args[2].src|| args[2].src_thumb);
         $scope.modal.show();
     })
     $scope.closeModal = function() {
@@ -4155,7 +4155,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     }
     $scope.submitMsg = function() {
         if($scope.counselstatus!=1) return nomoney();
-        var actionUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfa2216ac422fb747&redirect_uri=http://proxy.haihonghospitalmanagement.com/go&response_type=code&scope=snsapi_userinfo&state=doctor_11_'+ $scope.params.counseltype+'_'+$scope.params.UID+'_'+$scope.params.counsel.counselId+ '&#wechat_redirect';
+        var actionUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfa2216ac422fb747&redirect_uri=http://proxy.haihonghospitalmanagement.com/go&response_type=code&scope=snsapi_userinfo&state=doctor_11_'+ $scope.params.counselstatus+'_'+$scope.params.UID+'_'+$scope.params.counsel.counselId+ '&#wechat_redirect';
         var template = {
             "userId": $scope.params.chatId, //医生的UID
             "role": "doctor",
@@ -7609,63 +7609,113 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 socket.off('messageRes');
                 socket.emit('disconnect');
                 if(DoctorId=='U201612291283'){
-                    Communication.getTeam({teamId:'10050278'})
-                    .then(function(response){
-                        var team = response.results,
-                            idarr = [];
-                        team.members.forEach(function(member){
-                            this.push(member.userId);
-                        },idarr);
-                        jmapi.groups(DoctorId,idarr,thisPatient.name + '-' +team.name,'consultatioin_open')
-                        .then(function(res){
-                            var d = {
-                                teamId: team.teamId,
-                                counselId: data.results.counselId,
-                                sponsorId: DoctorId,
-                                patientId: patientId,
-                                consultationId: res.results.gid,
-                                status: '1'
-                            }
-                            msgContent.consultationId=res.results.gid;
-                            var msgTeam={
-                                contentType:'custom',
-                                fromID:DoctorId,
-                                fromName:'陈江华',
-                                fromUser:{
-                                    avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+DoctorId+'_myAvatar.jpg'
-                                },
-                                targetID:team.teamId,
-                                teamId:team.teamId,
-                                targetName:team.name,
-                                targetType:'group',
-                                status:'send_going',
-                                newsType:'13',
-                                createTimeInMillis: Date.now(),
-                                content:msgContent
-                            }
+                    var time = new Date();
+                    var gid='G'+$filter('date')(time, 'MMddHmsss');
+                    // var msgdata = $state.params.msg;
 
-                            Communication.newConsultation(d)
-                            .then(function(con){
-                                console.log(con);
-                                socket.emit('newUser',{user_name:'陈江华'.name,user_id:DoctorId});
-                                socket.emit('message',{msg:msgTeam,to:team.teamId,role:'patient'});
-                                socket.on('messageRes',function(messageRes){
-                                    socket.off('messageRes');
-                                    socket.emit('disconnect');
-                                    $state.go('tab.consult-chat',{chatId:DoctorId});
-                                });
-                            },function(er){
-                                console.error(err);
-                            })
-                        },function(err){
-                            console.error(err);
-                        })                
-
+                    var d = {
+                        teamId: '10050278',
+                        counselId: data.results.counselId,
+                        sponsorId: DoctorId,
+                        patientId: patientId,
+                        consultationId: gid,
+                        status: '1'
+                    }
+                    msgContent.consultationId=gid;
+                    var msgTeam={
+                        contentType:'custom',
+                        fromID:DoctorId,
+                        fromName:'陈江华',
+                        fromUser:{
+                            avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+DoctorId+'_myAvatar.jpg'
+                        },
+                        targetID:'10050278',
+                        teamId:'10050278',
+                        targetName:'陈江华主任医师团队',
+                        targetType:'group',
+                        status:'send_going',
+                        newsType:'13',
+                        createTimeInMillis: Date.now(),
+                        content:msgContent
+                    }
+                    Communication.newConsultation(d)
+                    .then(function(con){
+                        console.log(con);
+                        socket.emit('newUser',{user_name:'陈江华',user_id:DoctorId});
+                        socket.emit('message',{msg:msgTeam,to:'10050278',role:'patient'});
+                        socket.on('messageRes',function(messageRes){
+                            socket.off('messageRes');
+                            socket.emit('disconnect');
+                            $state.go('tab.consult-chat',{chatId:DoctorId});
+                        });
+                    },function(er){
+                        console.error(err);
                     });
                 }else{
                     $state.go('tab.consult-chat',{chatId:DoctorId});
                 }
             });
+            // socket.on('messageRes',function(messageRes){
+            //     socket.off('messageRes');
+            //     socket.emit('disconnect');
+            //     if(DoctorId=='U201612291283'){
+            //         Communication.getTeam({teamId:'10050278'})
+            //         .then(function(response){
+            //             var team = response.results,
+            //                 idarr = [];
+            //             team.members.forEach(function(member){
+            //                 this.push(member.userId);
+            //             },idarr);
+            //             jmapi.groups(DoctorId,idarr,thisPatient.name + '-' +team.name,'consultatioin_open')
+            //             .then(function(res){
+            //                 var d = {
+            //                     teamId: team.teamId,
+            //                     counselId: data.results.counselId,
+            //                     sponsorId: DoctorId,
+            //                     patientId: patientId,
+            //                     consultationId: res.results.gid,
+            //                     status: '1'
+            //                 }
+            //                 msgContent.consultationId=res.results.gid;
+            //                 var msgTeam={
+            //                     contentType:'custom',
+            //                     fromID:DoctorId,
+            //                     fromName:'陈江华',
+            //                     fromUser:{
+            //                         avatarPath:CONFIG.mediaUrl+'uploads/photos/resized'+DoctorId+'_myAvatar.jpg'
+            //                     },
+            //                     targetID:team.teamId,
+            //                     teamId:team.teamId,
+            //                     targetName:team.name,
+            //                     targetType:'group',
+            //                     status:'send_going',
+            //                     newsType:'13',
+            //                     createTimeInMillis: Date.now(),
+            //                     content:msgContent
+            //                 }
+
+            //                 Communication.newConsultation(d)
+            //                 .then(function(con){
+            //                     console.log(con);
+            //                     socket.emit('newUser',{user_name:'陈江华'.name,user_id:DoctorId});
+            //                     socket.emit('message',{msg:msgTeam,to:team.teamId,role:'patient'});
+            //                     socket.on('messageRes',function(messageRes){
+            //                         socket.off('messageRes');
+            //                         socket.emit('disconnect');
+            //                         $state.go('tab.consult-chat',{chatId:DoctorId});
+            //                     });
+            //                 },function(er){
+            //                     console.error(err);
+            //                 })
+            //             },function(err){
+            //                 console.error(err);
+            //             })                
+
+            //         });
+            //     }else{
+            //         $state.go('tab.consult-chat',{chatId:DoctorId});
+            //     }
+            // });
           
         }
         console.log(data.results)
