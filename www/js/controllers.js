@@ -7641,7 +7641,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     Communication.newConsultation(d)
                     .then(function(con){
                         console.log(con);
-                        socket.emit('newUser',{user_name:'陈江华'.name,user_id:DoctorId});
+                        socket.emit('newUser',{user_name:'陈江华',user_id:DoctorId});
                         socket.emit('message',{msg:msgTeam,to:'10050278',role:'patient'});
                         socket.on('messageRes',function(messageRes){
                             socket.off('messageRes');
