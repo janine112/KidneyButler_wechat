@@ -65,7 +65,8 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                               console.log("setopenid");
                               $state.go('signin')
                           },function(){
-                              console.log("连接超时！");
+                            $state.go('signin')
+                            console.log("连接超时！");
                           })
                         }
                         else
@@ -204,7 +205,8 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                 }
             },function(err)
             {
-                console.log(err)
+              $state.go('signin');
+              console.log(err)
             })
 
           }
