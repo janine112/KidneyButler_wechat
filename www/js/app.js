@@ -81,7 +81,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                       if(data.results==1){
                         if(data.mesg == "No authority!")
                         {
-                          alert("您没有权限登陆肾事管家，如您是医生，请登录肾病守护者")
+                          // alert("您没有权限登陆肾事管家，如您是医生，请登录肾病守护者")
                           $state.go('signin')
                         }
                         else
