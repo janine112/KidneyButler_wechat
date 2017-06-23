@@ -88,15 +88,15 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                         {
                           try{
                             $ionicPopup.show({   
-                               title: '由于系统更新，如您已拥有手机账号，请重新进行验证并绑定微信账号。如果您是首次使用，请点击取消后进行注册！',
-                               buttons: [
+                              title: '由于系统更新，如您已拥有手机账号，请重新进行验证并绑定微信账号。如果您是首次使用，请点击取消后进行注册！',
+                              buttons: [
                                  { 
                                       text: '取消',
                                       type: 'button',
                                       onTap: function(e) {
                                           $state.go('signin')
                                       }
-                                    },
+                                  },
                                  {
                                       text: '確定',
                                       type: 'button-positive',
@@ -105,7 +105,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                                           $state.go('phonevalid',{phonevalidType:"wechat"})
                                       }
                                  },
-                                 ]
+                              ]
                             })
                           }
                           catch(e)
