@@ -664,6 +664,16 @@ display: inline-block;
   background-color: red
 }
 
+.blue-round-input {
+  border:1px solid #6ac4f8;
+  border-radius: 5px;
+  margin-top: 10px
+}
+
+.padding10 {
+  padding: 10px 10px 10px 10px !important;
+}
+
 .no-line{
   background-color:transparent !important;
   background-image: none !important;
@@ -703,6 +713,10 @@ input.hasTick {
   position:absolute;
   left: 0px;
   top: 75%;
+}
+
+textarea {
+  resize: none;
 }
 
 .item-select-custom {
@@ -786,3 +800,7 @@ input.hasTick {
     color: #fff; }
   .item-select-custom.item-dark:after, .item-select-custom.item-dark .input-label {
     color: #fff; }
+
+.popupWithKeyboard{
+  margin-top: -190px;
+}
