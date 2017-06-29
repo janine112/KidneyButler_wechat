@@ -28,6 +28,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   crossKey: 'cf32b94444c4eaacef86903e',
   baseUrl: 'http://121.196.221.44:4060/api/v1/',
   mediaUrl: 'http://121.196.221.44:8055/',
+  socketUrl: 'http://121.196.221.44:4060/chat',
   imgThumbUrl: 'http://121.196.221.44:8055/uploads/photos/resize',
   imgLargeUrl: 'http://121.196.221.44:8055/uploads/photos/',
   cameraOptions: {
