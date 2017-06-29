@@ -9,7 +9,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
   // console.log(9)
   $ionicPlatform.ready(function() {
     // console.log(11)
-    socket = io.connect('http://121.43.107.106:4050/chat');
+    socket = io.connect('http://121.196.221.44:4060/chat');
     
     // console.log(14)
     var temp = $location.absUrl().split('=')
