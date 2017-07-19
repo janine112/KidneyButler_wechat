@@ -389,47 +389,50 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                             $state.go('agreement',{last:'register'});
                         }
                         else if ($stateParams.phonevalidType == 'wechat'){
-                          if (!(Storage.get('openid'))) {
-                            $ionicPopup.show({
-                              title: '退出账号时系统记录被清除，请返回公众号重新进入肾事管家',
-                              buttons: [
-                                {
-                                  text: '確定',
-                                  type: 'button-positive'
-                                }
-                              ]
-                            })
-                          }
-                            if (isregisted&&Storage.get('openid'))
+                          
+                            if (isregisted)
                             {
-                              User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
-                                  if(data.results == "success!")
-                                  {
-                                    User.setMessageOpenId({type:2,userId:tempuserId,openId:Storage.get('messageopenid')}).then(function(res){
-                                        console.log("setopenid");
-                                        $ionicPopup.show({   
-                                           title: '微信账号绑定手机账号成功，是否重置密码？',
-                                           buttons: [
-                                             { 
-                                                  text: '取消',
-                                                  type: 'button'
-                                                },
-                                             {
-                                                  text: '確定',
-                                                  type: 'button-positive',
-                                                  onTap: function(e) {
-                                                      $state.go('setpassword',{phonevalidType:"reset"})
-                                                  }
-                                             },
-                                            ]
-                                        })
-                                    },function(err){
-                                        console.log("连接超时！");
-                                    })
-                                  }
-                              },function(){
-                                  $scope.logStatus = "连接超时！";
-                              })
+                              if (!(Storage.get('openid'))) {
+                                $ionicPopup.show({
+                                  title: '退出账号时系统记录被清除，请返回公众号重新进入肾事管家',
+                                  buttons: [
+                                    {
+                                      text: '確定',
+                                      type: 'button-positive'
+                                    }
+                                  ]
+                                })
+                              }
+                              else{
+                                User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
+                                    if(data.results == "success!")
+                                    {
+                                      User.setMessageOpenId({type:2,userId:tempuserId,openId:Storage.get('messageopenid')}).then(function(res){
+                                          console.log("setopenid");
+                                          $ionicPopup.show({   
+                                             title: '微信账号绑定手机账号成功，是否重置密码？',
+                                             buttons: [
+                                               { 
+                                                    text: '取消',
+                                                    type: 'button'
+                                                  },
+                                               {
+                                                    text: '確定',
+                                                    type: 'button-positive',
+                                                    onTap: function(e) {
+                                                        $state.go('setpassword',{phonevalidType:"reset"})
+                                                    }
+                                               },
+                                              ]
+                                          })
+                                      },function(err){
+                                          console.log("连接超时！");
+                                      })
+                                    }
+                                },function(){
+                                    $scope.logStatus = "连接超时！";
+                                })
+                              }
                             }
                             else
                             {
