@@ -1142,7 +1142,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                                         // }else{
                                             if(back == 'mine'){
                                                 $scope.canEdit = false;
-                                                // initialPatient();
+                                                initialPatient();
                                             }else if(back == 'tasklist'||$stateParams.last == 'consult'){
                                                 $ionicHistory.goBack();
                                             }
@@ -2671,7 +2671,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
   //页面刷新
     $scope.Refresh = function()
     {
-        $window.location.reload();
+        GetTasks();
     }
 
   //跳转至任务设置页面
