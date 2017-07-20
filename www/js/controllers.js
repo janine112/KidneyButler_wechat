@@ -1036,6 +1036,8 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     }
     $scope.infoSetup = function(){
         var back = $stateParams.last;
+        var patientId = Storage.get('UID');
+        $scope.User.userId = patientId;
         if (back == 'signin'||back == 'implement'){
           // alert('register')
             $scope.User.gender = $scope.User.gender.Type;
@@ -1049,8 +1051,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             }
             $scope.User.class = $scope.User.class.type;
 
-            var patientId = Storage.get('UID');
-            $scope.User.userId = patientId;
+            
             // console.log(patientId);
             Patient.editPatientDetail($scope.User).then(function(data){
 
