@@ -1052,7 +1052,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
             var patientId = Storage.get('UID');
             $scope.User.userId = patientId;
             // console.log(patientId);
-            Patient.newPatientDetail($scope.User).then(function(data){
+            Patient.editPatientDetail($scope.User).then(function(data){
 
                 // console.log(data);
                 var task = distinctTask(data.results.class,data.results.operationTime,data.results.class_info);
