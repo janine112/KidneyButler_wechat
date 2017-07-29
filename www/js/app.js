@@ -100,7 +100,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                           var results = [];
                           var errs = [];
 
-                          if (state == 'testpatientinsurance')
+                          if (state == 'testpatientinsurance' || state == 'patientinsurance')
                           {
                               $state.go('insurance')
                           }
