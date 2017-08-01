@@ -1,6 +1,6 @@
 angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','ionic-datepicker','kidney.directives'])//,'ngRoute'
 //登录--PXY
-.controller('SignInCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','jmapi', '$location','wechat','$sce','Patient', '$ionicPopup', function($scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,jmapi,$location,wechat,$sce,Patient, $ionicPopup) {
+.controller('SignInCtrl', ['$scope','$timeout','$state','Storage','$ionicHistory','$http','Data','User','jmapi', '$location','wechat','$sce','Patient', '$ionicPopup', 'CONFIG', function($scope, $timeout,$state,Storage,$ionicHistory,$http,Data,User,jmapi,$location,wechat,$sce,Patient, $ionicPopup, CONFIG) {
   //$scope.barwidth="width:0%";
   $scope.navigation_login=$sce.trustAsResourceUrl("http://patientdiscuss.haihonghospitalmanagement.com/member.php?mod=logging&action=logout&formhash=xxxxxx");
   // Storage.set("personalinfobackstate","logOn");
@@ -98,6 +98,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                     Storage.set('refreshToken',data.results.refreshToken);
                     Storage.set('isSignIn',"Yes");
                     Storage.set('UID',data.results.userId);
+                    socket = io.connect(CONFIG.socketUrl);
                     User.getAgree({userId:data.results.userId}).then(function(res){
                         User.setMessageOpenId({type:2,userId:data.results.userId,openId:Storage.get('messageopenid')}).then(function(res){
                         },function(err){
