@@ -6897,7 +6897,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       }
   }
 
-  if (state == "testpatientinsurance")
+  if (state.indexOf('insurance') !== -1)
   {
     $scope.back = false;
   }
