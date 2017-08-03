@@ -134,7 +134,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                                   console.log(results)
                                   var a, b;
                                   for (var i in results) {
-                                      if (results[i].results) {
+                                      if (results[i].results.agreement) {
                                           a = i;
                                       } else {
                                           b = i;
