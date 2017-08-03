@@ -134,14 +134,14 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                                   console.log(results)
                                   var a, b;
                                   for (var i in results) {
-                                      if (results[i].results.agreement != undefined) {
+                                      if (results[i].results) {
                                           a = i;
                                       } else {
                                           b = i;
                                       }
                                   }
                                   if (results[a].results.agreement == "0") {
-                                      if (results[b].results != null) {
+                                      if (results[b].results) {
                                           if (results[b].results.photoUrl == undefined || results[b].results.photoUrl == "") {
                                               Patient.editPatientDetail({ userId: Storage.get("UID"), photoUrl: wechatData.headimgurl }).then(function(r) {
                                                   $state.go('tab.tasklist');
