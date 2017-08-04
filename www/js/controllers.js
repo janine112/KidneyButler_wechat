@@ -4016,11 +4016,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         msg.direct = msg.fromID==$scope.params.UID?'send':'receive';
         if(msg.contentType=='image') {
             msg.content.thumb=CONFIG.mediaUrl+msg.content['src_thumb'];
-            $http.get(msg.content.thumb).then(function(data){
+            $timeout(function(){
+              $http.get(msg.content.thumb).then(function(data){
                 $scope.msgs.push(msg);
                 toBottom(true,600);
                 $scope.params.msgCount++;
-            })
+              })
+            },1000)
+            
         }else{
             $scope.msgs.push(msg);
             toBottom(true,200);
