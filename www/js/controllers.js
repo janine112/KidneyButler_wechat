@@ -4022,7 +4022,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                 toBottom(true,600);
                 $scope.params.msgCount++;
               })
-            },1000)
+            },500)
             
         }else{
             $scope.msgs.push(msg);
