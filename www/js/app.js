@@ -14,9 +14,9 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
     // console.log(14)
     var temp = $location.absUrl().split('=')
     // alert(temp)
-    if (angular.isDefined(temp[1]) == true)
+    if (temp[1])
     {
-        if (angular.isDefined(temp[2]) == true)
+        if (temp[2])
         {
             var code = temp[1].split('&')[0]
             var state = temp[2].split('#')[0]
@@ -80,7 +80,10 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                           // $scope.logStatus = "登录成功！";
                           $ionicHistory.clearCache();
                           $ionicHistory.clearHistory();
-
+                          $ionicHistory.nextViewOptions({
+                            disableBack: true,
+                            disableAnimate: true
+                          })
                           Storage.set('TOKEN',data.results.token);//token作用目前还不明确
                           Storage.set('refreshToken',data.results.refreshToken);
                           Storage.set('isSignIn',"Yes");
@@ -104,7 +107,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                           {
                               $state.go('insurance')
                           }
-                          else if(params.length > 1 && params[0]=='patient'){
+                          else if(params.length > 1 && params[0]=='patient'){                           
                               if(params[1]=='11') 
                               {
                                 $state.go('tab.consult-chat',{chatId:params[3]});
