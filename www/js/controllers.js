@@ -279,13 +279,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
         var SMS = User.sendSMS({mobile:phone,smsType:1});
             SMS.then(function(data){
                 unablebutton();
-                if(data.mesg.substr(0,8)=="您的邀请码已发送"){
-                    $scope.logStatus = "您的验证码已发送，重新获取请稍后";
-                }else if (data.results == 1){
-                    $scope.logStatus = "验证码发送失败，请稍后再试";
-                }
-                else{
-                    $scope.logStatus ="验证码发送成功！";
+                if (data.results == 0) {
+                  if (data.mesg.substr(0, 8) == '您的邀请码已发送') {
+                    $scope.logStatus = '您的验证码已发送，重新获取请稍后'
+                  } else {
+                    $scope.logStatus = '验证码发送成功！'
+                  }
+                } else {
+                  $scope.logStatus = '验证码发送失败，请稍后再试'
                 }
             },function(err){
                 if(err.results==null && err.status==0){
@@ -2609,7 +2610,6 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
       });
        $scope.openModal = function() {
        GetMyDoctors();
-       $scope.modal.show();
      };
      $scope.closeModal = function() {
        $scope.modal.hide();
@@ -2686,7 +2686,6 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
                    $scope.HemoTbl[num]['background-color'] = 'red';
                 }
             }
-          }
           if(data.results.doctorId.suspendTime.length==0){
             $scope.hasstop=false
           }else{
@@ -2718,8 +2717,14 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
               $scope.hasstop=false
             }
           }
+          $scope.modal.show();
+        }else{
+          $ionicLoading.show({
+            template: '您尚未绑定主管医生，请绑定主管医生后查看！',
+            duration: 2000
+          })
+        }
        },function(){
-
        })
     }
 
@@ -6145,7 +6150,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
 }])
 
 
-.controller('DoctorDetailCtrl', ['$ionicPopup','$scope','$state','$ionicHistory','$stateParams','Doctor','Counsels','Storage','Account','payment','$filter','$ionicLoading','CONFIG','Expense','$q',function($ionicPopup,$scope, $state,$ionicHistory,$stateParams,Doctor,Counsels,Storage,Account,payment,$filter,$ionicLoading,CONFIG,Expense,$q) {
+.controller('DoctorDetailCtrl', ['$ionicPopup','$scope','$state','$ionicHistory','$stateParams','Doctor','Counsels','Storage','Account','payment','$filter','$ionicLoading','CONFIG','Expense','$q', 'Patient', function($ionicPopup,$scope, $state,$ionicHistory,$stateParams,Doctor,Counsels,Storage,Account,payment,$filter,$ionicLoading,CONFIG,Expense,$q, Patient) {
   $scope.Goback = function(){
     $ionicHistory.goBack();
   }
