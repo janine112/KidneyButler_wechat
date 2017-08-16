@@ -13,6 +13,9 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
     
     // console.log(14)
     var temp = $location.absUrl().split('=')
+    var code = ''
+    var state = ''
+    var params = ''
     // alert(temp)
     if (temp[1])
     {
