@@ -2745,7 +2745,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
       var $http = $injector.get('$http')
       $http({
         method: 'POST',
-        url: 'http://121.43.107.106:4050/api/v1/log ',
+        url: 'http://121.196.221.44:4060/api/v1/log ',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -2785,7 +2785,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
     var $http = $injector.get('$http')
     $http({
       method: 'POST',
-      url: 'http://121.43.107.106:4050/api/v1/log ',
+      url: 'http://121.196.221.44:4060/api/v1/log ',
       headers: {
         'Content-Type': 'application/json'
       },
