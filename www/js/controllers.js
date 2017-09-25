@@ -7160,7 +7160,7 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     {
       if ($scope.Kidneyfunction.Creatinine <= 62)
       {
-        $scope.Kidneyfunction.KidneyfunctionValue = 141*Math.pow(($scope.Kidneyfunction.Creatinine*0.01131/0.9),-0.411)*Math.pow(0.993,$scope.Kidneyfunction.Age)
+        $scope.Kidneyfunction.KidneyfunctionValue = 141*Math.pow(($scope.Kidneyfunction.Creatinine*0.01131/0.9),-0.329)*Math.pow(0.993,$scope.Kidneyfunction.Age)
       }
       else
       {
