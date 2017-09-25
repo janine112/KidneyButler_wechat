@@ -7160,11 +7160,11 @@ angular.module('kidney.controllers', ['ionic','kidney.services','ngResource','io
     {
       if ($scope.Kidneyfunction.Creatinine <= 62)
       {
-        $scope.Kidneyfunction.KidneyfunctionValue = 144*Math.pow(($scope.Kidneyfunction.Creatinine*0.01131/0.9),-0.329)*Math.pow(0.993,$scope.Kidneyfunction.Age)
+        $scope.Kidneyfunction.KidneyfunctionValue = 144*Math.pow(($scope.Kidneyfunction.Creatinine*0.01131/0.7),-0.329)*Math.pow(0.993,$scope.Kidneyfunction.Age)
       }
       else
       {
-        $scope.Kidneyfunction.KidneyfunctionValue = 144*Math.pow(($scope.Kidneyfunction.Creatinine*0.01131/0.9),-1.209)*Math.pow(0.993,$scope.Kidneyfunction.Age)
+        $scope.Kidneyfunction.KidneyfunctionValue = 144*Math.pow(($scope.Kidneyfunction.Creatinine*0.01131/0.7),-1.209)*Math.pow(0.993,$scope.Kidneyfunction.Age)
       }
     }
     else if ($scope.Kidneyfunction.CreatinineUnit == "μmol/L" && $scope.Kidneyfunction.Gender == "Male")
