@@ -1,0 +1,49 @@
+<ion-view cache-view="false" title="预约面诊" show-tabs>
+  <ion-nav-buttons side="left">
+    <my-nav-back-button ng-click="$ionicGoBack()"></my-nav-back-button>
+  </ion-nav-buttons>
+  <ion-content class="padding">
+    <div class="card">
+      <div class="item item-thumbnail-left">
+        <img style="border-radius: 100%;top: 40%;margin-top: -40px" ng-src="{{doctor.photoUrl  || 'img/DefaultAvatar.jpg'}}">
+        <span>{{doctor.name}}</span>
+        <span style="float: right">{{doctor.department}}</span>
+        <p>{{doctor.workUnit}}</p>
+        <p>职称:{{doctor.title}}</p>
+        <p style="color: #6ac4f8;font-weight: bold;">面诊收费：{{doctor.charge5}}元</p>
+      </div>
+    </div>
+    <div style="position: absolute;right: 0px;top: 120px">
+      <button class="TimeBtn" ng-if="!nextSchedual" ng-click="switchNext()">下一周 <i class="icon ion-chevron-right"></i></button>
+      <button class="TimeBtn" ng-if="nextSchedual" ng-click="switchNext()"><i class="icon ion-chevron-left"></i> 上一周</button>
+    </div>
+    <!-- <div class="list" id="tbl" ng-show="!nextSchedual" style="position: absolute;top: 155px;width: 100%">
+        <ion-item class="row" ng-repeat="period in periods">
+          <div class="col">{{period.availableDay|periodFilter:$index}}</div>
+          <div class="col">{{period.availableTime}}</div>
+          <div class="col">{{period.margin}}</div> 
+        </ion-item>
+
+    </div> -->
+    <div ng-show="!nextSchedual" style="margin-top: 50px">
+      <div class="row" style="text-align: center;" ng-repeat="period in periods">
+        <div class="col col-30 appointTable" ng-class="{true:'odd',false:'even'}[$index%2==0]">{{period.availableDay|periodFilter:$index}}</div>
+        <div class="col col-30 appointTable">{{{Morning:"上午",Afternoon:"下午"}[period.availableTime]}}</div>
+        <!-- 如果是已预约 -->
+        <button ng-if="period.diagId" class="col col-40 appointed" ng-click="cancelAppoint(period)">已预约</button>
+        <!-- 如果患者没预约 -->
+        <button ng-if="!period.diagId&&(!period.suspendFlag)" ng-disabled="period.margin==0" class="col col-40 appoint" ng-click="AppointDoc(period)">{{period.margin|canAppointFilter}}</button>
+        <button ng-if="!period.diagId&&period.suspendFlag" ng-disabled="true" class="col col-40 appoint">医生停诊中</button>
+      </div>
+    </div>
+    <div ng-show="nextSchedual" style="margin-top: 50px">
+      <div class="row" style="text-align: center;" ng-repeat="nextday in nextDays">
+        <div class="col col-30 appointTable" ng-class="{true:'odd',false:'even'}[$index%2==0]">{{nextday.availableDay|periodFilter:$index}}</div>
+        <div class="col col-30 appointTable">{{{Morning:"上午",Afternoon:"下午"}[nextday.availableTime]}}</div>
+        <button ng-if="nextday.diagId" class="col col-40 appointed" ng-click="cancelAppoint(nextday)">已预约</button>
+        <button ng-if="!nextday.diagId&&(!nextday.suspendFlag)" ng-disabled="nextday.margin==0" ng-click="AppointDoc(nextday)" class="col col-40 appoint">{{nextday.margin|canAppointFilter}}</button>
+        <button ng-if="!nextday.diagId&&nextday.suspendFlag" ng-disabled="true" class="col col-40 appoint">医生停诊中</button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,23 @@
+<ion-view view-title="我的设备" hide-tabs>
+    <ion-nav-bar class="bar-positive " align-title="center">
+        <ion-nav-buttons side="left">
+            <my-nav-back-button ng-click="$ionicGoBack()"></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <button class='button button-clear' ng-click="scanbarcode()"><i class='icon ion-qr-scanner font-white'></i></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content class="padding" scroll="true" overflow-scroll="true">
+        <!-- <iframe ng-src='{{navigation}}' height="100%" width="100%">
+            <p>Your browser does not support iframes.</p>
+        </iframe> -->
+        <ion-list can-swipe="true">
+            <ion-item ng-repeat="d in deviceList">
+                {{d.deviceName}}
+                <ion-option-button class="button-positive" ng-click="deleteDevice($index)">
+                    删除
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

@@ -1,4 +1,23 @@
 <ion-view cache-view="false" title="肾病保险服务">
+<<<<<<< HEAD
+  <ion-nav-buttons side="left">
+        <my-nav-back-button ng-click="$ionicGoBack()"></my-nav-back-button>
+  </ion-nav-buttons>
+  <ion-content padding="true">    
+    <div>
+    <button ng-show="vip" class="displayBtn">您已购买肾事管家肾病保险</button>
+    </div>
+    <div>
+      <img ng-show="vip" ng-src="img/insurance2.png" style="margin-top: 10px;width: 100%;height: 100%">
+      <img ng-show="!vip" ng-src="img/insurance2.png" style="margin-top: 0px;width: 100%;height: 100%">
+    </div>
+    <div>
+      <button ng-show="!vip" style="margin:3px auto;" class="displayBtn2" ng-click="submitintension()">我有意向</button>
+    </div>
+    <div>
+      <button ng-show="!vip" ng-click="expense()" class="displayBtn3" ><i class="icon ion-calculator"></i><span></span> 保费计算</button>
+      <button ng-show="!vip" ng-click="kidneyfunction()" class="displayBtn3" ><i class="icon ion-ios-body-outline"></i><span></span> 肾功能计算</button>
+=======
   <ion-nav-bar class="bar-positive green-bg" align-title="center">
     <ion-nav-buttons side="left">
       <button class="button button-icon icon ion-ios-arrow-back font-white" ng-click="$ionicGoBack()" ng-if="back"></button>
@@ -33,6 +52,7 @@
     </div>
     <div>
       <button style="margin:20px auto;width: 80%" class="button button-block green-bg font-white" ng-click="submitintension()">我有意向</button>
+>>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
     </div>
   </ion-content>
 </ion-view>

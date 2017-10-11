@@ -1,4 +1,14 @@
 <div class="msgbox {{'msgbox-'+msg.direct}}">
+<<<<<<< HEAD
+    <div ng-if="msg.diff" class="msg-time"><span>{{msg.time | msgdate}}</span></div>
+    <img class="avatar" ng-src="{{photourls[msg.fromID] || 'img/DefaultAvatar.jpg'}}" ng-click="emitEvent('profile',msg)" />
+    <div class="msg-body " ng-click="emitEvent('voice',msg.content)" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event,'voice')">
+        <div class="media-text"><i class="icon ion-volume-high"></i>语音</div>
+    </div>
+    <div my-small-spin="msg.status" class="status"></div>
+    <div ng-if="msg.status=='send_fail'" class="msg-fail"><span ng-click="emitEvent('resend',msg.createTimeInMillis)"><i class="icon ion-android-warning"></i>发送失败（点此重发）</span></div>
+</div>
+=======
 	<!-- display time -->
 	<!-- <my-time></my-time> -->
 	<div ng-if="msg.diff" class="msg-time"><span>{{msg.time | msgdate}}</span></div>
@@ -12,3 +22,4 @@
 	<div my-small-spin="msg.status" class="status"></div>
 	<div ng-if="msg.status=='send_fail'"  class="msg-fail"><span><i class="icon ion-android-warning"></i>发送失败</span></div>
 </div>
+>>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428

@@ -1,0 +1,75 @@
+<ion-view cache-view="false" hide-Back-Button="true" title="患者论坛" show-tabs>
+
+  <ion-nav-buttons side="left">
+        <button class="button button-clear" ng-click="GoToPost()"><i class="icon ion-compose"></i></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right" >
+            <button class="button button-clear" ng-click="GoToMessage() " head-red-point='HasUnreadMessages'><i class="icon iconfont icon-lingdang"></i></button>
+    </ion-nav-buttons>
+    
+  <div class="bar bar-header item-input-inset text-center" style="padding:0;position:absolute;top:44px;height:38px;">
+
+            <a class="item col-33" style="padding-top: 2px;padding-bottom: 2px;border-top-width: 0px;border-bottom-width: 0px;color: #6ac4f8;">
+                <span style="font-size: 16px;">全部帖子</span>
+            </a>
+            <a class="item col-33 " href="#/tab/myposts" style="border-right:0px;padding-top: 2px;padding-bottom: 2px;border-top-width: 0px;border-bottom-width: 0px;">
+                <span style="font-size: 16px;">我的帖子</span>
+            </a>
+            <a class="item col-33 " href="#/tab/mycollection" style="border-right:0px;padding-top: 2px;padding-bottom: 2px;border-top-width: 0px;border-bottom-width: 0px;">
+                <span style="font-size: 16px;">我的收藏</span>
+            </a>
+    </div>
+
+  <ion-content delegate-handle="myContentScroll"> 
+
+     <ion-refresher pulling-text="下拉刷新..." on-refresh="refresher()"></ion-refresher>
+
+     <div class="bar bar-header item-input-inset" style="height:40px;padding:30;margin-top:40px;">
+            <div class="item-input-wrapper">
+                <i class="icon ion-ios-search placeholder-icon f-24"></i>
+                <input type="search" ng-model="search.title" placeholder="请输入搜索帖子主题" ng-change="goSearch()">
+                <button-clear-input input = "search.title" origin = "allposts" curr = "posts" ng-click="clearSearch()"></button-clear-input>
+            </div>
+      </div>
+    <div class="list">
+
+        <div ng-repeat="item in posts">
+          <div ng-click="gotopostsdetail(item.postId)">
+           <div class="item item-avatar" style="border-bottom: none;padding-top: 12px;padding-bottom: 0px">
+                <img style="margin-top: 0px" ng-if = "!(item.anonymous)" ng-src="{{item.avatar || 'img/DefaultAvatar.jpg'}}">
+                <img style="margin-top: 0px" ng-if = "(item.anonymous)" ng-src="{{'img/DefaultAvatar.jpg'}}">
+                <span style="font-size: 14px" ng-if = "!(item.anonymous)">{{item.sponsorName || item.sponsorId}}</span>
+                <span style="font-size: 14px" ng-if = "(item.anonymous)">匿名用户</span><br/>
+                <span style="font-size: 12px">{{item.time |dateFormat:"YYYY-MM-DD"}}</span>
+           </div>
+           <div class="item item-body" style="border: none; padding-top: 0px;padding-bottom: 10px">
+                <p style="margin-top: 0px; margin-bottom: 0px;font-size: 14px">{{item.title}}</p>
+                <p>
+                   <a class="subdued" style="float: right; font-size: 12px">{{item.favoritesNum}} 收藏</a>
+                   <a class="subdued" style="float: right; font-size: 12px; padding-right: 8px">{{item.replyCount}} 评论</a>
+                </p>
+           </div>
+          </div>
+           <div class="item tabs tabs-secondary tabs-icon-left" style="height:45px;margin-bottom: 10px;margin-right: 0px;border-right-width: 0px;border-top-width: 0px;">
+                <a class="tab-item" ng-click="changefavoritestatus(item)" ng-style="myStyle[item.favoritesstatus]">
+                <i class="icon ion-heart"></i>
+                收藏
+                </a>
+                <a class="tab-item" ng-click="GoToComment(item.postId)">
+                <i class="icon ion-chatbox-working"></i>
+                评论
+                </a>
+                <a class="tab-item" ng-click="gotopostsdetail(item.postId)">
+                <i class="icon ion-eye"></i>
+                详情
+                </a>
+           </div>
+      </div>  
+      <ion-infinite-scroll ng-if="moredata" immediate-check="false" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>
+    </div>
+  
+    
+   
+  </ion-content>
+        
+</ion-view>

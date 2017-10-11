@@ -1,9 +1,16 @@
+<<<<<<< HEAD
+<ion-view view-title="{{varyMes.name}}消息" hide-tabs>
+    <ion-nav-buttons side="left">
+        <my-nav-back-button ng-click="$ionicGoBack()"></my-nav-back-button>
+    </ion-nav-buttons>
+=======
 <ion-view view-title="{{varyMes.name}}消息">
   <ion-nav-bar class="bar-positive green-bg" align-title="center">
     <ion-nav-buttons side="left">
       <button class="button button-icon icon ion-ios-arrow-back font-white" ng-click="$ionicGoBack()"></button>
     </ion-nav-buttons>
   </ion-nav-bar>
+>>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
     <ion-content class="bg">
     <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
 
@@ -15,10 +22,17 @@
     <div class="list card" ng-repeat="message in messages" ng-click="MoreMessageDetail($event,message.sendBy,message.type)">
 
         <div class="item item-avatar">
+<<<<<<< HEAD
+            <img ng-src="img\{{varyMes.avatar}}" ng-if="(notInsurance&&notInfo)">
+            <img ng-src="{{message.docPhoto || 'img/DefaultAvatar.jpg'}}" ng-if="(!notInsurance||!notInfo)">
+            <h2 ng-if="(notInsurance&&notInfo)">{{message.title}}</h2>
+            <h2 ng-if="(!notInsurance||!notInfo)">{{message.docName}}</h2>
+=======
             <img ng-src="img\{{varyMes.avatar}}" ng-if="notInsurance">
             <img ng-src="{{(message.docPhoto|changeimgip) || 'img/DefaultAvatar.jpg'}}" ng-if="!notInsurance">
             <h2 ng-if="notInsurance">{{message.title}}</h2>
             <h2 ng-if="!notInsurance">{{message.docName}}</h2>
+>>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
             <p>{{message.time|dateFormat:"YYYY-MM-DD h:m"}}</p>
         </div>

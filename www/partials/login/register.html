@@ -1,0 +1,121 @@
+<ion-view title="注册"  cache-view="true">
+    <ion-nav-buttons side="left">
+      <my-nav-back-button ng-click="goBack()"></my-nav-back-button>
+    </ion-nav-buttons>
+    
+  <!-- <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 3px;background-color: #33cd5f;{{barwidth}}" ></div> -->
+  <ion-content class="paddContent">
+
+    <div style="text-align: center;margin-top:25px">
+      <img style="border-radius: 20%;width: 80px;height: 80px;" ng-src="img/app.png">
+      <p>肾事管家</p>
+    </div>
+    <!-- 正常手机号码注册 -->
+    <form name="registerForm" nonvalidate ng-if="!wechat">
+      <div class="list" style="margin-bottom:0;margin-top: 30px">
+
+        <label class="item item-input green-edite-css">
+          <span class="input" style="margin-right:16px"><i class="icon ion-iphone ion-iphone1"></i></span>
+          <input type="tel" style="padding-right: 0px" required ng-model="Register.Phone" placeholder="请输入手机号" >
+          <button-clear-input input="Register.Phone"></button-clear-input>
+        </label>
+
+        <span class="item item-input green-edite-css mg-10 ">
+          <span class="input" style="margin-right:16px"><i class="icon ion-unlocked"></i></span>
+          <input type="password" style="padding-right: 0px" ng-model="Register.Code" placeholder="请输入验证码" >
+          <button-clear-input input="Register.Code"></button-clear-input>
+          <button item-right ng-disabled="isable" ng-click="getcode()" class="phonevalid">{{veritext}}</button>
+        </span>
+
+        <label class="item item-input green-edite-css mg-10">
+          <span class="input" style="margin-right:16px"><i class="icon ion-ios-locked-outline"></i></span>
+          <input type="password" placeholder="请输入6位以上密码" required ng-minlength="6" ng-maxlength="15" ng-model="Register.newPass">
+          <button-clear-input input="Register.newPass"></button-clear-input>
+
+        </label>
+
+        <label class="item item-input green-edite-css mg-10">
+          <span class="input" style="margin-right:16px"><i class="icon ion-ios-locked-outline"></i></span>
+          <input type="password" placeholder="请再次确认密码" required ng-minlength="6" ng-maxlength="15" ng-model="Register.confirm">
+          <button-clear-input input="Register.confirm"></button-clear-input>
+        </label>
+
+        <label class="item item-input green-edite-css mg-10">
+          <span class="input" style="margin-right:16px"><i class="icon ion-person"></i></span>
+          <input type="text" placeholder="请输入姓名" required ng-minlength="2" ng-maxlength="5" ng-model="Register.name">
+          <button-clear-input input="Register.name"></button-clear-input>
+        </label>
+
+        <div  style="border: none;font-size: 12px;background-color: transparent;padding: 0px 5px 0px 5px;text-align: center;">
+          <label class="checkbox" style="padding: 0px;top: 4px;">
+            <input type="checkbox" ng-model="Register.agree" required ng-click="changeAgree(Register.agree)">
+          </label>
+          <p style="display: inline;color: #aaa;">我已阅读并同意<a  ng-click="goAgreement()">《肾事管家协议》</a></p>
+        </div>
+       
+      </div>
+
+      <button ng-disabled="!(registerForm.$valid)" style="margin-top:10px" class="button roundBtn" type="submit" ng-click ="phoneRegister(Register)">
+         立即注册
+      </button>
+    </form>
+    <!-- 微信注册 -->
+    <form name="wechatForm" nonvalidate ng-if="wechat &&(!moreWechat)">
+      <div class="list" style="margin-bottom:0;margin-top: 30px">
+
+        <label class="item item-input green-edite-css">
+          <span class="input" style="margin-right:16px"><i class="icon ion-iphone ion-iphone1"></i></span>
+          <input type="tel" style="padding-right: 0px" required ng-model="Register.Phone" placeholder="请输入手机号" >
+          <button-clear-input input="Register.Phone"></button-clear-input>
+        </label>
+
+        <span class="item item-input green-edite-css mg-10 ">
+          <span class="input" style="margin-right:16px"><i class="icon ion-unlocked"></i></span>
+          <input type="password" style="padding-right: 0px" ng-model="Register.Code" placeholder="请输入验证码" >
+          <button-clear-input input="Register.Code"></button-clear-input>
+          <button item-right  class="phonevalid" ng-disabled="isable" ng-click="getcode()">{{veritext}}</button>
+        </span>
+        <button ng-disabled="!(wechatForm.$valid)" style="margin-top:10px" class="button roundBtn" type="submit" ng-click ="wechatPhone(Register.Phone,Register.Code)">
+         下一步
+        </button>
+      </div>
+    </form>
+    <!-- 未注册过的手机号码的微信注册 -->
+    <form name="moreWechatForm" nonvalidate ng-if="wechat && moreWechat">
+      <label class="item item-input green-edite-css mg-10">
+          <span class="input" style="margin-right:16px"><i class="icon ion-ios-locked-outline"></i></span>
+          <input type="password" placeholder="请输入6位以上密码" required ng-minlength="6" ng-maxlength="15" ng-model="Register.newPass">
+          <button-clear-input input="Register.newPass"></button-clear-input>
+
+        </label>
+
+        <label class="item item-input green-edite-css mg-10">
+          <span class="input" style="margin-right:16px"><i class="icon ion-ios-locked-outline"></i></span>
+          <input type="password" placeholder="请再次确认密码" required ng-minlength="6" ng-maxlength="15" ng-model="Register.confirm">
+          <button-clear-input input="Register.confirm"></button-clear-input>
+        </label>
+
+        <label class="item item-input green-edite-css mg-10">
+          <span class="input" style="margin-right:16px"><i class="icon ion-person"></i></span>
+          <input type="text" placeholder="请输入姓名" required ng-minlength="2" ng-maxlength="5" ng-model="Register.name">
+          <button-clear-input input="Register.name"></button-clear-input>
+        </label>
+
+        <div  style="border: none;font-size: 12px;background-color: transparent;padding: 0px 5px 0px 5px;text-align: center;">
+          <label class="checkbox" style="padding: 0px;top: 4px;">
+            <input type="checkbox" ng-model="Register.agree" required ng-click="changeAgree(Register.agree)">
+          </label>
+          <p style="display: inline;color: #aaa;">我已阅读并同意<a  ng-click="goAgreement()">《肾事管家协议》</a></p>
+        </div>
+         <button ng-disabled="!(moreWechatForm.$valid)" style="margin-top:10px" class="button roundBtn" type="submit" ng-click ="wxRegister(Register)">
+         下一步
+        </button>
+    </form>
+    <p style="color:#B8B8B8;text-align: center;">{{logStatus}}</p>
+
+
+
+
+
+  </ion-content>
+</ion-view>

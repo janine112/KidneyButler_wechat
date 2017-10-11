@@ -1,0 +1,18 @@
+<ion-view cache-view="false" title="医生评价" show-tabs>
+    <ion-nav-buttons side="left">
+        <my-nav-back-button ng-click="$ionicGoBack()"></my-nav-back-button>
+    </ion-nav-buttons>
+    
+    <ion-content padding="true">
+    <ion-list>
+	<div class="list" ng-repeat='comment in doctorComment' style="margin:6px,6px,6px,6px;border-bottom: solid 1px gray;">
+		<div class="row">
+            <span class="commentStyle">{{comment.patientId.phoneNo}}</span>
+            <div class="item" style="padding-top: 0;border: white;padding-left:30px; "><ionic-ratings ratingsobj='comment.ratingsObject'></ionic-ratings> </div>
+            <span class="commentStyle" style="margin-left:40px;padding-left:20px">{{comment.time}}</span>
+        </div>
+	</div>
+	</ion-list>
+	<ion-infinite-scroll ng-if="moredata" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>  
+    </ion-content>
+</ion-view>

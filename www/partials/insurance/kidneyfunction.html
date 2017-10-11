@@ -1,3 +1,33 @@
+<<<<<<< HEAD
+<ion-view cache-view="false" title="肾功能计算">
+  <!-- <ion-nav-bar class="bar-positive green-bg" align-title="center"> -->
+    <ion-nav-buttons side="left">
+      <my-nav-back-button ng-click="$ionicGoBack()"></my-nav-back-button>
+    </ion-nav-buttons>
+  <!-- </ion-nav-bar> -->
+  <ion-content>
+      <label class="item item-input">
+          <i class="icon_mine ion-android-contacts" style="color: #FFC125"></i><span class="input-label">&nbsp;&nbsp;年龄&thinsp;<span style="color:red;">*</span></span>
+          <input  ng-model="Kidneyfunction.Age"  type="number" placeholder="&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;请输入您的年龄" >
+      </label>
+      <label  class="item item-input item-select">
+          <i class="icon_mine ion-male" style="color: #6495ED"></i><span class="input-label">&nbsp;&nbsp;性别&thinsp;<span style="color:red;">*</span></span>
+          <select  ng-model="Kidneyfunction.Gender" ng-options="Gender.Type as Gender.Name for Gender in Genders"></select>
+      </label>
+      <label  class="item item-input item-select">
+          <i class="icon_mine ion-edit" style="color: #FF69B4"></i><span class="input-label">&nbsp;&nbsp;肌酐单位&thinsp;<span style="color:red;">*</span></span>
+          <select  ng-model="Kidneyfunction.CreatinineUnit" ng-options="CreatinineUnit.Type as CreatinineUnit.Type for CreatinineUnit in CreatinineUnits"></select>
+      </label>
+      <label class="item item-input">
+          <i class="icon_mine ion-ios-body-outline" style="color: #66CD00"></i><span class="input-label">&nbsp;&nbsp;肌酐&thinsp;<span style="color:red;">*</span></span>
+
+          <input  ng-model="Kidneyfunction.Creatinine"  type="number" placeholder="&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;请输入您的肌酐" >
+      </label>
+    
+    <div>
+      <button style="margin:20px auto;width: 80%; border-radius: 50px;" class="button button-block green-bg font-white" ng-click="getkidneyfunction()">计算</button>
+      <button style="margin:20px auto;width: 80%; border-radius: 50px;" class="button button-block green-bg font-white" ng-click="resetkidneyfunction()">重置</button>
+=======
 <ion-view cache-view="false" title="肾功能计算小工具">
   <ion-nav-bar class="bar-positive green-bg" align-title="center">
     <ion-nav-buttons side="left">
@@ -27,6 +57,7 @@
     <div>
       <button style="margin:20px auto;width: 80%" class="button button-block green-bg font-white" ng-click="getkidneyfunction()">确认</button>
       <button style="margin:20px auto;width: 80%" class="button button-block green-bg font-white" ng-click="resetkidneyfunction()">重置</button>
+>>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
     </div>
   </ion-content>
 </ion-view>
