@@ -34,6 +34,184 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
     $state.go('signin')
   }
   $ionicPlatform.ready(function () {
+    socket = io.connect(CONFIG.socketUrl);
+    
+    // console.log(14)
+    var temp = $location.absUrl().split('=')
+    // alert(temp)
+    if (angular.isDefined(temp[1]) == true)
+    {
+        if (angular.isDefined(temp[2]) == true)
+        {
+            var code = temp[1].split('&')[0]
+            var state = temp[2].split('#')[0]
+            var params = state.split('_');
+            Storage.set('code',code)
+        }
+        else
+        {
+            var code = temp[1].split('#')[0]
+            Storage.set('code',code)
+        }
+    }
+    // console.log(state)
+    var wechatData = ""
+    if (angular.isDefined(code) == true)
+    {
+        Mywechat.getUserInfo({code:code}).then(function(data){ 
+          // alert(1)
+          wechatData = data.results
+          // console.log(wechatData)
+          if (wechatData.unionid){
+            Storage.set('openid',wechatData.unionid)
+          }
+          if (wechatData.headimgurl){
+            Storage.set('wechathead',wechatData.headimgurl)
+          }
+          if (wechatData.openid){
+            Storage.set('messageopenid',wechatData.openid)
+          }
+          if (wechatData.unionid&&wechatData.openid)
+          {
+                  User.logIn({username:Storage.get('openid'),password:Storage.get('openid'),role:"patient"}).then(function(data){
+                    // console.log(data)
+                      if(data.results.mesg=="login success!"){
+                          // $scope.logStatus = "登录成功！";
+                          console.log($ionicHistory.viewHistory())
+                          $ionicHistory.nextViewOptions({
+                            disableBack: true,
+                            disableAnimate: true,
+                            historyRoot: true
+                          })
+                          $ionicHistory.clearCache();
+                          $ionicHistory.clearHistory();
+                          console.log($ionicHistory.viewHistory())
+                          Storage.set('TOKEN',data.results.token);//token作用目前还不明确
+                          Storage.set('refreshToken',data.results.refreshToken);
+                          Storage.set('isSignIn',"Yes");
+                          Storage.set('UID',data.results.userId);
+
+                          User.getUserId({username:Storage.get('openid')}).then(function(data)
+                          {
+                              if (angular.isDefined(data.phoneNo) == true)
+                              {
+                                  Storage.set('USERNAME',data.phoneNo);
+                              }
+                          },function(err)
+                          {
+                              console.log(err)
+                          })  
+                          
+                          var results = [];
+                          var errs = [];
+
+                          if (state.indexOf('insurance') !== -1)
+                          {
+                              $state.go('insurance')
+                          }
+                          else if(params.length > 1 && params[0]=='patient'){
+                              if(params[1]=='11') 
+                              {
+                                $state.go('tab.consult-chat',{chatId:params[3]});
+                              }
+                              else
+                              {
+                                $state.go('signin')
+                              }
+                          }else{
+                              $q.all([
+                                  User.getAgree({ userId: data.results.userId }).then(function(res) {
+                                      results.push(res)
+                                  }, function(err) {
+                                      errs.push(err)
+                                  }),
+                                  User.setMessageOpenId({ type: 2, userId: Storage.get("UID"), openId: Storage.get('messageopenid') }).then(function(res) {
+                                      // results.push(res)
+                                  }, function(err) {
+                                      errs.push(err)
+                                  }),
+                                  Patient.getPatientDetail({ userId: Storage.get('UID') }).then(function(res) {
+                                      results.push(res)
+                                  }, function(err) {
+                                      errs.push(err)
+                                  })
+                              ]).then(function() {
+                                  console.log(results)
+                                  var a, b;
+                                  for (var i in results) {
+                                      if (results[i].results.agreement) {
+                                          a = i;
+                                      } else {
+                                          b = i;
+                                      }
+                                  }
+                                  if (results[a].results.agreement == "0") {
+                                      if (results[b].results) {
+                                          if (results[b].results.photoUrl == undefined || results[b].results.photoUrl == "") {
+                                              Patient.editPatientDetail({ userId: Storage.get("UID"), photoUrl: wechatData.headimgurl }).then(function(r) {
+                                                  $state.go('tab.tasklist');
+                                              },function(err){
+                                                $state.go('tab.tasklist');
+                                              })
+                                          }else {
+                                              $state.go('tab.tasklist');
+                                          }
+                                      }
+                                      else
+                                      {
+                                        $state.go('tab.tasklist');
+                                      }
+                                      // else {
+                                      //     $state.go('userdetail', { last: 'implement' });
+                                      // }
+                                  } else {
+                                      $state.go('agreement', { last: 'signin' });
+                                  }
+                              });
+                          }
+                      }
+                      else
+                      {
+                        $state.go('signin');
+                      }
+
+                  },function(err){
+                      if(err.results==null && err.status==0){
+                          $scope.logStatus = "网络错误！";
+                          $state.go('signin');
+                          return;
+                      }
+                      if(err.status==404){
+                          $scope.logStatus = "连接服务器失败！";
+                          $state.go('signin')
+                          return;
+                      }
+                      $state.go('signin')
+                  });
+                // }
+            // },function(err)
+            // {
+            //     console.log(err)
+            // })
+
+          }
+          else
+          {
+            $state.go('signin');
+          }
+          // alert(wechatData.openid)
+          // alert(wechatData.nickname)
+          
+        },function(err){
+            console.log(err)
+            $state.go('signin')
+            // alert(2);
+        });
+    }
+    else
+    {
+      $state.go('signin')
+    }
     version.checkUpdate($rootScope)
     // autoLogin.AutoLoginOrNot($rootScope)
     ionic.Platform.fullScreen(true, true)

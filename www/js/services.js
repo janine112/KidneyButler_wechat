@@ -486,8 +486,10 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
 
   var Mywechat = function () {
     return $resource(CONFIG.baseUrl + ':path/:route', {path: 'wechat'}, {
+      settingConfig: {method: 'GET', skipAuthorization: true, params: {route: 'settingConfig'}, timeout: 100000},
       messageTemplate: {method: 'POST', params: {route: 'messageTemplate'}, timeout: 100000},
       // gettokenbycode: {method: 'GET', params: {route: 'gettokenbycode'}, timeout: 100000},
+      download: {method: 'GET', params: {route: 'download'}, timeout: 100000},
       addOrder: {method: 'POST', params: {route: 'addOrder'}, timeout: 100000},
       getUserInfo: {method: 'GET', skipAuthorization: true, params: {route: 'getUserInfo'}, timeout: 100000}
     })
@@ -1030,6 +1032,59 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   }
 
   return self
+}])
+
+.factory('checknetwork', ['$q', '$ionicLoading', '$rootScope', '$injector', 'Storage', function ($q, $ionicLoading, $rootScope, $injector, Storage) {
+  return {
+    checknetwork: function (err) {
+      $rootScope.$watch('online', function () {
+        if (navigator.onLine) {
+          $ionicLoading.show({
+            template: "<p ng-click='stoploading()'>服务器连接失败，请稍候再试！</p>",
+            duration: 2000,
+            scope: $rootScope
+          })
+        } else {
+          $ionicLoading.show({
+            template: "<p ng-click='stoploading()'>请确认您的手机是否连接网络！</p>",
+            duration: 2000,
+            scope: $rootScope
+          })
+        }
+      })
+      var $http = $injector.get('$http')
+      $http({
+        method: 'POST',
+        url: 'http://121.43.107.106:4050/api/v1/log ',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          'userId': Storage.get('UID'),
+          'role': 'patient',
+          'userProxy': window.navigator.userAgent,
+          'webState': {
+            'onLine': navigator.onLine,
+            'connection': navigator.connection
+          },
+          'errStack': err
+        }
+      }).then(function successCallback (response) {
+      // console.log(response)
+    // this callback will be called asynchronously
+    // when the response is available
+      }, function errorCallback (response) {
+      // console.log(response)
+    // called asynchronously if an error occurs
+    // or server returns response with an error status.
+      })
+
+      $rootScope.stoploading = function () {
+        $ionicLoading.hide()
+      }
+    }
+
+  }
 }])
 
 .factory('otherTask', ['Task', 'Compliance', 'Storage', function (Task, Compliance, Storage) {
@@ -1951,6 +2006,114 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   }
   return self
 }])
+
+.factory('payment', ['$q', 'Mywechat', 'Storage', '$http', '$location', '$ionicLoading', 'checknetwork', function ($q, Mywechat, Storage, $http, $location, $ionicLoading, checknetwork) {
+  return {
+    payment: function (neworder) {
+      $ionicLoading.show({
+        template: '请稍候',
+        duration: 10000
+      })
+      // res = {
+      //   "errMsg":"chooseWXPay:ok",
+      //   "money":0
+      // }
+      // var defer = $q.defer()
+      // defer.resolve(res);
+
+      var defer = $q.defer()
+      var config = ''
+      var path = $location.absUrl().split('#')[0]
+
+      Mywechat.settingConfig({url: path}).then(function (data) {
+        // alert(data.results.timestamp)
+        config = data.results
+        config.jsApiList = ['chooseWXPay']
+        // alert(config.jsApiList)
+        // alert(config.debug)
+        console.log(angular.toJson(config))
+        wx.config({
+          debug: false,
+          appId: config.appId,
+          timestamp: config.timestamp,
+          nonceStr: config.nonceStr,
+          signature: config.signature,
+          jsApiList: config.jsApiList
+        })
+        wx.ready(function () {
+          wx.checkJsApi({
+            jsApiList: ['chooseWXPay'],
+            success: function (res) {
+                  // var neworder = {
+                  //   userId:'doc01',
+                  //   money:1,
+                  //   goodsInfo:{
+                  //     class:'01',
+                  //     name:'咨询',
+                  //     notes:'测试'
+                  //   },
+                  //   paystatus:0,
+                  //   paytime:"2017-05-02"
+                  // }
+                  // order.insertOrder(neworder).then(function(data){
+                        // var json = 'http://ipv4.myexternalip.com/json';
+                        // $http.get(json).then(function(result) {
+                        // console.log(result.data.ip)
+                        // if (result.data.ip == null || result.data.ip == undefined || result.data.ip == "")
+                        // {
+                        //   result.data.ip = "121.43.107.106"
+                        // }
+                        // neworder.ip = result.data.ip
+              Mywechat.addOrder(neworder).then(function (data) {
+                $ionicLoading.hide()
+                if (data.results && (data.results.status === 0 || data.results.status === 1)) {
+                  res = {
+                    'errMsg': 'chooseWXPay:ok',
+                    'money': neworder.money / 100
+                  }
+                  $ionicLoading.show({
+                    template: data.results.msg,
+                    duration: 3000
+                  })
+                  defer.resolve(res)
+                  return defer.promise
+                } else {
+                  wx.chooseWXPay({
+                    timestamp: data.results.timestamp,
+                    nonceStr: data.results.nonceStr,
+                    package: data.results.package,
+                    signType: data.results.signType,
+                    paySign: data.results.paySign,
+                    success: function (res) {
+                      res.money = neworder.money / 100
+                      defer.resolve(res)
+                    }
+                  })
+                }
+              }, function (err) {
+                checknetwork.checknetwork(err)
+                defer.reject(err)
+              })
+
+                  // },function(err){
+                  //   defer.reject(err);
+                  // })
+            }
+          })
+        })
+        wx.error(function (res) {
+          checknetwork.checknetwork(res)
+          defer.reject(res)
+        })
+      }, function (err) {
+        checknetwork.checknetwork(err)
+        defer.reject(err)
+      })
+      return defer.promise
+    }
+  }
+}])
+
 .factory('Doctor', ['$q', 'Data', function ($q, Data) {
   var self = this
   self.getDoctorInfo = function (params) {
@@ -2473,6 +2636,19 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
 .factory('Mywechat', ['$q', 'Data', function ($q, Data) {
   var self = this
 
+  self.settingConfig = function (params) {
+    var deferred = $q.defer()
+    Data.Mywechat.settingConfig(
+            params,
+            function (data, headers) {
+              deferred.resolve(data)
+            },
+            function (err) {
+              deferred.reject(err)
+            })
+    return deferred.promise
+  }
+
   self.messageTemplate = function (params) {
     var deferred = $q.defer()
     Data.Mywechat.messageTemplate(
@@ -2498,6 +2674,19 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   //           })
   //   return deferred.promise
   // }
+
+  self.download = function (params) {
+    var deferred = $q.defer()
+    Data.Mywechat.download(
+            params,
+            function (data, headers) {
+              deferred.resolve(data)
+            },
+            function (err) {
+              deferred.reject(err)
+            })
+    return deferred.promise
+  }
 
   self.addOrder = function (params) {
     var deferred = $q.defer()
