@@ -1,5 +1,4 @@
 <!-- 任务视图中的列表-tab -->
-<<<<<<< HEAD
 <ion-view cache-view="false" title='个人中心' show-tabs>
   <ion-nav-bar class="bar myPageBar">
     <ion-nav-buttons side="right" >
@@ -19,51 +18,6 @@
         </ion-item>
       </div>
 
-=======
-<ion-view cache-view="false" view-title='个人中心' show-tabs>
-    
-  <!-- <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->
-    <ion-content class="bg-f5">
-
-        <div class="me-top-box">
-        <div class="me-top-bg"></div>
-        <div class="me-massage-box">
-          <div class="me-avatar-box" >
-            <div class="img-cen me-avatar">
-              <img ng-src="{{myAvatar|changeimgip}}" name="Photo" ng-click="onClickCamera($event)">
-            </div>
-            </a>
-          </div>
-        </div>
-        </div>
-       <!-- <ion-item style="border:none; text-align:center" >
-         <img ng-src="{{myAvatar}}" name="Photo" ng-click="onClickCamera($event)" style="border-radius:50%; height:30%; width:30%" />
-      </ion-item> -->
-
-    <!-- 上传照片的弹出框 -->
-      <script id="my-popover.html" type="text/ng-template">
-        <ion-popover-view>
-          <ion-header-bar class="bar-calm">
-              <h1 class="title">上传头像</h1>
-          </ion-header-bar>
-        <ion-content>
-          <ion-list> 
-            <div class = "padding">
-              <button class="button button-block button-primary " ng-click="getPhoto()"><i class="icon ion-camera"></i>
-                  拍照
-              </button>
-            
-              <button class="button button-block button-primary " ng-click="onClickCameraPhotos()"><i class="icon ion-image"></i>
-                  相册
-              </button>
-             
-            </div>
-          </ion-list>
-        </ion-content>
-      </ion-popover-view>
-    </script>
-    <!-- 上传照片的弹出框 -->
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
       <div class="myBtnBar button-bar">
         <a class="button button-small icon ion-card" ng-click="GoUserDetail()"><br>个人信息</a>
@@ -71,7 +25,6 @@
         <a class="button button-small icon ion-ios-heart-outline" ng-click="PaperCollection()"><br>收藏文章</a>
       </div>
 
-<<<<<<< HEAD
       <div class="myBtnBar button-bar" style="margin-top: 0px;">
         <a class="button button-small icon ion-document-text" ng-click="GoDiagnosiInfo()"><br>诊断记录</a>
         <a class="button button-small icon ion-laptop" ng-click="GoDevices()"><br>设备管理</a>
@@ -147,46 +100,9 @@
             </ion-popover-view>
         </script>
     <!-- 上传照片的弹出框 -->
-=======
-     <div class="me-mun bg-wite mt-10">
-            <div class="row ">
-                <a class="col col-50 text-center" ng-click="GoUserDetail()"><i class="icon iconfont icon-gerenxinxi"></i>个人信息</a>
-                <a class="col col-50 text-center" ng-click="GoManagement()"><i class="icon iconfont icon-shenjieshi"></i>肾病方案</a>
-            </div>
-            <div class="row">
-                <a class="col col-50 text-center" ng-click="GoDiagnosiInfo()"><i class="icon iconfont icon-dedaozhenduanbaogao"></i>诊断记录</a>
-                <a class="col col-50 text-center" ng-click="GoHealthInfo()"><i class="icon  iconfont icon-jiankang"></i>健康信息</a>
-            </div>
-            <div class="row">
-                <a class="col col-50 text-center" ng-click="GoConsultRecord()"><i class="icon iconfont icon-iconfontconsult"></i>咨询记录</a>
-                <a class="col col-50 text-center"  ng-click="GoMoney()"><i class="icon iconfont icon-zengzhifuwu"></i>增值服务</a>
-            </div>
-        </div>
-        <div class="me-list list mt-15">
 
-            <a class="item item-icon-left" ng-click="ChangePassword()">
-                <i class="icon iconfont icon-xiugaimima"></i>修改密码
-            </a>
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
-            <a class="item item-icon-left" ng-click="SignOut()">
-                <i class="icon iconfont icon-tuichuzhanghu"></i>
-                退出账号
-            </a>
-
-<<<<<<< HEAD
      
-=======
-            <a class="item item-icon-left" ng-click="ReflectAdvice()">
-                <i class="icon iconfont ion-paper-airplane"></i>
-            意见反馈
-            </a>
-            <a class="item item-icon-left" ng-click="About()">
-                <i class="icon iconfont icon-jiangpai"></i>
-            关于我们
-            </a>
-        </div>
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
 
     </ion-content>    

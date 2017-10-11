@@ -1,15 +1,11 @@
 <ion-view cache-view="false" title="我的医生" show-tabs>
-<<<<<<< HEAD
     <ion-nav-buttons side="left">
         <button class='button button-clear' ng-click="scanbarcode()"><i class='icon ion-qr-scanner font-white'></i></button>
     </ion-nav-buttons>
-=======
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
     <ion-nav-buttons side="right" >
         <button class="button button-clear" ng-click="GoToMessage() " head-red-point='HasUnreadMessages'><i class="icon iconfont icon-lingdang"></i></button>
     </ion-nav-buttons>
     
-<<<<<<< HEAD
 
   <!-- <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->
   <ion-content>
@@ -17,54 +13,17 @@
         <button class="topbutton" ng-click ="allDoctors()">
             更多医生
         </button>
-=======
-  
-
-
-  <!-- <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2.5px;background-color: #33cd5f;{{barwidth}}" ></div> -->
-  <ion-content padding="true" style="">
-    <p style="color: #6ac4f8;text-align:center;margin-top:5px">目前为平台试运行期间，浙一医院医生为您提供免费咨询及问诊服务</p>
-    <div class="card"  ng-if="hasDoctor">
-
-        <div class="item item-thumbnail-left" ng-click="getDoctorDetail(doctor.userId)"> 
-            <img style="border-radius: 100%;top: 40%;margin-top: -40px" ng-src="{{(doctor.photoUrl|changeimgip)  || 'img/DefaultAvatar.jpg'}}">
-            <span>{{doctor.name}}</span>
-            <span style="float: right">{{doctor.department}}</span>
-            <p>医院：{{doctor.workUnit}}</p>
-            <p style="font-size: 12px">职称:{{doctor.title}}</p>
-            <p style="font-size: 12px">收费：<span>咨询{{doctor.charge1}}元</span><span style="margin-left: 20px">问诊{{doctor.charge2}}元</span></p>
-            <div class="row row-below-avatar" style="font-size: 14px;color:#2B67F5;">
-                <span class="col font-c"><i class="icon ion-star"></i>{{doctor.score.toFixed(2)||"无"}}</span>
-                <span class="col font-c">咨询量：{{doctor.count1}}</span>
-                <span class="col font-c">问诊量：{{doctor.count2}}</span>
-            </div>
-        </div>
-
-        <div class="row">
-            <button style="color:#181544;font-size:14px;font-weight:bold;text-align: center;" ng-disabled="DisabledConsult" ng-click="question(doctor.userId,doctor.name,doctor)" class="col no-line"><i class="icon iconfont icon-zixun2"></i>咨询</button>
-            <button  style="color:#181544;font-size:14px;font-weight:bold;text-align: center;" ng-disabled="DisabledConsult" ng-click="consult(doctor.userId,doctor.name,doctor)" class="col no-line"><i class="icon iconfont icon-baojifuben"></i>问诊</button>
-        </div>
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
          <button class="topbutton" ng-click ="consultRecord()">
             咨询记录
         </button>  
     </div>
-<<<<<<< HEAD
     <div class="card" style="margin-top: 10px">
 
         <div class="item item-divider">
             我的主管医生
-=======
-
-    <div class="card" ng-if="!hasDoctor">
-        <div class="item item-text-wrap">
-            你还没有绑定医生，请使用微信扫一扫绑定我的医生！
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         </div>
-      </div>
 
-<<<<<<< HEAD
         <div  class="card" ng-if="hasDoctor" style="margin:0">
 
             <div class="item item-thumbnail-left" ng-disabled="DisabledConsult" ng-click="getDoctorDetail(doctor.userId)" style="border:none"> 
@@ -80,18 +39,6 @@
                     <span class="col font-c">问诊量：{{doctor.count2}}</span>
                 </div>
             </div>
-=======
-
-    
-
-    <div>
-         <button style="margin-top:10px" class="button button-block green-bg font-white" ng-click ="allDoctors()">
-            更多医生
-        </button>
-
-    </div>
-      
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
             <div class="row" style="border-width: 1px 0px 0px 0px;border-color: #eee;border-style: solid">
               <button ng-disabled="DisabledConsult||!doctor.counselStatus1||(doctor.charge1==undefined)"  ng-click="question(doctor.userId,doctor.charge1)" class="docDetailBtn">

@@ -3,23 +3,12 @@
         <my-nav-back-button ng-click="Goback()"></my-nav-back-button>
     </ion-nav-buttons>
 
-<<<<<<< HEAD
 
   <ion-content  style="" class="all-message-cont">
 
       <!-- <div ng-if="pay||alert||task||insurance"> -->
       <!-- 支付消息 -->
       <ion-item class="item item-avatar card" ng-if="pay.history" style="padding-top: 25px;padding-bottom: 25px;" ng-click="getMessageDetail(pay)">
-=======
-  <ion-nav-bar class="bar-positive green-bg" align-title="center">
-    <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-ios-arrow-back font-white" ng-click="Goback()"></button>
-    </ion-nav-buttons>
-  </ion-nav-bar>
-
- <ion-content  style="" class="all-message-cont">
-  <ion-item class="item item-avatar card" ng-if="pay" style="padding-top: 25px;padding-bottom: 25px;" ng-click="getMessageDetail(pay)">
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         <img ng-src="img/icon_paymessage.png" image-red-point="!pay.readOrNot">
         <!-- <div class="row"> -->
             <h2>支付消息</h2>
@@ -29,7 +18,6 @@
       </ion-item>
      
       <!-- 警报消息 -->
-<<<<<<< HEAD
 <!--       <ion-item class="item item-avatar card" ng-if="alert" style="padding-top: 25px;padding-bottom: 25px;" ng-click="getMessageDetail(alert)">
         <img ng-src="img/icon_warning.png" image-red-point="!alert.readOrNot"> -->
         <!-- <div class="row"> -->
@@ -42,20 +30,6 @@
       
       <!-- 任务消息 -->
       <ion-item class="item item-avatar card" ng-if="task.history" style="padding-top: 25px;padding-bottom: 25px;" ng-click="getMessageDetail(task)">
-=======
-      <ion-item class="item item-avatar card" ng-if="alert" style="padding-top: 25px;padding-bottom: 25px;" ng-click="getMessageDetail(alert)">
-        <img ng-src="img/icon_warning.png" image-red-point="!alert.readOrNot">
-        <!-- <div class="row"> -->
-            <h2>警报消息</h2>
-            <!-- <span class="col" style="font-size: 12px">{{alert.time|dateFormat:"YYYY-MM-DD h:m"}}</span> -->
-        <!-- </div> -->
-        <!-- <span class="row" style="margin-left:5px;">{{alert.description}}</span> -->
-      </ion-item>
-
-      
-      <!-- 任务消息 -->
-      <ion-item class="item item-avatar card" ng-if="task" style="padding-top: 25px;padding-bottom: 25px;" ng-click="getMessageDetail(task)">
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         <img ng-src="img/icon_renwu.png" image-red-point="!task.readOrNot">
         <!-- <div class="row"> -->
             <h2>任务消息</h2>
@@ -63,7 +37,6 @@
         <!-- </div> -->
         <!-- <span class="row" style="margin-left:5px;">{{task.description}}</span> -->
       </ion-item>
-<<<<<<< HEAD
 
       <!-- 退款消息 -->
       <ion-item class="item item-avatar card" ng-if="refund.history" style="padding-top: 25px;padding-bottom: 25px;" ng-click="getMessageDetail(refund)">
@@ -77,11 +50,6 @@
      
       <!-- 保险消息 -->
       <ion-item class="item item-avatar card" ng-if="insurance.history" style="padding-top: 25px;padding-bottom: 25px;" ng-click="getMessageDetail(insurance)">
-=======
-     
-      <!-- 保险消息 -->
-      <ion-item class="item item-avatar card" ng-if="insurance" style="padding-top: 25px;padding-bottom: 25px;" ng-click="getMessageDetail(insurance)">
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         <img ng-src="img/security.png" image-red-point="!insurance.readOrNot">
         <!-- <div class="row"> -->
         <h2>保险消息</h2>
@@ -90,7 +58,6 @@
         <!-- <span class="row" style="margin-left:5px;">{{insurance.description}}</span> -->
       </ion-item>
 
-<<<<<<< HEAD
       <!-- 系统通知 -->
       <ion-item class="item item-avatar card" ng-if="Info.history" style="padding-top: 25px;padding-bottom: 25px;" ng-click="getMessageDetail(Info)">
         <img ng-src="img/mail.png" image-red-point="!Info.readOrNot">
@@ -106,20 +73,12 @@
         <img ng-src="img/edu.png" image-red-point="!edu.readOrNot">
         <h2>群体教育消息</h2>
       </ion-item>
-=======
-
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
       <!-- </div> -->
       
       <!-- 聊天消息 -->
-<<<<<<< HEAD
       <ion-item  ng-repeat="chat in chats"  class="item item-avatar card" ng-click="getConsultRecordDetail($event,chat)">
         <img ng-src="{{chat.docPhoto}}" image-red-point="!chat.readOrNot">
-=======
-      <ion-item  ng-repeat="chat in chats"  class="item item-avatar card" ng-click="getConsultRecordDetail(chat)">
-        <img ng-src="{{chat.docPhoto|changeimgip}}" image-red-point="!chat.readOrNot">
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         <div class="row">
             <h2 class="col">{{chat.docName}}</h2>
             <span class="col" style="font-size: 12px">{{chat.time|dateFormat:"YYYY-MM-DD h:m"}}</span>
@@ -127,11 +86,7 @@
         <span class="row" style="margin-left:5px;">{{chat.description}}</span>
       </ion-item>
 
-<<<<<<< HEAD
       <div class="card" ng-if="(!pay)&&(!alert)&&(!task)&&(!insurance)&&(!Info)&&(!edu)&&(chats.length==0)">
-=======
-      <div class="card" ng-if="(!pay)&&(!alert)&&(!task)&&(!insurance)&&(chats.length==0)">
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         <div class="item item-text-wrap">
             暂时没有消息
         </div>

@@ -30,12 +30,8 @@
 }
 .green-edite-css {
   border: 1px solid #6ac4f8 !important;
-<<<<<<< HEAD
   border-radius: 20px !important;
   height: 35px;
-=======
-  border-radius: 10px !important;
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 }
 .f-fr{
   float: right;
@@ -81,13 +77,10 @@
   color: #ea790a!important;
   font-size: 12px;
 }
-<<<<<<< HEAD
 .icon_mine {
   size: 50px;
   vertical-align: middle;
 }
-=======
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 .c-red {
   color: red !important;
   font-size: 10px;
@@ -325,15 +318,9 @@
   color: #ffa76d;
   font-size: 16px;
 }
-<<<<<<< HEAD
 /*.item-avatar > img:first-child{
   top:10px
 }*/
-=======
-.item-avatar > img:first-child{
-  top:10px
-}
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 .patient-bar .button{
   background: #fff;
   color: #333;
@@ -344,7 +331,6 @@
   margin-bottom: 5px;
 }
 
-<<<<<<< HEAD
 .high-light {
   color: #6ac4f8 !important;
   border-color: #6ac4f8;
@@ -359,6 +345,3 @@
   min-height: 35px !important;
   width: 100%
 }
-=======
-
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428

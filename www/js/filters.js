@@ -29,7 +29,6 @@ angular.module('kidney.filters', [])
     return ret
   }
 }])
-<<<<<<< HEAD
 
 .filter('filterClass', [function () {
   return function (type) {
@@ -251,16 +250,5 @@ angular.module('kidney.filters', [])
         break
     }
     return name
-=======
-.filter('changeimgip', [function () {
-  return function (url) {
-    if (url) {
-      if (url.indexOf('https' !== -1)) {
-        url = url.replace(/https/, 'http')
-      }
-    }
-
-    return url
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
   }
 }])

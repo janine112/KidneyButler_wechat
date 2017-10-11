@@ -3,7 +3,6 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-<<<<<<< HEAD
 angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kidney.directives', 'kidney.filters', 'ngCordova', 'ngFileUpload', 'btford.socket-io', 'angular-jwt', 'highcharts-ng'])
 
 .run(['Authentication', 'version', '$ionicPlatform', '$state', 'Storage', '$location', '$ionicHistory', '$ionicPopup', '$rootScope', 'CONFIG', 'notify', '$interval', 'socket', 'mySocket', 'session', function (Authentication, version, $ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup, $rootScope, CONFIG, notify, $interval, socket, mySocket, session) {
@@ -46,222 +45,10 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
 
     var appState = {
       background: false
-=======
-angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.directives','kidney.filters','ngCordova','ngFileUpload','angular-jwt'])
-
-.run(function($ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup,$rootScope,JM,$location,wechat,User,Patient,$q,$window,CONFIG) {
-  // console.log(9)
-  $ionicPlatform.ready(function() {
-    // console.log(11)
-    socket = io.connect(CONFIG.socketUrl);
-    
-    // console.log(14)
-    var temp = $location.absUrl().split('=')
-    var code = ''
-    var state = ''
-    var params = ''
-    // alert(temp)
-    if (temp[1])
-    {
-        if (temp[2])
-        {
-            var code = temp[1].split('&')[0]
-            var state = temp[2].split('#')[0]
-            var params = state.split('_');
-            Storage.set('code',code)
-        }
-        else
-        {
-            var code = temp[1].split('#')[0]
-            Storage.set('code',code)
-        }
-    }
-    // console.log(state)
-    var wechatData = ""
-    if (angular.isDefined(code) == true)
-    {
-        wechat.getUserInfo({code:code}).then(function(data){ 
-          // alert(1)
-          wechatData = data.results
-          // console.log(wechatData)
-          if (wechatData.unionid){
-            Storage.set('openid',wechatData.unionid)
-          }
-          if (wechatData.headimgurl){
-            Storage.set('wechathead',wechatData.headimgurl)
-          }
-          if (wechatData.openid){
-            Storage.set('messageopenid',wechatData.openid)
-          }
-          if (wechatData.unionid&&wechatData.openid)
-          {
-            // User.getUserIDbyOpenId({openId:wechatData.openid}).then(function(data)
-            // {
-            //     var tempuserId = data.UserId
-            //     if (angular.isDefined(data.phoneNo) == true)
-            //     {
-            //         var tempresult = []
-            //         var temperr = []
-            //         $q.all([
-            //             User.setOpenId({phoneNo:data.phoneNo,openId:Storage.get('openid')}).then(function(res){
-            //                 console.log("替换openid");
-            //             },function(err){
-            //                 temperr.push(err)
-            //             }),
-            //             User.setMessageOpenId({type:2,userId:data.UserId,openId:wechatData.openid}).then(function(res){
-            //                 console.log("setopenid");
-            //             },function(err){
-            //                 temperr.push(err)
-            //             })
-            //         ]).then(function(){
-            //           // console.log(temperr)
-            //           $state.go('signin')
-            //         })
-            //     }
-            //     else
-            //     {
-                  User.logIn({username:Storage.get('openid'),password:Storage.get('openid'),role:"patient"}).then(function(data){
-                    // console.log(data)
-                      if(data.results.mesg=="login success!"){
-
-                          // $scope.logStatus = "登录成功！";
-                          $ionicHistory.clearCache();
-                          $ionicHistory.clearHistory();
-                          $ionicHistory.nextViewOptions({
-                            disableBack: true,
-                            disableAnimate: true
-                          })
-                          Storage.set('TOKEN',data.results.token);//token作用目前还不明确
-                          Storage.set('refreshToken',data.results.refreshToken);
-                          Storage.set('isSignIn',"Yes");
-                          Storage.set('UID',data.results.userId);
-
-                          User.getUserId({username:Storage.get('openid')}).then(function(data)
-                          {
-                              if (angular.isDefined(data.phoneNo) == true)
-                              {
-                                  Storage.set('USERNAME',data.phoneNo);
-                              }
-                          },function(err)
-                          {
-                              console.log(err)
-                          })  
-                          
-                          var results = [];
-                          var errs = [];
-
-                          if (state.indexOf('insurance') !== -1)
-                          {
-                              $state.go('insurance')
-                          }
-                          else if(params.length > 1 && params[0]=='patient'){                           
-                              if(params[1]=='11') 
-                              {
-                                $state.go('tab.consult-chat',{chatId:params[3]});
-                              }
-                              else
-                              {
-                                $state.go('signin')
-                              }
-                          }else{
-                              $q.all([
-                                  User.getAgree({ userId: data.results.userId }).then(function(res) {
-                                      results.push(res)
-                                  }, function(err) {
-                                      errs.push(err)
-                                  }),
-                                  User.setMessageOpenId({ type: 2, userId: Storage.get("UID"), openId: Storage.get('messageopenid') }).then(function(res) {
-                                      // results.push(res)
-                                  }, function(err) {
-                                      errs.push(err)
-                                  }),
-                                  Patient.getPatientDetail({ userId: Storage.get('UID') }).then(function(res) {
-                                      results.push(res)
-                                  }, function(err) {
-                                      errs.push(err)
-                                  })
-                              ]).then(function() {
-                                  console.log(results)
-                                  var a, b;
-                                  for (var i in results) {
-                                      if (results[i].results.agreement) {
-                                          a = i;
-                                      } else {
-                                          b = i;
-                                      }
-                                  }
-                                  if (results[a].results.agreement == "0") {
-                                      if (results[b].results) {
-                                          if (results[b].results.photoUrl == undefined || results[b].results.photoUrl == "") {
-                                              Patient.editPatientDetail({ userId: Storage.get("UID"), photoUrl: wechatData.headimgurl }).then(function(r) {
-                                                  $state.go('tab.tasklist');
-                                              },function(err){
-                                                $state.go('tab.tasklist');
-                                              })
-                                          }else {
-                                              $state.go('tab.tasklist');
-                                          }
-                                      }
-                                      else
-                                      {
-                                        $state.go('tab.tasklist');
-                                      }
-                                      // else {
-                                      //     $state.go('userdetail', { last: 'implement' });
-                                      // }
-                                  } else {
-                                      $state.go('agreement', { last: 'signin' });
-                                  }
-                              });
-                          }
-                      }
-                      else
-                      {
-                        $state.go('signin');
-                      }
-
-                  },function(err){
-                      if(err.results==null && err.status==0){
-                          $scope.logStatus = "网络错误！";
-                          $state.go('signin');
-                          return;
-                      }
-                      if(err.status==404){
-                          $scope.logStatus = "连接服务器失败！";
-                          $state.go('signin')
-                          return;
-                      }
-                      $state.go('signin')
-                  });
-                // }
-            // },function(err)
-            // {
-            //     console.log(err)
-            // })
-
-          }
-          else
-          {
-            $state.go('signin');
-          }
-          // alert(wechatData.openid)
-          // alert(wechatData.nickname)
-          
-        },function(err){
-            console.log(err)
-            $state.go('signin')
-            // alert(2);
-        });
-    }
-    else
-    {
-      $state.go('signin')
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
     }
     document.addEventListener('pause', onPause, false)
     document.addEventListener('resume', onResume, false)
 
-<<<<<<< HEAD
     function onPause () {
       appState.background = true
     }
@@ -302,18 +89,6 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
       socket.emit('gotMsg', {msg: data.msg, userId: Storage.get('UID')})
     }
     if (window.cordova && window.cordova.plugins.Keyboard) {
-=======
-    // var isSignIN=Storage.get("isSignIN");
-    // if(isSignIN=='YES'){
-    //   $state.go('tab.tasklist');
-    // }
-    
-    $rootScope.conversation = {
-            type: null,
-            id: ''
-        }
-    if(window.cordova && window.cordova.plugins.Keyboard) {
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       // 注释掉尝试解决ios select Done的问题
@@ -329,7 +104,6 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
 
       // StatusBar.styleDefault();
     }
-<<<<<<< HEAD
     $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
       $state.go('signin')
     })
@@ -340,27 +114,6 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         $state.go('consult-chat', {chatId: msg.fromID})
       }
     })
-=======
-    window.addEventListener('native.keyboardshow', function(e) {
-        $rootScope.$broadcast('keyboardshow', e.keyboardHeight);
-    });
-    window.addEventListener('native.keyboardhide', function(e) {
-        $rootScope.$broadcast('keyboardhide');
-    });
-    $rootScope.online = navigator.onLine;
-    $window.addEventListener("offline", function () {
-      $rootScope.$apply(function() {
-        $rootScope.online = false;
-      });
-    }, false);
-    $window.addEventListener("online", function () {
-      $rootScope.$apply(function() {
-        $rootScope.online = true;
-      });
-    }, false);
-  });
-})
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
     window.addEventListener('native.keyboardshow', function (e) {
       $rootScope.$broadcast('keyboardshow', e.keyboardHeight)
@@ -379,17 +132,12 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
 //   })
 // }])
 // --------路由, url模式设置----------------
-<<<<<<< HEAD
-=======
-.config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
 .config(['$stateProvider', '$urlRouterProvider', '$ionicConfigProvider', function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
-<<<<<<< HEAD
 
   // ios 白屏可能问题配置
   $ionicConfigProvider.views.swipeBackEnabled(false)
@@ -405,18 +153,7 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
   //   }]
   // }
   // 注册与登录
-=======
-  //禁止側滑
-  $ionicConfigProvider.views.swipeBackEnabled(false);
-  //注册与登录
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
   $stateProvider
-    .state('welcome', {
-      cache: false,
-      url: '/welcome',
-      templateUrl: 'partials/login/welcome.html',
-      controller: 'welcomeCtrl'
-    })
     .state('signin', {
       cache: false,
       url: '/signin',
@@ -441,10 +178,6 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
     .state('setpassword', {
       cache: false,
       url: '/setpassword',
-<<<<<<< HEAD
-=======
-      params:{phonevalidType:null},
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
       templateUrl: 'partials/login/setpassword.html',
       controller: 'setPasswordCtrl'
     })
@@ -577,13 +310,8 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
     })
     .state('tab.consult-comment', {
       url: '/consult/comment',
-<<<<<<< HEAD
       params: {counselId: null, doctorId: null, patientId: null},
       cache: false,
-=======
-      params:{counselId:null,doctorId:null,patientId:null},
-      cache:false,
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
       views: {
         'tab-consult': {
           cache: false,
@@ -612,7 +340,6 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         }
       }
     })
-<<<<<<< HEAD
     .state('tab.DoctorComment', {
       url: '/DoctorDetail/:DoctorId/DoctorComment',
       views: {
@@ -666,73 +393,15 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         }
       }
       // params:{DoctorId:null}
-=======
-    .state('tab.consultQuestionnaire', {
-      url: '/Questionnaire',
-      params:{DoctorId:null,counselType:null},
-      views: {
-        'tab-consult': {
-          cache:true,
-          templateUrl: 'partials/tabs/consult/questionnaire.html',
-          controller: 'consultquestionCtrl'
-        }
-      },
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
     })
-    // .state('tab.consultquestion1', {
-    //   url: '/consultquestion1',
-    //   params:{DoctorId:null,counselType:null},
-    //   views: {
-    //     'tab-consult': {
-    //       cache:false,
-    //       templateUrl: 'partials/tabs/consult/consultquestion1.html',
-    //       controller: 'consultquestionCtrl'
-    //     }
-    //   },
-    //   // params:{DoctorId:null}
-    // })
-    // .state('tab.consultquestion2', {
-    //   url: '/consultquestion2',
-    //   params:{DoctorId:null,counselType:null},
-    //   views: {
-    //     'tab-consult': {
-    //       cache:false,
-    //       templateUrl: 'partials/tabs/consult/consultquestion2.html',
-    //       controller: 'consultquestionCtrl'
-    //     }
-    //   },
-    //   // params:{DoctorId:null}
-    // })
-    // .state('tab.consultquestion3', {
-    //   url: '/consultquestion3',
-    //   params:{DoctorId:null,counselType:null},
-    //   views: {
-    //     'tab-consult': {
-    //       cache:false,
-    //       templateUrl: 'partials/tabs/consult/consultquestion3.html',
-    //       controller: 'consultquestionCtrl'
-    //     }
-    //   },
-    //   // params:{DoctorId:null}
-    // })
 
     .state('tab.mine', {
-<<<<<<< HEAD
       url: '/mine',
       views: {
         'tab-mine': {
           templateUrl: 'partials/tabs/mine/mine.html',
           controller: 'MineCtrl'
         }
-=======
-        url: '/mine',
-        views: {
-          'tab-mine': {
-            cache: false,
-            templateUrl: 'partials/tabs/mine/mine.html',
-            controller: 'MineCtrl'
-          }
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
       }
 
@@ -748,64 +417,29 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
       }
 
     })
-    .state('tab.DiagnosisInfo', {
-        url: '/mine/DiagnosisInfo',
-        views: {
-          'tab-mine': {
-            cache: false,
-            templateUrl: 'partials/tabs/mine/diagnosisInfo.html',
-            controller: 'DiagnosisCtrl'
-          }
-
-        }
-         
-    })
     .state('tab.myConsultRecord', {
-<<<<<<< HEAD
       url: '/mine/ConsultRecord',
       views: {
         'tab-mine': {
           templateUrl: 'partials/tabs/mine/consultRecord.html',
           controller: 'ConsultRecordCtrl'
-=======
-        url: '/mine/ConsultRecord',
-        views: {
-          'tab-mine': {
-            cache: false,
-            templateUrl: 'partials/tabs/mine/consultRecord.html',
-            controller: 'ConsultRecordCtrl'
-          }
-
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         }
 
       }
 
     })
     .state('tab.myHealthInfo', {
-<<<<<<< HEAD
       url: '/mine/health/HealthInfo',
       views: {
         'tab-mine': {
           templateUrl: 'partials/tabs/mine/health/HealthInfo.html',
           controller: 'HealthInfoCtrl'
-=======
-        url: '/mine/HealthInfo',
-        views: {
-          'tab-mine': {
-            cache: false,
-            templateUrl: 'partials/tabs/mine/HealthInfo.html',
-            controller: 'HealthInfoCtrl'
-          }
-
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         }
 
       }
 
     })
     .state('tab.myHealthInfoDetail', {
-<<<<<<< HEAD
       cache: false,
       url: '/mine/health/HealthInfoDetail',
       params: {id: null, caneidt: null},
@@ -813,63 +447,6 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         'tab-mine': {
           templateUrl: 'partials/tabs/mine/health/editHealthInfo.html',
           controller: 'HealthDetailCtrl'
-=======
-      cache:false,
-      url: '/mine/HealthInfoDetail/',
-      params: {id:null,caneidt:null},
-      views: {
-        'tab-mine': {
-          templateUrl: 'partials/tabs/mine/editHealthInfo.html',
-          controller: 'HealthDetailCtrl'
-        }
-
-      }
-         
-    })
-     .state('tab.myMoney', {
-        url: '/mine/Account/',
-        views: {
-          'tab-mine': {
-            cache: false,
-            templateUrl: 'partials/tabs/mine/money.html',
-            controller: 'MoneyCtrl'
-          }
-
-        }     
-         
-    })
-     .state('tab.about',{
-      cache:false,
-      url:'/mine/about',
-      views:{
-        'tab-mine':{
-            templateUrl:'partials/about.html',
-            controller:'aboutCtrl'
-        }
-      }
-      
-    })
-     .state('tab.advice', {
-        cache:false,
-        url: '/mine/advice/',
-        views: {
-            'tab-mine': {
-                templateUrl: 'partials/tabs/mine/advice.html',
-                controller: 'adviceCtrl'
-            }
-
-        }     
-         
-    })
-    .state('tab.changePassword',{
-        cache:false,
-        url:'/mine/changePassword',
-        views:{
-            'tab-mine':{
-                templateUrl:'partials/changePassword.html',
-                controller:'changePasswordCtrl'
-            }
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         }
 
       }
@@ -948,7 +525,6 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
     })
 
     .state('tab.taskSet', {
-<<<<<<< HEAD
       url: '/mine/taskSet/',
       views: {
         'tab-mine': {
@@ -1007,19 +583,6 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
     })
 
      // 肾病保险
-=======
-        url: '/mine/taskSet/',
-        views: {
-          'tab-mine': {
-            cache: false,
-            templateUrl: 'partials/tabs/task/taskSet.html',
-            controller: 'TaskSetCtrl'
-          }
-        }           
-    })  
-
-     //肾病保险
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
   $stateProvider
     .state('insurance', {
       cache: false,
@@ -1056,20 +619,9 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
       url: '/insurancestaff',
       templateUrl: 'partials/insurance/insurancestaff.html',
       controller: 'insurancestaffCtrl'
-<<<<<<< HEAD
     })
   // $urlRouterProvider.otherwise('/signin')
 }])
-=======
-    });
-
-  // $urlRouterProvider.otherwise('/welcome');
-
-
-
-   
- 
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
 
 // $httpProvider.interceptors提供http request及response的预处理
 .config(['$httpProvider', 'jwtOptionsProvider', function ($httpProvider, jwtOptionsProvider) {
@@ -1088,7 +640,6 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
         return null
       }
 
-<<<<<<< HEAD
       var isExpired = true
       // debugger
       try {
@@ -1161,99 +712,10 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
                 ]
               })
             }
-=======
-})   
-
-// $httpProvider.interceptors提供http request及response的预处理
-.config(['$httpProvider', 'jwtOptionsProvider', function ($httpProvider, jwtOptionsProvider) {
-    // 下面的getter可以注入各种服务, service, factory, value, constant, provider等, constant, provider可以直接在.config中注入, 但是前3者不行
-    jwtOptionsProvider.config({
-      whiteListedDomains: ['121.196.221.44','121.43.107.106', 'testpatient.haihonghospitalmanagement.com', 'testdoctor.haihonghospitalmanagement.com','patient.haihonghospitalmanagement.com','doctor.haihonghospitalmanagement.com','localhost'],
-      tokenGetter: ['options', 'jwtHelper', '$http', 'CONFIG', 'Storage', '$state', '$ionicPopup',function(options, jwtHelper, $http, CONFIG, Storage,$state,$ionicPopup) {
-         // console.log(config);
-        // console.log(CONFIG.baseUrl);
-
-        // var token = sessionStorage.getItem('token');
-        var token = Storage.get('TOKEN');
-        // var refreshToken = sessionStorage.getItem('refreshToken');
-        var refreshToken = Storage.get('refreshToken');
-        if (!token && !refreshToken) {
-            return null;
-        }
-
-        var isExpired = true;
-        try {
-            // isExpired = jwtHelper.isTokenExpired(token);
-            var temp = jwtHelper.decodeToken(token);
-            if (temp.exp === "undefined")
-            {
-              isExpired = false;
-            }
-            else
-            {
-              // var d = new Date(0); // The 0 here is the key, which sets the date to the epoch
-              // d.setUTCSeconds(temp.expireAfter);
-              isExpired = !(temp.exp > new Date().valueOf());//(new Date().valueOf() - 8*3600*1000));
-              // console.log(temp)
-            }
-           
-             // console.log(isExpired);
-        }
-        catch (e) {
-             console.log(e);
-            isExpired = true;
-        }
-        // 这里如果同时http.get两个模板, 会产生两个$http请求, 插入两次jwtInterceptor, 执行两次getrefreshtoken的刷新token操作, 会导致同时查询redis的操作, ×××估计由于数据库锁的关系×××(由于token_manager.js中的exports.refreshToken中直接删除了redis数据库里前一个refreshToken, 导致同时发起的附带有这个refreshToken的getrefreshtoken请求查询返回reply为null, 导致返回"凭证不存在!"错误), 其中一次会查询失败, 导致返回"凭证不存在!"错误, 使程序流程出现异常(但是为什么会出现模板不能加载的情况? 是什么地方阻止了模板的下载?)
-        if (options.url.substr(options.url.length - 5) === '.html' || options.url.substr(options.url.length - 3) === '.js' || options.url.substr(options.url.length - 4) === '.css' || options.url.substr(options.url.length - 4) === '.jpg' || options.url.substr(options.url.length - 4) === '.png' || options.url.substr(options.url.length - 4) === '.ico' || options.url.substr(options.url.length - 5) === '.woff') {  // 应该把这个放到最前面, 否则.html模板载入前会要求refreshToken, 如果封装成APP后, 这个就没用了, 因为都在本地, 不需要从服务器上获取, 也就不存在http get请求, 也就不会interceptors
-             // console.log(config.url);
-            return null;
-        }
-        else if (isExpired) {    // 需要加上refreshToken条件, 否则会出现网页循环跳转
-            // This is a promise of a JWT token
-             // console.log(token);
-            if (refreshToken && refreshToken.length >= 16) {  // refreshToken字符串长度应该大于16, 小于即为非法
-                return $http({
-                    url: CONFIG.baseUrl + 'token/refresh?refresh_token=' + refreshToken,
-                    // This makes it so that this request doesn't send the JWT
-                    skipAuthorization: true,
-                    method: 'GET',
-                    timeout: 5000
-                }).then(function (res) { // $http返回的值不同于$resource, 包含config等对象, 其中数据在res.data中
-                     // console.log(res);
-                    // sessionStorage.setItem('token', res.data.token);
-                    // sessionStorage.setItem('refreshToken', res.data.refreshToken);
-                      Storage.set('TOKEN', res.data.results.token);
-                      Storage.set('refreshToken', res.data.results.refreshToken);
-                      return res.data.results.token;
-                }, function (err) {
-                    console.log(err);
-                    if (refreshToken == Storage.get('refreshToken'))
-                    {
-                      // console.log("凭证不存在!")
-                      console.log(options)
-                      $ionicPopup.show({   
-                           title: '您离开太久了，请重新登录',
-                           buttons: [
-                             { 
-                                  text: '取消',
-                                  type: 'button'
-                              },
-                             {
-                                  text: '確定',
-                                  type: 'button-positive',
-                                  onTap: function(e) {
-                                      $state.go('signin')
-                                  }
-                             },
-                             ]
-                      })
-                    }
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
                     // sessionStorage.removeItem('token');
                     // sessionStorage.removeItem('refreshToken');
                     // Storage.rm('token');
                     // Storage.rm('refreshToken');
-<<<<<<< HEAD
             return null
           })
         } else {
@@ -1269,23 +731,3 @@ angular.module('kidney',['ionic','kidney.services','kidney.controllers','kidney.
 
   $httpProvider.interceptors.push('jwtInterceptor')
 }])
-=======
-                    return null;
-                });
-            }
-            else {
-                Storage.rm('refreshToken');  // 如果是非法refreshToken, 删除之
-                return null;
-            }  
-        } 
-        else {
-            // console.log(token);
-            return token;
-        }
-      }]
-    })
-
-  $httpProvider.interceptors.push('jwtInterceptor');
-}])
- 
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428

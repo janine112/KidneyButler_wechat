@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 <ion-view view-title='任务' show-tabs>
     <ion-nav-buttons side="right" >
         <button class="button button-clear" ng-click="GoToMessage() " head-red-point='HasUnreadMessages'><i class="icon iconfont icon-lingdang"></i></button>
     </ion-nav-buttons>
     <ion-content>
-=======
-<ion-view view-title='任务' show-tabs cache-view="false">
-    <ion-nav-buttons side="right" >
-            <button class="button button-clear" ng-click="GoToMessage() " head-red-point='HasUnreadMessages'><i class="icon iconfont icon-lingdang"></i></button>
-    </ion-nav-buttons>
-    <ion-content class="padding">
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         <ion-refresher pulling-text="下拉刷新" spinner='ripple' refreshing-text="。。。" on-refresh="Refresh()">
         </ion-refresher>
 
@@ -21,7 +13,6 @@
             <p>请您完善个人信息，将会为您提供任务列表</p>
             <button ng-click="CompleteUserdetail()" style="background-color: transparent;border: none;color: #6ac4f8">点击完善个人信息<i style="margin-left: 10px" class="icon iconfont ion-ios-redo"></i></button>
         </div>
-<<<<<<< HEAD
 
         <div class="scroll-left" style="border-bottom: 0.1px solid #ddd">
            <p class="ion-volume-high" style="color: #feca42;display: inline;" >{{newMes}}</p>
@@ -35,8 +26,6 @@
                 <span>健康日记</span>
             </a>
         </div>
-=======
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
         
         <ion-list>
             <a class="item green-bg font-white" style="border: 0;font-size: 14px;border-bottom: 1px solid #fff;margin-bottom: 0" ng-click="open==true?open=false:open=true" ng-model="open">
@@ -45,13 +34,10 @@
             <i class="icon ion-chevron-down" ng-if="open"></i>
             </a>   
 
-<<<<<<< HEAD
            <!--  <a class="item green-bg font-white" style="border: 0;font-size: 14px;border-bottom: 1px solid #fff;margin-bottom: 0" ng-click="openModal()">
             排班表
             </a>   --> 
 
-=======
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
             <div class="padding10" style="border: 0.1px solid #ddd" ng-show="!open" ng-repeat="item in Tasks.Measure| orderBy:'Flag'">
                 <div class="row">
                     <p class="col col-30" style="text-align: left;font-weight: bold;">{{item.Name}}<span style="font-size:12px;color:#9E9E9E" ng-if="item.Unit != '' ">({{item.Unit}})</span></p>
@@ -59,10 +45,7 @@
                     <span class="col col-30">
                         <button class="button-block no-line" style="text-align: right;" ng-click="showMesPop(item,'fill')"><i style="font-size:20px" ng-if="!item.Flag" class="icon ion-plus-round" ></i></button>
                         <button class="button-block no-line" style="text-align: right;" ng-click="showMesPop(item,'edit')"><i style="color:#6ac4f8;font-size:20px" ng-if="item.Flag" class="icon iconfont icon-xiugaibi"></i></button>
-<<<<<<< HEAD
                         
-=======
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
                     </span>
                 </div>
                 
@@ -71,7 +54,6 @@
                 <div class="task-jd" style="width: 100%" ng-if="item.TimesFlag">
                     <span style="width: {{item.Progress}}">
                     </span>
-<<<<<<< HEAD
                 </div>                 
             </div>
         </ion-list>
@@ -133,62 +115,6 @@
             </a>
         </div>
 
-=======
-                </div>  
-                
-
-                
-                
-            </div>
-        </ion-list>
-
-        <ion-list>    
-            <a class="item green-bg font-white" style="border: 0;margin-top: 0">
-            <label>其它任务</label>
-            <span class="mg-left10 mg-right10">|</span>
-            <label ng-click = "openModal()">医生排班表</label>
-            <i class="iconfont icon-icondayu"></i>
-            </a>
-            <a class="item item-icon-right" ng-if="HemoBtnFlag">
-                您还未设定血透排班时间
-                <i class='icon'><button ng-click="GotoSet()" class="button button-small green-bg font-white">设置</button></i>
-            </a>
-
-
-            <div class="padding10" style="border: 0.1px solid #ddd" ng-repeat="item in Tasks.Hemo| orderBy:'Flag'">
-                <div class="row">
-                    <p class="col col-30" style="text-align: left;font-weight: bold;">{{item.Name}}</p>
-                    <div class="col col-30 task-jd" style="margin-top: 8px;"><span style="width: {{item.Progress}};"></span></div>
-                     <span class="col col-30" style="padding-top: 3px;">
-                        <button class="button-block no-line" style="text-align: right;" ng-click="showHemoPop(item, 'fill')"><i style="font-size:20px" ng-if="!item.Flag" class="icon ion-plus-round"></i></button>
-                        <button class="button-block no-line" style="text-align: right;" ng-click="showHemoPop(item, 'edit')"><i style="color:#6ac4f8;font-size:20px" ng-if="item.Flag" class="icon iconfont icon-xiugaibi"></i></button>
-                    </span>
-                </div>
-                
-                <p style="text-indent:2em;">{{item.Freq}}</p>
-                <p style="text-indent:2em;">任务时间：{{item.startTime|dateFormat:"YYYY-MM-DD"}}</p>
-                <p style="text-indent:2em;" ng-if="item.endTime != ''">执行时间：{{item.endTime|dateFormat:"YYYY-MM-DD"}}</p>
-            </div>
-
-
-            <div class="padding10" style="border: 0.1px solid #ddd" ng-repeat="item in Tasks.Other| orderBy:'Flag'">
-                <div class="row">
-                    <p class="col col-40" style="text-align: left;font-weight: bold;">{{item.Name}}</p>
-                    <p class="col col-30" style="text-align: center;"">{{item.Freq}}</p>
-                    <span class="col col-30" style="padding-top: 3px;">
-                         <button class="button-block no-line" style="text-align: right;" ng-click="showOtherPop(item, 'fill')"><i style="font-size:20px" ng-if="!item.Flag" class="icon ion-plus-round"></i></button>
-                        <button class="button-block no-line" style="text-align: right;"  ng-click="showOtherPop(item, 'edit')"> <i style="color:#6ac4f8;font-size:20px" ng-if="item.Flag" class="icon iconfont icon-xiugaibi"></i></button>
-                    </span>
-                </div>
-                
-                
-                <p ng-if="item.frequencyTimes != 0" style="text-indent:2em;">任务时间：{{item.startTime|dateFormat:"YYYY-MM-DD"}}</p>
-                <p style="text-indent:2em;" ng-if="item.DoneFlag">上次执行：{{item.endTime|dateFormat:"YYYY-MM-DD"}}</p>
-                <p style="text-indent:2em;">{{item.content}}</p>
-                <button  class="button button-small button-outline button-stable" style="width: 100% " ng-if = "item.Flag" ng-click = "StartNewTask(item)">新任务</button>
-            </div>
-               
->>>>>>> dbff3e6e96eb65834ba5cc7039add7de1694d428
             
      </ion-list>
         <!-- <button ng-click="Test()">测试</button>
