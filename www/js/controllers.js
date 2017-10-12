@@ -126,119 +126,119 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
  * @DateTime 2017-07-05
  * @return   {[type]}
  */
-  $scope.wxsignIn = function () {
-    $ionicLoading.show({
+  // $scope.wxsignIn = function () {
+  //   $ionicLoading.show({
 
-      template: '<ion-spinner icon="ios"></ion-spinner>',
-      hideOnStateChange:true
-    })
-    /**
-     * *[微信js版sdk自带方法，微信登录，获取用户授权之后拿到用户的基本信息]
-     * @Author   ZXF
-     * @DateTime 2017-07-05
-     * @param    {[type]}
-     * @param    {[type]}
-     * @return   code:string
-     */
-    var wxscope = 'snsapi_userinfo',
-    wxstate = '_' + (+new Date())
-    Wechat.auth(wxscope, wxstate, function (response) {
-        // you may use response.code to get the access token.
-        // $ionicLoading.hide()
-        // alert(JSON.stringify(response))
-        // alert(response.code);
-        /**
-         * *[根据unionid获取用户基本信息]
-         * @Author   ZXF
-         * @DateTime 2017-07-05
-         * @param    {role: 'appPatient',code:string,state:?}
-         * @param    {[type]}
-         * @return   results:{headimgurl：微信头像路径，unionid：string，}
-         */
-      Mywechat.getUserInfo({role: 'appPatient', code: response.code, state: ''}).then(function (persondata) {
-          // alert('getUserInfo:'+JSON.stringify(persondata));
-        Storage.set('wechatheadimgurl', persondata.results.headimgurl)
-        Storage.set('openId',persondata.results.openid)
-        $scope.unionid = persondata.results.unionid
-          // alert('unionid:'+$scope.unionid)
-          // 判断这个unionid是否已经绑定用户了 有直接登录
-          /**
-           * *[根据unionid获取用户userid]
-           * @Author   ZXF
-           * @DateTime 2017-07-05
-           * @param    {['username': unionid]}
-           * @return   {results：[0:用户有与微信unionid绑定userid]，UserId：string，roles:['patient','doctor'...]用户所用的角色}
-           */
-        User.getUserID({'username': $scope.unionid}).then(function (ret) {
-            // alert('userId:'+JSON.stringify(ret))
-            // 用户已经存在id 说明公众号注册过
-            // 未测试
-            /**
-             * *[将用户的微信头像存在用户表中，如果用户没有头像存，有则不修改]
-             * @Author   ZXF
-             * @DateTime 2017-07-05
-             * @param    {[patientId：string，wechatPhotoUrl：微信头像路径]}
-             * @return   {[type]}
-             */
-          if (Storage.get('wechatheadimgurl') && ret.results === 0) {
-                // alert("image"+ret.AlluserId+Storage.get('wechatheadimgurl')); 
-            Patient.replacePhoto({'patientId': ret.AlluserId, 'wechatPhotoUrl': Storage.get('wechatheadimgurl')}).then(function (data) {
-              // alert(JSON.stringify(data))
-              Storage.rm('wechatheadimgurl')
-            }, function (err) {
-              // alert('imageerror'+JSON.stringify(err))
-              // console.log(err)
-            }
-                )
-                // 已有头像，未更新;没有头像，已替换
-          }
+  //     template: '<ion-spinner icon="ios"></ion-spinner>',
+  //     hideOnStateChange:true
+  //   })
+  //   /**
+  //    * *[微信js版sdk自带方法，微信登录，获取用户授权之后拿到用户的基本信息]
+  //    * @Author   ZXF
+  //    * @DateTime 2017-07-05
+  //    * @param    {[type]}
+  //    * @param    {[type]}
+  //    * @return   code:string
+  //    */
+  //   var wxscope = 'snsapi_userinfo',
+  //   wxstate = '_' + (+new Date())
+  //   Wechat.auth(wxscope, wxstate, function (response) {
+  //       // you may use response.code to get the access token.
+  //       // $ionicLoading.hide()
+  //       // alert(JSON.stringify(response))
+  //       // alert(response.code);
+  //       /**
+  //        * *[根据unionid获取用户基本信息]
+  //        * @Author   ZXF
+  //        * @DateTime 2017-07-05
+  //        * @param    {role: 'appPatient',code:string,state:?}
+  //        * @param    {[type]}
+  //        * @return   results:{headimgurl：微信头像路径，unionid：string，}
+  //        */
+  //     Mywechat.getUserInfo({role: 'appPatient', code: response.code, state: ''}).then(function (persondata) {
+  //         // alert('getUserInfo:'+JSON.stringify(persondata));
+  //       Storage.set('wechatheadimgurl', persondata.results.headimgurl)
+  //       Storage.set('openId',persondata.results.openid)
+  //       $scope.unionid = persondata.results.unionid
+  //         // alert('unionid:'+$scope.unionid)
+  //         // 判断这个unionid是否已经绑定用户了 有直接登录
+  //         /**
+  //          * *[根据unionid获取用户userid]
+  //          * @Author   ZXF
+  //          * @DateTime 2017-07-05
+  //          * @param    {['username': unionid]}
+  //          * @return   {results：[0:用户有与微信unionid绑定userid]，UserId：string，roles:['patient','doctor'...]用户所用的角色}
+  //          */
+  //       User.getUserID({'username': $scope.unionid}).then(function (ret) {
+  //           // alert('userId:'+JSON.stringify(ret))
+  //           // 用户已经存在id 说明公众号注册过
+  //           // 未测试
+  //           /**
+  //            * *[将用户的微信头像存在用户表中，如果用户没有头像存，有则不修改]
+  //            * @Author   ZXF
+  //            * @DateTime 2017-07-05
+  //            * @param    {[patientId：string，wechatPhotoUrl：微信头像路径]}
+  //            * @return   {[type]}
+  //            */
+  //         if (Storage.get('wechatheadimgurl') && ret.results === 0) {
+  //               // alert("image"+ret.AlluserId+Storage.get('wechatheadimgurl')); 
+  //           Patient.replacePhoto({'patientId': ret.AlluserId, 'wechatPhotoUrl': Storage.get('wechatheadimgurl')}).then(function (data) {
+  //             // alert(JSON.stringify(data))
+  //             Storage.rm('wechatheadimgurl')
+  //           }, function (err) {
+  //             // alert('imageerror'+JSON.stringify(err))
+  //             // console.log(err)
+  //           }
+  //               )
+  //               // 已有头像，未更新;没有头像，已替换
+  //         }
 
-          if (ret.results == 0 && ret.roles.indexOf('patient') != -1) { // 直接登录
-            ionicLoadingshow()
-            /**
-             * [用户的unionid登录，密码不能为空可以随意填写]
-             * @Author   ZXF
-             * @DateTime 2017-07-05
-             * @param    logOn:{username:String, password:String，role：string}  注：username：unionid
-             */
-            User.logIn({username: $scope.unionid, password: '112233', role: 'patient'}).then(function (data) {
-                // alert("sername:$scope.unionid,password:112"+JSON.stringify(data));
-              if (data.results.mesg == 'login success!') {
-                Storage.set('UID', data.results.userId)// 后续页面必要uid
+  //         if (ret.results == 0 && ret.roles.indexOf('patient') != -1) { // 直接登录
+  //           ionicLoadingshow()
+  //           /**
+  //            * [用户的unionid登录，密码不能为空可以随意填写]
+  //            * @Author   ZXF
+  //            * @DateTime 2017-07-05
+  //            * @param    logOn:{username:String, password:String，role：string}  注：username：unionid
+  //            */
+  //           User.logIn({username: $scope.unionid, password: '112233', role: 'patient'}).then(function (data) {
+  //               // alert("sername:$scope.unionid,password:112"+JSON.stringify(data));
+  //             if (data.results.mesg == 'login success!') {
+  //               Storage.set('UID', data.results.userId)// 后续页面必要uid
 
-                Storage.set('patientunionid', $scope.unionid)// 自动登录使用
-                Storage.set('TOKEN', data.results.token)// token作用目前还不明确
+  //               Storage.set('patientunionid', $scope.unionid)// 自动登录使用
+  //               Storage.set('TOKEN', data.results.token)// token作用目前还不明确
 
-                Storage.set('refreshToken', data.results.refreshToken)
+  //               Storage.set('refreshToken', data.results.refreshToken)
 
-                mySocket.newUser(data.results.userId)
-                ionicLoadinghide()
-                $state.go('tab.tasklist')
+  //               mySocket.newUser(data.results.userId)
+  //               ionicLoadinghide()
+  //               $state.go('tab.tasklist')
                 
-              }
-            }, function (er) {
-                // alert(JSON.stringify(er))
-              ionicLoadinghide()
-            })
-          } else {
-                // alert('else');
-            Storage.set('patientunionid', $scope.unionid)// 自动登录使用
-            $state.go('registerPat',{rType:'openId'})
-          }
-        })
-      }, function (err) {
-          // alert(JSON.stringify(err));
-      })
-    }, function (reason) {
-      $ionicLoading.show({
-        template: reason,
-        duration: 1000
-      })
-    })
-  // }
+  //             }
+  //           }, function (er) {
+  //               // alert(JSON.stringify(er))
+  //             ionicLoadinghide()
+  //           })
+  //         } else {
+  //               // alert('else');
+  //           Storage.set('patientunionid', $scope.unionid)// 自动登录使用
+  //           $state.go('registerPat',{rType:'openId'})
+  //         }
+  //       })
+  //     }, function (err) {
+  //         // alert(JSON.stringify(err));
+  //     })
+  //   }, function (reason) {
+  //     $ionicLoading.show({
+  //       template: reason,
+  //       duration: 1000
+  //     })
+  //   })
+  // // }
 
-    // }
-  }
+  //   // }
+  // }
 }])
 
 .controller('AgreeCtrl', ['$ionicLoading','$stateParams', '$scope', '$timeout', '$state', 'Storage', '$ionicHistory', '$http',  'User', '$ionicPopup', 'mySocket', function ($ionicLoading,$stateParams, $scope, $timeout, $state, Storage, $ionicHistory, $http, User, $ionicPopup, mySocket) {
