@@ -1,0 +1,214 @@
+<ion-view cache-view="true" title="患者端测量记录" hide-tabs>
+   <ion-nav-bar class="bar-positive " align-title="center">
+        <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="Goback()"></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+  <ion-content class="padding">
+      <ion-refresher pulling-text="下拉刷新" spinner='ripple' refreshing-text="刷新一下" on-refresh="Refresh()">
+      </ion-refresher>
+      
+    <div style="text-align:center;height:44px" class="row">
+      <button id="week" ng-click="toWeekReports()" class="seasonBtn">周</button>
+      <button id="month" ng-click="toMonthReports()" class="seasonBtn">月</button>
+      <button id="season" ng-click="toSeasonReports()" class="seasonBtn">季</button>
+      <button id="year" ng-click="toYearReports()" class="seasonBtn">年</button>
+    </div>   
+
+    <div style="text-align:center; height:44px;" class="row">
+      <button ng-click="last()" class="seasonBtn2"><i class="icon ion-ios-arrow-left"></i></button>
+      <button id="middle" class="seasonBtn2"></button> 
+      <button ng-if="modify" ng-click="next()" class="seasonBtn2"><i class="icon ion-ios-arrow-right"></i></button>
+      <button ng-if="!modify" class="seasonBtn2"><i class="icon ion-ios-arrow-right"></i></button>
+    </div> 
+
+  <div ng-if="type=='week'">
+      <div ng-if="flagT" style="margin-top: 0px; min-width: 300px; " id="container1"></div><!-- //体温 -->
+           <div ng-if="tw" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{tw1}}</div>
+           </div>
+      <div ng-if="flagWeight" style="margin-top: 0px; min-width: 300px; " id="container2"></div><!-- //体重 --> 
+            <div ng-if="tz" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{tz1}}</div>
+            </div>
+
+      <div ng-if="flagBP" style="margin-top: 0px; min-width: 300px; " id="container3"></div><!-- //血压 -->
+            <div ng-if="xy" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{xy1}}</div>
+            </div>
+
+      <div ng-if="flagVol" style="margin-top: 0px; min-width: 300px; " id="container4"></div><!-- //尿量 -->
+            <div ng-if="nl&&flagVol" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{nl1}}</div>
+            </div>
+
+      <div ng-if="flagHR" style="margin-top: 0px; min-width: 300px; " id="container5"></div><!-- //心率 -->
+            <div ng-if="xl" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{xl1}}</div>
+            </div>
+
+      <div ng-if="flagPD" style="margin-top: 0px; min-width: 300px; " id="container6"></div><!-- //腹透 -->
+            <div ng-if="ft&&flagPD" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{ft1}}</div>
+            </div>
+
+      <div style="margin-top: 0px; min-width: 300px; " id="container7"></div><!-- //化验 -->
+      <div style="margin-top: 0px; min-width: 300px; " id="container8"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container9"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container10"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container11"></div>
+            <div ng-if="hy" class="list list-inset" style="border-radius: 10px">
+                    <div class="item item-text-wrap">{{hy1}}</div>
+            </div>
+            <div ng-if="bg" class="list list-inset" style="border-radius: 10px">
+                    <div class="item item-text-wrap">{{bg1}}</div>
+            </div>
+  </div>
+
+    <div ng-if="type=='month'">
+      <div ng-if="flagT" style="margin-top: 0px; min-width: 300px; " id="container1"></div><!-- //体温 -->
+          <div ng-if="tw" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{tw1}}</div>
+           </div>
+
+      <div ng-if="flagWeight" style="margin-top: 0px; min-width: 300px; " id="container2"></div><!-- //体重 -->
+          <div ng-if="tz" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{tz1}}</div>
+            </div>
+
+      <div ng-if="flagBP" style="margin-top: 0px; min-width: 300px; " id="container3"></div><!-- //血压 -->
+          <div ng-if="xy" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{xy1}}</div>
+            </div>
+
+      <div ng-if="flagVol" style="margin-top: 0px; min-width: 300px; " id="container4"></div><!-- //尿量 -->
+          <div ng-if="nl&&flagVol" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{nl1}}</div>
+            </div>
+
+      <div ng-if="flagHR" style="margin-top: 0px; min-width: 300px; " id="container5"></div><!-- //心率 -->
+          <div ng-if="xl" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{xl1}}</div>
+            </div>
+
+      <div ng-if="flagPD" style="margin-top: 0px; min-width: 300px; " id="container6"></div><!-- //腹透 -->
+          <div ng-if="ft&&flagPD" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{ft1}}</div>
+            </div>
+
+      <div style="margin-top: 0px; min-width: 300px; " id="container7"></div><!-- //化验 -->
+      <div style="margin-top: 0px; min-width: 300px; " id="container8"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container9"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container10"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container11"></div>
+          <div ng-if="hy" class="list list-inset" style="border-radius: 10px">
+                    <div class="item item-text-wrap">{{hy1}}</div>
+            </div>
+            <div ng-if="bg" class="list list-inset" style="border-radius: 10px">
+                    <div class="item item-text-wrap">{{bg1}}</div>
+            </div>
+    </div>
+
+    <div ng-if="type=='season'">
+      <div ng-if="flagT" style="margin-top: 0px; min-width: 300px; " id="container1"></div><!-- //体温 -->
+          <div ng-if="tw" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{tw1}}</div>
+              <div ng-if="pl_tw" class="item item-text-wrap">{{tw2}}</div>
+           </div>
+
+      <div ng-if="flagWeight" style="margin-top: 0px; min-width: 300px; " id="container2"></div><!-- //体重 -->
+          <div ng-if="tz" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{tz1}}</div>
+              <div ng-if="pl_tz" class="item item-text-wrap">{{tz2}}</div>
+            </div>
+
+      <div ng-if="flagBP" style="margin-top: 0px; min-width: 300px; " id="container3"></div><!-- //血压 -->
+          <div ng-if="xy" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{xy1}}</div>
+              <div ng-if="pl_xy" class="item item-text-wrap">{{xy2}}</div>
+            </div>
+
+      <div ng-if="flagVol" style="margin-top: 0px; min-width: 300px; " id="container4"></div><!-- //尿量 -->
+          <div ng-if="nl&&flagVol" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{nl1}}</div>
+              <div ng-if="pl_nl" class="item item-text-wrap">{{nl2}}</div>
+            </div>
+
+      <div ng-if="flagHR" style="margin-top: 0px; min-width: 300px; " id="container5"></div><!-- //心率 -->
+          <div ng-if="xl" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{xl1}}</div>
+              <div ng-if="pl_xl" class="item item-text-wrap">{{xl2}}</div>
+            </div>
+
+      <div ng-if="flagPD" style="margin-top: 0px; min-width: 300px; " id="container6"></div><!-- //腹透 -->
+          <div ng-if="ft&&flagPD" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{ft1}}</div>
+              <div ng-if="pl_ft" class="item item-text-wrap">{{ft2}}</div>
+            </div>
+
+      <div style="margin-top: 0px; min-width: 300px; " id="container7"></div><!-- //化验 -->
+      <div style="margin-top: 0px; min-width: 300px; " id="container8"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container9"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container10"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container11"></div>
+          <div ng-if="hy" class="list list-inset" style="border-radius: 10px">
+                    <div class="item item-text-wrap">{{hy1}}</div>
+            </div>
+            <div ng-if="bg" class="list list-inset" style="border-radius: 10px">
+                    <div class="item item-text-wrap">{{bg1}}</div>
+            </div>
+    </div>
+
+    <div ng-if="type=='year'">
+      <div ng-if="flagT" style="margin-top: 0px; min-width: 300px; " id="container1"></div><!-- //体温 -->
+           <div ng-if="tw" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{tw1}}</div>
+              <div ng-if="pl_tw" class="item item-text-wrap">{{tw2}}</div>
+           </div>
+
+      <div ng-if="flagWeight" style="margin-top: 0px; min-width: 300px; " id="container2"></div><!-- //体重 -->
+            <div ng-if="tz" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{tz1}}</div>
+              <div ng-if="pl_tz" class="item item-text-wrap">{{tz2}}</div>
+            </div>
+
+      <div ng-if="flagBP" style="margin-top: 0px; min-width: 300px; " id="container3"></div><!-- //血压 -->
+             <div ng-if="xy" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{xy1}}</div>
+              <div ng-if="pl_xy" class="item item-text-wrap">{{xy2}}</div>
+            </div>
+
+      <div ng-if="flagVol" style="margin-top: 0px; min-width: 300px; " id="container4"></div><!-- //尿量 -->
+            <div ng-if="nl&&flagVol" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{nl1}}</div>
+              <div ng-if="pl_nl" class="item item-text-wrap">{{nl2}}</div>
+            </div>
+
+      <div ng-if="flagHR" style="margin-top: 0px; min-width: 300px; " id="container5"></div><!-- //心率 -->
+            <div ng-if="xl" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{xl1}}</div>
+              <div ng-if="pl_xl" class="item item-text-wrap">{{xl2}}</div>
+            </div>
+
+      <div ng-if="flagPD" style="margin-top: 0px; min-width: 300px; " id="container6"></div><!-- //腹透 -->
+           <div ng-if="ft&&flagPD" class="list list-inset" style="border-radius: 10px">
+              <div class="item item-text-wrap">{{ft1}}</div>
+              <div ng-if="pl_ft" class="item item-text-wrap">{{ft2}}</div>
+            </div>
+
+      <div style="margin-top: 0px; min-width: 300px; " id="container7"></div><!-- //化验 -->
+      <div style="margin-top: 0px; min-width: 300px; " id="container8"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container9"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container10"></div>
+      <div style="margin-top: 0px; min-width: 300px; " id="container11"></div>
+             <div ng-if="hy" class="list list-inset" style="border-radius: 10px">
+                    <div class="item item-text-wrap">{{hy1}}</div>
+            </div>
+            <div ng-if="bg" class="list list-inset" style="border-radius: 10px">
+                    <div class="item item-text-wrap">{{bg1}}</div>
+            </div>
+    </div>
+
+  </ion-content>
+
+</ion-view>

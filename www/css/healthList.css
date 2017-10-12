@@ -1,0 +1,182 @@
+#chooseHealth:after {
+  content: "\2714";
+  display: block;
+  position: absolute;
+  /*margin: auto;*/
+  top: 0; 
+  /*left: 0; */
+  /*bottom: 0; */
+  right: 0;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  background:  #00c09e;
+  border-radius: 50px;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  z-index: 100;
+  opacity: 0;
+  transition:         0.3s linear;
+  -o-transition:      0.3s linear;
+  -ms-transition:     0.3s linear;
+  -moz-transition:    0.3s linear;
+  -webkit-transition: 0.3s linear;
+  -o-user-select:      none;
+  -moz-user-select:    none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+
+#healthCheck.item-checkbox{
+  padding: 0px !important;
+  margin: 20px 0px;
+  background-color:transparent !important;
+  background-image: none !important;
+  border:0px !important;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+#healthCheck.item-checkbox .checkbox {
+  top:24px;
+  left: 90%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+
+.checkbox input:checked:before, .checkbox input:checked + .checkbox-icon:before {
+    background: #6ac4f8;
+    border-color: #6ac4f8;
+}
+
+#healthButton{
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.appointTable{
+  border-color:  #ddd;
+  border-width: thin;
+  border-style:solid;
+  /*line-height: 30px;*/
+  background-color: transparent;
+  
+}
+button.TimeBtn{
+  width:100%;
+  border-color: #6ac4f8;
+  color: #444;
+  height: 30px;
+  font-size:14px;
+   /*font-weight:bold; */
+  margin: 1px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: transparent;
+  border-width: thin;
+  border-style: solid;
+}
+button.appoint{
+  background-color: #95E1D3;
+  color: #fff;
+  
+  /*font-weight: bold;*/
+  border-top-right-radius: 15px 20px;
+  border-bottom-right-radius: 15px 20px;
+  border: 1px none #fff;
+  /*outline: none;*/
+}
+button.appointed{
+  background-color: #FCE38A;
+  color: #fff;
+  
+  font-weight: bold;
+  border-top-right-radius: 15px 20px;
+  border-bottom-right-radius: 15px 20px;
+  border: 1px none #fff;
+}
+button.appoint:disabled{
+  background-color: #ECF0F1;
+  color: #000;
+  font-weight:normal;
+  border-color:  #ddd;
+}
+
+div.odd{
+  border-bottom-style:none;
+}
+div.even{
+  border-top-style:none;
+}
+div.first{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+div.others{
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+/*#tbl.col:first-child{
+  padding: 0px;
+  border:1px solid #ddd;
+  border-top-style: none;
+}*/
+
+#autoline{ 
+  white-space: pre-wrap;
+}
+/*我的*/
+
+.my-down-bg{
+  height: 110px;
+  width: 100%;
+  background: url(../img/downSky.jpg) no-repeat;
+  background-size:cover;
+}
+
+.myPageBar{
+  background: transparent !important;
+  /*border:1px none #fff;*/
+}
+
+
+.myBtnBar {height: 90px}
+.myBtnBar > .button { font-size: 15px; line-height: 30px; padding: 0 15px; border-color: #eee;background-color: #fff;border-top: none;}
+.myBtnBar > .button .icon,.myBtnBar > .button.icon:before, .myBtnBar > .button.icon-left:before, .myBtnBar > .button.icon-right:before{color:#6ac4f8;font-size: 300%; margin-top: 20px; }
+.myBtnBar > .button:first-child { border-radius: 0px 0px 0px 0px}
+.myBtnBar > .button:last-child { border-radius: 0px 0px 0px 0px}
+
+.mylist >.item {
+  border-color: #eee
+}
+.greyIcon {
+  color: #ddd
+}
+
+.paddContent {
+  padding-left: 12%;
+  padding-right: 12%;
+}
+ 
+#agreement >p {
+  text-indent: 2em
+}
+#agreement >h4 {
+  color: #6ac4f8;
+  font-size: 16px;
+}
+
+button.phonevalid {
+  width:60%;
+  background-color: transparent;
+  border-style:solid;
+  font-size:14px;
+  text-align:center;
+  border-width: 0px 0px 0px 1px;
+  border-color: #6ac4f8;
+}
+
+#followDoc> .card:last-child {margin:0px !important;}

@@ -1,14 +1,10 @@
 <div class="msgbox {{'msgbox-'+msg.direct}}">
-	<!-- display time -->
-	<div ng-if="msg.diff" class="msg-time"><span>{{msg.time | msgdate}}</span></div>
-	<!-- avatar -->
-	<img class="avatar" ng-src="{{(photourls[msg.fromID]|changeimgip) || 'img/DefaultAvatar.jpg'}}" ng-click="emitEvent('profile',msg)"/>
-	<!-- chat bubble -->
-	<div class="msg-body"  on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event,'text')">
-		<!-- text content -->
-		<div class="media-text">{{msg.content.text}}</div>
-	</div>
-	<div my-small-spin="msg.status" class="status"></div>
-  <div ng-if="msg.status=='send_fail'"  class="msg-fail"><span><i class="icon ion-android-warning"></i>发送失败</span></div>
-
+    <div ng-if="msg.diff" class="msg-time"><span>{{msg.time | msgdate}}</span></div>
+    <img class="avatar" ng-src="{{photourls[msg.fromID] || 'img/DefaultAvatar.jpg'}}" ng-click="emitEvent('profile',msg)" />
+    <div class="msg-body" on-hold="emitEvent('holdmsg',msg.createTimeInMillis,$event,'text')">
+      <div multiline-text class="media-text" info="msg.content.text"></div>
+        <!-- <div class="media-text">{{msg.content.text}}</div> -->
+    </div>
+    <div my-small-spin="msg.status" class="status"></div>
+    <div ng-if="msg.status=='send_fail'" class="msg-fail"><span ng-click="emitEvent('resend',msg.createTimeInMillis)"><i class="icon ion-android-warning"></i>发送失败（点此重发）</span></div>
 </div>

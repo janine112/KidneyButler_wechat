@@ -1,0 +1,68 @@
+<ion-view cache-view="true" title="选择健康信息" hide-tabs>
+
+      <ion-nav-buttons  side="left" >
+        <my-nav-back-button ng-click="$ionicGoBack()"></my-nav-back-button>
+      </ion-nav-buttons>
+      <ion-nav-buttons  side="right" >
+         <button  id= "healthButton" class="button button-outline" ng-disabled = "!hasChanged" ng-click="SaveHealthList()" > 确定{{selectNumber}}/{{maxNumber}} </button><!--  -->
+      </ion-nav-buttons>
+  
+
+    <script type="text/javascript"></script>
+    <ion-content  class="padding">
+        <ion-checkbox id="healthCheck" ng-repeat="item in items " ng-disabled = "!item.selected && overflow" ng-checked="item.selected" on-hold="gotoHealthDetail(item)" ng-model="item.selected" ng-change="selectOrDeselect(item.insertTime,item.selected)" on-tap="popAlert(selectNumber)" >
+            
+                <div class="row">
+                    <p class="col" style="text-align: left;font-weight: bold;">{{item.label}}</p>
+                    <p class="col" style="text-align:center;">{{item.time|dateFormat:"YYYY-MM-DD"}}</p>
+                    
+
+                </div>
+
+                <div class="row">
+                    <p style="margin-left:2%">{{item.description}}</p>
+                </div>
+
+                <ion-item class="row row-wrap" style="border:none; text-align:center; height:100%;">
+                    <div class="col col-33" ng-repeat = "img in item.url">
+                        <img ng-src="{{img}}" style="height:100%; width:100%;max-height: 87px;max-height: 119px">
+                    </div>
+                </ion-item>
+
+        </ion-checkbox>
+       <!--  <ion-list>
+            <div id="chooseHealth" class="card" >
+            
+                <div class="row">
+                    <p class="col" style="text-align: left;font-weight: bold;">{{item.label}}</p>
+                    <p class="col" style="text-align:center;">{{item.time|dateFormat:"YYYY-MM-DD"}}</p>
+                    
+
+                </div>
+
+                <div class="row">
+                    <p style="margin-left:2%">{{item.description}}</p>
+                </div>
+
+                <ion-item class="row row-wrap" style="border:none; text-align:center; height:100%;">
+                    <div class="col col-33" ng-repeat = "img in item.url">
+                        <img ng-src="{{img}}" style="height:100%; width:100%;max-height: 87px;max-height: 119px">
+                    </div>
+                </ion-item>
+
+            </div>
+        </ion-list> -->
+
+
+        <div class="card" ng-if="noHealth">
+            <div class="item item-text-wrap">
+                您还没有健康信息！
+            </div>
+        </div>
+
+    
+        <ion-refresher pulling-text="下拉刷新..." on-refresh="do_refresher()"></ion-refresher>
+    
+    </ion-content>
+
+</ion-view>

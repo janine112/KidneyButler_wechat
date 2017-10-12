@@ -1,4 +1,4 @@
-<div class="msgbox image-msgbox {{'msgbox-'+msg.direct}}">
-	<div class="msg-time"><span style="color:#448AFF">咨询已升级为问诊</span></div>
-
+<div class="msgbox {{'msgbox-'+msg.direct}}">
+	<div ng-if="msg.content.flag=='consult'" class="msg-time"><span style="color:#448AFF">咨询已升级为问诊</span></div>
+	<div ng-if="msg.content.flag=='urgent'" class="msg-time"><span style="color:#448AFF">咨询已升级为加急咨询</span></div>
 </div>

@@ -4,3 +4,4 @@ node_modules/
 platforms/
 plugins/
 jmessage-phonegap-plugin-2.2.0/
+./.vscode/settings.json

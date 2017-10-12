@@ -39,6 +39,7 @@
     "commit": "37407f03703976f97e0a1235a157885344f70377"
   },
   "_source": "https://github.com/auth0/angular-jwt.git",
-  "_target": "0.1.9",
-  "_originalSource": "angular-jwt"
+  "_target": "^0.1.9",
+  "_originalSource": "angular-jwt",
+  "_direct": true
 }

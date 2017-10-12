@@ -1,35 +1,35 @@
-<ion-view cache-view="false" title="保费计算小工具">
-  <ion-nav-bar class="bar-positive green-bg" align-title="center">
+<ion-view cache-view="false" title="保费计算">
+  <!-- <ion-nav-bar class="bar-positive green-bg" align-title="center"> -->
     <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-ios-arrow-back font-white" ng-click="$ionicGoBack()"></button>
+        <my-nav-back-button ng-click="$ionicGoBack()"></my-nav-back-button>
     </ion-nav-buttons>
-  </ion-nav-bar>
-  <ion-content padding="true">
-      <label class="item item-input item-select-custom">
-          <i class="icon ion-asterisk" style="color:red;font-size:8px"></i><span class="input-label">投保年龄</span>
-          <select  ng-model="InsuranceInfo.InsuranceAge" ng-options="InsuranceAge.Age as InsuranceAge.Age for InsuranceAge in InsuranceAges"></select>
-      </label>
-      <label  class="item item-input item-select-custom">
-          <i class="icon ion-asterisk" style="color:red;font-size:8px"></i><span class="input-label">性别</span>
-          <select  ng-model="InsuranceInfo.Gender" ng-options="Gender.Type as Gender.Name for Gender in Genders"></select>
-      </label>
-      <label class="item item-input item-select-custom">
-          <i class="icon ion-asterisk" style="color:red;font-size:8px"></i><span class="input-label">投保年限</span>
-          <select  ng-model="InsuranceInfo.InsuranceTime" ng-options="Insurance.Time as Insurance.Time for Insurance in InsuranceTimes" ng-change="changeAge()"></select>
-      </label>
-      <label  class="item item-input item-select-custom">
-          <i class="icon ion-asterisk" style="color:red;font-size:8px"></i><span class="input-label">计算类型</span>
-          <select  ng-model="InsuranceInfo.CalculationType" ng-options="Calculation.Type as Calculation.Name for Calculation in CalculationTypes"></select>
-      </label>
-      <label class="item item-input">
-          <i class="icon ion-asterisk" style="color:red;font-size:8px"></i><span class="input-label">输入金额</span>
-
-          <input  ng-model="InsuranceInfo.InsuranceMoney"  type="number" placeholder="请输入您的投保金额" >
-      </label>
-    
+  <!-- </ion-nav-bar> -->
+  <ion-content >
+      <div class="list">
+          <label class="item item-input item-select">
+               <i class="icon_mine ion-android-contacts" style="color: #FFC125"></i><span class="input-label">&nbsp;&nbsp;年龄&thinsp;<span style="color:red;">*</span></span>
+              <select  ng-model="InsuranceInfo.InsuranceAge" ng-options="InsuranceAge.Age as InsuranceAge.Age for InsuranceAge in InsuranceAges"></select>
+          </label>
+          <label  class="item item-input item-select">
+              <i class="ion-male" style="color: #6495ED"></i><span class="input-label">&nbsp;&nbsp;性别&thinsp;<span style="color:red;">*</span></span>
+              <select  ng-model="InsuranceInfo.Gender" ng-options="Gender.Type as Gender.Name for Gender in Genders"></select>
+          </label>
+          <label class="item item-input item-select">
+              <i class="icon ion-calendar" style="color: #FF69B4"></i><span class="input-label">&nbsp;&nbsp;投保年限&thinsp;<span style="color:red;">*</span></span>
+              <select  ng-model="InsuranceInfo.InsuranceTime" ng-options="Insurance.Time as Insurance.Time for Insurance in InsuranceTimes" ng-change="changeAge()"></select>
+          </label>
+          <label  class="item item-input item-select">
+              <i class="ion-ios-search-strong" style="color: #66CD00"></i><span class="input-label">&nbsp;&nbsp;计算类型&thinsp;<span style="color:red;">*</span></span>
+              <select  ng-model="InsuranceInfo.CalculationType" ng-options="Calculation.Type as Calculation.Name for Calculation in CalculationTypes"></select>
+          </label>
+          <label class="item item-input" style="color: #8DEEEE">
+              <i class="ion-social-yen-outline"></i><span class="input-label">&nbsp;&nbsp;输入金额&thinsp;<span style="color:red;">*</span></span>
+              <input ng-model="InsuranceInfo.InsuranceMoney" type="number" placeholder="&nbsp;&emsp;&emsp;&emsp;请输入您的投保金额">
+          </label>
+    </div>
     <div>
-      <button style="margin:20px auto;width: 80%" class="button button-block green-bg font-white" ng-click="getexpense()">确认</button>
-      <button style="margin:20px auto;width: 80%" class="button button-block green-bg font-white" ng-click="resetexpense()">重置</button>
+      <button style="margin:20px auto;width:80%; border-radius:50px;" class="button button-block green-bg font-white" ng-click="getexpense()">计算</button>
+      <button style="margin:20px auto;width:80%; border-radius:50px;" class="button button-block green-bg font-white" ng-click="resetexpense()">重置</button>
     </div>
   </ion-content>
 </ion-view>

@@ -5,8 +5,8 @@
       <ion-scroll overflow-scroll="false" direction="xy" scrollbar-x="false" scrollbar-y="false"
       zooming="true" min-zoom="{{zoomMin}}" style="width: 100%; height: 100%"
       delegate-handle="imgScrollHandle">
-      <div class="picBox"  ng-dblclick="switchZoomLevel()">
-			  <span></span><img id="bigPic" ng-src="{{imageUrl|changeimgip}}"/>
+      <div class="picBox"  ng-dblclick="switchZoomLevel()" on-swipe-right="onSwipeRight()" on-swipe-left="onSwipeLeft()">
+			  <span></span><img id="bigPic" ng-src="{{imageUrl}}"/>
 			</div>
     </ion-scroll>
 </div>

@@ -1,61 +1,162 @@
-<ion-view cache-view="false" title="医生详情" >
-
-    <ion-nav-bar class="bar-positive green-bg" align-title="center">
-        <ion-nav-buttons side="left">
-            <button class="button button-clear"  ng-click="Goback()"><i class="icon ion-ios-arrow-back font-white"></i></button>
-
-            <!-- <button class="button button-icon icon ion-ios-arrow-left fc-ff" ng-click="Goback()"></button> -->
-        </ion-nav-buttons>
-    </ion-nav-bar>
+<ion-view cache-view="false" title="医生详情" show-tabs>
+    <ion-nav-buttons side="left">
+        <my-nav-back-button ng-click="GoBack()"></my-nav-back-button>
+    </ion-nav-buttons>
+    
     <ion-content>
-
     
 
-     <div class="card">
-         <div class="item item-thumbnail-left"> 
-            <img style="border-radius: 100%;top: 40%;margin-top: -40px" ng-src="{{(doctor.photoUrl|changeimgip)  || 'img/DefaultAvatar.jpg'}}">
+     <div>
+         <div class="item item-thumbnail-left" style="padding-bottom: 20px;border:none"> 
+            <img style="border-radius: 100%;top: 40%;margin-top: -30px;width: 70px;height: 70px" ng-src="{{doctor.photoUrl  || 'img/DefaultAvatar.jpg'}}">
             <span>{{doctor.name}}</span>
             <span style="float: right">{{doctor.department}}</span>
-            <p>{{doctor.workUnit}}</p>
+            <p>{{doctor.workUnit||"无"}}</p>
             <p>职称:{{doctor.title}}</p>
-            <p>性别：{{{1:"男",2:"女",undefined:"未填写"}[doctor.gender]}}</p>
-            <p style="font-size: 12px">收费：<span>咨询{{doctor.charge1}}元</span><span style="margin-left: 20px">问诊{{doctor.charge2}}元</span></p>
+            <!-- <p>性别：{{{1:"男",2:"女",undefined:"未填写"}[doctor.gender]}}</p> -->
+            <!-- <p style="font-size: 12px">收费：<span>咨询{{doctor.charge1}}元</span><span style="margin-left: 20px">问诊{{doctor.charge2}}元</span></p> -->
             <div class="row row-below-avatar" style="font-size: 14px;color:#2B67F5;">
-                <span class="col font-c"><i class="icon ion-star"></i>{{doctor.score.toFixed(2)||"无"}}</span>
+                <span class="col font-c" style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="icon ion-star"></i>{{doctor.score.toFixed(2)||"无"}}
+                </span>
                 <span class="col font-c">咨询量：{{doctor.count1}}</span>
                 <span class="col font-c">问诊量：{{doctor.count2}}</span>
             </div>
-            
-        </div>
+          </div>
+         <!--  <div class="row" style="font-size: 14px;color:#2B67F5;padding-top: 2px;text-align: center;">
+                <span class="col font-c"><i class="icon ion-star"></i>{{doctor.score.toFixed(2)||"无"}}</span>
+                <span class="col font-c">咨询量：{{doctor.count1}}</span>
+                <span class="col font-c">问诊量：{{doctor.count2}}</span>
+          </div> -->
+        <div class="row" style="border:none">
 
-        <div class="row">
-            <button style="color:#181544;font-size:14px;font-weight:bold;text-align: center;" ng-disabled="DisabledConsult" ng-click="question(doctor.userId,doctor.name,doctor)" class="col no-line"><i class="icon iconfont icon-zixun2"></i>咨询</button>
-            <button  style="color:#181544;font-size:14px;font-weight:bold;text-align: center;" ng-disabled="DisabledConsult" ng-click="consult(doctor.userId,doctor.name,doctor)" class="col no-line"><i class="icon iconfont icon-baojifuben"></i>问诊</button>
+            <button  ng-if="!doctor.IsMyFollowDoctor" ng-disabled="DisabledConsult" ng-click="followDoctor(doctor)" class="doctorBtn"><i class="icon ion-ios-heart-outline">
+            </i>关注医生</button>
+            <button  ng-if="doctor.IsMyFollowDoctor"  ng-click="unfollowDoctor(doctor)" class="doctorBtn2"><i class="icon ion-ios-heart">
+            </i>已关注医生</button>
+            <button  ng-if="!doctor.IsMyDoctor" ng-disabled="(!doctor.counselStatus4)||(doctor.charge4==undefined)||DisabledConsult" ng-click="applyMyDoctor(doctor)" class="doctorBtn"><i class="icon ion-person-add"></i>申请为管理医生</button>
+            <button  ng-if="doctor.IsMyDoctor" ng-click="cancelMyDoc(doctor)" class="doctorBtn2"><i class="icon ion-person-add"></i>已成为管理医生</button>
+
+
         </div>
+          
+
+     
+      <ion-item>
+        <span style="font-size: 18px"><i class="icon ion-network" style="margin-right: 10px"></i>医生服务</span>
+        <div class="row">
+            <button ng-disabled="!doctor.counselStatus1||(doctor.charge1==undefined)||DisabledConsult" ng-click="question(doctor.userId,doctor.charge1)" class="docDetailBtn">
+              <i class="icon iconfont icon-zixun2" style="color:#daf603;font-size: 25px;"></i></br>咨询</br>
+              <span style="font-size: 2px; color:#a2a2a2" ng-if="doctor.counselStatus1">{{doctor.charge1}}元/次</span><span style="font-size: 14px; color:#a2a2a2" ng-if="!doctor.counselStatus1">未开通</span>
+            </button>
+            <button ng-disabled="!doctor.counselStatus2||(doctor.charge2==undefined)||DisabledConsult" ng-click="consult(doctor.userId,doctor.charge1,doctor.charge2)" class="docDetailBtn">
+              <i class="icon iconfont icon-baojifuben" style="color: #3ef63d;font-size: 25px;"></i></br>问诊</br>
+              <span style="font-size: 2px; color:#a2a2a2" ng-if="doctor.counselStatus2">{{doctor.charge2}}元/次</span><span style="font-size: 14px; color:#a2a2a2" ng-if="!doctor.counselStatus2">未开通</span>
+            </button>
+            <button ng-disabled="!doctor.counselStatus3||(doctor.charge3==undefined)||DisabledConsult" class="docDetailBtn" ng-click="urgentquestion(doctor.userId, doctor.charge1,doctor.charge3)">
+              <i class="icon ion-speakerphone" style="color: #ff00dd;font-size: 25px;"></i></br>加急咨询</br>
+              <span style="font-size: 2px; color:#a2a2a2" ng-if="doctor.counselStatus3&&!(doctor.charge3==undefined)">{{doctor.charge3}}元/次</span><span style="font-size: 14px; color:#a2a2a2" ng-if="!doctor.counselStatus3||(doctor.charge3==undefined)">未开通</span>
+            </button>
+            <button ng-disabled="!doctor.counselStatus5||(doctor.charge5==undefined)||DisabledConsult" class="docDetailBtn" ng-click="docAppointment(doctor)">
+              <i class="icon ion-person-stalker" style="color: #00c2ff;font-size: 25px;"></i></br>面诊</br>
+              <span style="font-size: 2px; color:#a2a2a2" ng-if="doctor.counselStatus5&&!(doctor.charge5==undefined)">{{doctor.charge5}}元/次</span><span style="font-size: 14px; color:#a2a2a2" ng-if="!doctor.counselStatus5||(doctor.charge5==undefined)">未开通</span>
+            </button>
+             <button class="docDetailBtn" ng-click="openModal()">
+                <i class="icon ion-ios-people" style="color:#33cd47;font-size: 25px;"></i></br>排班表</br>
+                <span style="font-size: 2px; color:#a2a2a2" ng-if="!DisabledConsult&&doctor.counselStatus5&&!(doctor.charge5==undefined)">医生排班</span><span style="font-size: 2px; color:#a2a2a2"></span></button>
+        </div>
+        </ion-item>
        
         
         
         
 
-     
-
+     <ion-item ng-click="openModal()">
       <ion-item>
         <span style="font-size: 18px"><i class="icon ion-ios-lightbulb-outline" style="margin-right: 10px"></i>擅长方向</span>
-         <p style="font-size: 14px;padding-left: 20px" class="item-text-wrap">{{doctor.major}}</p>
+         <p style="font-size: 14px;padding-left: 20px" class="item-text-wrap">{{doctor.major||"医生有点忙，还没填写噢"}}</p>
       </ion-item>
 
       <ion-item>
-        <span style="font-size: 18px"><i class="icon ion-clipboard" style="margin-right: 10px"></i>个人介绍</span>
-         <p style="font-size: 14px;padding-left: 20px" class="item-text-wrap">{{doctor.description}}</p>
+        <span style="font-size: 18px"><i class="icon ion-person" style="margin-right: 10px"></i>个人介绍</span>
+         <p style="font-size: 14px;padding-left: 20px" class="item-text-wrap">{{doctor.description||"医生有点忙，还没填写噢"}}</p>
+      </ion-item>
+      <ion-item style="border-bottom: 1px none #fff">
+        <span style="font-size: 18px"><i class="icon ion-clipboard" style="margin-right: 10px"></i>医生评价({{commentNum}}个）</span>
+        <p style="font-size: 14px;padding-left: 20px;margin-top: 5px;" class="item-text-wrap" ng-if="!hasComment">暂无评论</p>
+        <div class="list" ng-repeat="comment in doctorComment" style="margin:0px">
+          <div class="row" style="padding: 0px">
+            <span class="commentStyle">{{comment.patientId.phoneNo}}</span>
+            <div class="item" style="padding-top: 0;border: white"><ionic-ratings ratingsobj='comment.ratingsObject'></ionic-ratings> </div>
+            <span class="commentStyle">{{comment.time}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <button style="margin:auto;border:white;color:#6ac4f8;background-color:white" ng-click='goAllComment()' ng-if="moreComment"><span>点击查看全部</span></button>
+        </div>
       </ion-item>
 
     </div>
-
-
-
-
-
-
   </ion-content>
+  
+ <script id="templates/modal.html" type="text/ng-template">
+        <ion-modal-view>
+            <ion-content class="padding" style="top:63px">
+                <p style="padding-left:4px;text-align: center; ">医生排班表</p>
+                <div ng-show="hasstop" style="padding-left:4px;">
+                    <p >医生停诊中：</p>
+                    <p>当前日期：{{dateC|dateFormat:"YYYY-MM-DD"}}</p>
 
+                    <p>停诊开始：{{begin|dateFormat:"YYYY-MM-DD"}}</p>
+                    <p>停诊结束：{{end|dateFormat:"YYYY-MM-DD"}}</p>
+                </div>
+
+                <div class="row">
+                    <div class="col schedual-border" ><span style="opacity:0">上午</span></div>
+                    <div class="col schedual-border" >一</div>
+                    <div class="col schedual-border" >二</div>
+                    <div class="col schedual-border" >三</div>
+                    <div class="col schedual-border" >四</div>
+                    <div class="col schedual-border" >五</div>
+                    <div class="col schedual-border" >六</div>
+                    <div class="col schedual-border-right">日</div>
+                </div>
+                <div class="row" disabled="true">
+                    <div class="col schedual-border" >上午</div>
+                    <div class="col schedual-border" ng-style="HemoTbl[1]" ></div>
+                    <div class="col schedual-border" ng-style="HemoTbl[3]" ></div>
+                    <div class="col schedual-border" ng-style="HemoTbl[5]" ></div>
+                    <div class="col schedual-border" ng-style="HemoTbl[7]" ></div>
+                    <div class="col schedual-border" ng-style="HemoTbl[9]" ></div>
+                    <div class="col schedual-border" ng-style="HemoTbl[11]" ></div>
+                    <div class="col schedual-border-right" ng-style="HemoTbl[13]" ></div>
+                </div>
+                <div class="row" disabled="true">
+                    <div class="col schedual-border-bottom" >下午</div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[2]" ></div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[4]" ></div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[6]"></div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[8]" ></div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[10]" ></div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[12]" ></div>
+                    <div class="col schedual-border-all" ng-style="HemoTbl[14]" ></div>
+                </div>
+                <div class="row" style="padding:0px;">
+                    <div class='col'>
+                        <div style="width: 20px;height: 20px;background-color: red;border: solid;border-color: #6ac4f8"></div>
+                    </div>
+                    <div class='col'>
+                        <div>工作</div>
+                    </div>
+                    <div class='col'>
+                        <div style="width: 20px;height: 20px;background-color: white;border: solid;border-color: #6ac4f8"></div>
+                    </div>
+                    <div class='col'>
+                        <div>空闲</div>
+                    </div>
+                </div>
+                <button class="button button-block green-bg font-white" ng-click="modal.hide()">返回</button>
+            </ion-content>
+        </ion-modal-view>
+    </script>
 </ion-view>

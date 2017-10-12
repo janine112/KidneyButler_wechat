@@ -1,9 +1,9 @@
 <ion-view cache-view="false" title="保险意向名单">
-  <ion-nav-bar class="bar-positive green-bg" align-title="center">
+  <!-- <ion-nav-bar class="bar-positive green-bg" align-title="center"> -->
     <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-ios-arrow-back font-white" ng-click="Back()"></button>
+      <my-nav-back-button ng-click="$ionicGoBack()"></my-nav-back-button>
     </ion-nav-buttons>
-  </ion-nav-bar>
+  <!-- </ion-nav-bar> -->
   <div  style="position: absolute;top: 43px;z-index:100;display: block;height: 2px;background-color: #33cd5f;{{barwidth}}" ></div>
   <ion-content padding="true"  style=" padding-left:0%;padding-right:0%;background : -webkit-linear-gradient(bottom, rgb(101, 98, 160) 00%, rgb(0, 0, 0) 99%);">
     <div class="row" style="height:30px">

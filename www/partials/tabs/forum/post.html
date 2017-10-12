@@ -1,0 +1,32 @@
+<ion-view view-title="发帖">
+  <ion-nav-bar class="bar-positive" align-title="center">
+
+      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="left" >
+          <button class="button button-positive defa-bg defa-font" ng-click="GoBack()">取消</button>
+      </ion-nav-buttons>
+
+      <ion-nav-buttons class="bar-dark nav-title-slide-ios7" side="right" >
+          <button class="button button-positive defa-bg defa-font" ng-click="Post()">发表</button>
+      </ion-nav-buttons>
+  </ion-nav-bar>
+
+  <ion-content class="padding">    
+        <form>
+            <!-- <label class="item item-input" style="border:1px solid #6ac4f8;border-radius: 5px;margin-top: 10px; "> -->
+              <textarea placeholder="标题" rows="1" style="border:1px solid #6ac4f8;border-radius: 5px; margin-top: 10px; left:5px;top:10px;line-height: 30px; font-size:15px; width: 98%" ng-model="post.title"></textarea>
+            <!-- </label> -->
+            <!-- <label class="item item-input" style="border:1px solid #6ac4f8;border-radius: 5px;margin-top: 10px; "> -->
+              <textarea placeholder="正文" rows="8" style="border:1px solid #6ac4f8;border-radius: 5px; margin-top: 10px; left:5px;top:10px;line-height: 30px; font-size:15px; width: 98%" ng-model="post.content[0].text"></textarea>
+            <!-- </label> -->
+            <ion-item class="row row-wrap" style="border:none; text-align:center; height:100%;margin-top:10px" >
+              <div  class="col col-33" ng-repeat="filepath in post.content[1].image track by $index">
+                <img ng-src="{{filepath}}"  name="Photo" ng-click="showoriginal(filepath)" style="height:90%; width:90%"  /><i  class="icon ion-close-circled" style="width: 5%;float: right;" ng-click="deleteimg($index)"></i>
+              </div>
+            </ion-item>
+            <div class="row">
+              <button class="button icon ion-camera" style="height: 40px;" ng-click="onClickCamera($event)" >上传图片</button>
+              <ion-checkbox ng-model="post.anonymous" style="border: none;">匿名发帖</ion-checkbox>
+            </div>
+        </form>
+  </ion-content>
+</ion-view>

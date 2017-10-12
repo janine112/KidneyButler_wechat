@@ -1,0 +1,55 @@
+<ion-view cache-view="false" hide-Back-Button="true" title="帖子内容" show-tabs>
+
+    <ion-nav-buttons side="left">
+        <my-nav-back-button ng-click="GoBack()"></my-nav-back-button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-clear" ng-click="GoToCommentf(postId)"><i class="icon ion-compose"></i></button>
+    </ion-nav-buttons>
+
+  <ion-content>
+    <div class="list" style="margin-bottom: 0px;">
+
+           <div class="item item-avatar" style="border-bottom: none;padding-top: 12px;padding-bottom: 0px">
+                <img style="margin-top: -10px" ng-if = "!(anonymous)" ng-src="{{avatar || 'img/DefaultAvatar.jpg'}}">
+                <img style="margin-top: -10px" ng-if = "(anonymous)" ng-src="{{'img/DefaultAvatar.jpg'}}">
+                <span style="font-size: 14px" ng-if = "!(anonymous)">{{name || sponsorId}}</span>
+                <span style="font-size: 14px" ng-if = "(anonymous)">匿名用户</span><br/>
+                <span style="font-size: 12px">{{time|dateFormat:"YYYY-MM-DD"}}</span>
+           </div>
+           <div class="item item-body" style="border: none; padding-top: 0px;padding-bottom: 10px">
+                <h style="margin-top: 0px; margin-bottom: 0px;font-size: 14px">{{title}}</h>
+                <p style="margin-top: 8px;margin-bottom: 8px;">{{text}}</p>
+                <ion-item class="row row-wrap" style="border:none; text-align:center; height:100%;margin-top:10px" >
+                  <div  class="col col-33" ng-repeat="filepath in image track by $index">
+                    <img ng-src="{{filepath}}"  name="Photo" ng-click="showoriginal(filepath)"  style="height:90%; width:90%"  />
+                  </div>
+                </ion-item>
+                <p style="margin-top: 0px;">
+                   <a class="subdued" style="float: right; font-size: 12px">{{favoritesNum}} 收藏</a>
+                   <a class="subdued" style="float: right; font-size: 12px; padding-right: 8px">{{replyCount}} 评论</a>
+                </p>
+           </div>
+
+    </div>
+
+    <div class="item item-divider" style="font-size: 13px">
+        <i class="icon ion-ios-people"></i>
+        全部评论:({{replyCount}})
+    </div>
+    <div ng-repeat="item in comments" class="list" style="margin-bottom: 0px;padding-bottom: 10px;">
+            <div class="item item-avatar" style="border-bottom-width: 0px;padding-top: 8px;padding-bottom: 5px;" ng-click="ReplyOrDelete1(item)">
+                <img style="margin-top: -13px" ng-src="{{item.avatar}}">
+                <span style="font-size: 14px">{{item.userName || item.userId}}</span><br/>
+                <span style="font-size: 12px">{{item.time|dateFormat:"YYYY-MM-DD"}}</span>
+                <p style="padding-top: 5px;white-space: normal;">{{item.content}}</p>
+            </div> 
+            <div ng-if="(item.replies.length)" style="margin-left: 70px;margin-bottom: 0px;background-color: #F0F0F0;margin-right: 10px;padding: 8px">
+            <div ng-repeat="rep in item.replies" class="list" style="margin-bottom: 0px;" ng-click="ReplyOrDelete2(rep,item)">
+                     <p style="margin-bottom: 0px;">{{rep.userName || rep.userId}} : @{{item.userName}} {{rep.content}}</p>
+            </div>
+            </div>
+    </div>
+  </ion-content>
+
+</ion-view>

@@ -30,7 +30,8 @@
 }
 .green-edite-css {
   border: 1px solid #6ac4f8 !important;
-  border-radius: 10px !important;
+  border-radius: 20px !important;
+  height: 35px;
 }
 .f-fr{
   float: right;
@@ -75,6 +76,10 @@
 .icon-c{
   color: #ea790a!important;
   font-size: 12px;
+}
+.icon_mine {
+  size: 50px;
+  vertical-align: middle;
 }
 .c-red {
   color: red !important;
@@ -313,9 +318,9 @@
   color: #ffa76d;
   font-size: 16px;
 }
-.item-avatar > img:first-child{
+/*.item-avatar > img:first-child{
   top:10px
-}
+}*/
 .patient-bar .button{
   background: #fff;
   color: #333;
@@ -326,4 +331,17 @@
   margin-bottom: 5px;
 }
 
+.high-light {
+  color: #6ac4f8 !important;
+  border-color: #6ac4f8;
+}
 
+.roundBtn {
+  border: 1px none #6ac4f8;
+  border-radius: 20px !important;
+  background-color: #6ac4f8;
+  color: #fff;
+  line-height: 17px !important;
+  min-height: 35px !important;
+  width: 100%
+}
