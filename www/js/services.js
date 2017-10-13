@@ -2891,11 +2891,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
     }
   }
 }])
-<<<<<<< HEAD
-.factory('QandC', ['Patient', '$q', 'Order', '$http', 'Storage', '$ionicLoading', '$state', '$ionicPopup', '$ionicHistory', 'Counsels', 'Account', 'CONFIG', 'Expense', 'socket', 'Mywechat', function (Patient, $q, Order, $http, Storage, $ionicLoading, $state, $ionicPopup, $ionicHistory, Counsels, Account, CONFIG, Expense, socket, Mywechat) {
-=======
-.factory('QandC', ['$q', 'Order', '$http', 'Storage', '$ionicLoading', '$state', '$ionicPopup', '$ionicHistory', 'Counsels', 'Account', 'CONFIG', 'Expense', 'socket', 'Mywechat', 'payment', function ($q, Order, $http, Storage, $ionicLoading, $state, $ionicPopup, $ionicHistory, Counsels, Account, CONFIG, Expense, socket, Mywechat, payment) {
->>>>>>> ae5e3b21cb10eead80af384f518230f53ef105c2
+.factory('QandC', ['Patient', '$q', 'Order', '$http', 'Storage', '$ionicLoading', '$state', '$ionicPopup', '$ionicHistory', 'Counsels', 'Account', 'CONFIG', 'Expense', 'socket', 'Mywechat', 'payment', function (Patient, $q, Order, $http, Storage, $ionicLoading, $state, $ionicPopup, $ionicHistory, Counsels, Account, CONFIG, Expense, socket, Mywechat, payment) {
   self = this
   var ionicLoadingshow = function () {
     $ionicLoading.show({
