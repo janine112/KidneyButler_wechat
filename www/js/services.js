@@ -448,7 +448,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   var Message = function () {
     return $resource(CONFIG.baseUrl + ':path/:route', {path: 'message'}, {
       getMessages: {method: 'GET', params: {route: 'messages'}, timeout: 100000},
-      setMessagesRead:{method: 'POST', params: {route: 'status'}, timeout: 100000}
+      setMessagesRead: {method: 'POST', params: {route: 'status'}, timeout: 100000}
     })
   }
 
@@ -2009,7 +2009,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
 
 .factory('payment', ['$q', 'Mywechat', 'Storage', '$http', '$location', '$ionicLoading', 'checknetwork', function ($q, Mywechat, Storage, $http, $location, $ionicLoading, checknetwork) {
   return {
-    payment: function (neworder) {
+    payment: function (orderdata) {
       $ionicLoading.show({
         template: '请稍候',
         duration: 10000
@@ -2064,35 +2064,17 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                         //   result.data.ip = "121.43.107.106"
                         // }
                         // neworder.ip = result.data.ip
-              Mywechat.addOrder(neworder).then(function (data) {
-                $ionicLoading.hide()
-                if (data.results && (data.results.status === 0 || data.results.status === 1)) {
-                  res = {
-                    'errMsg': 'chooseWXPay:ok',
-                    'money': neworder.money / 100
-                  }
-                  $ionicLoading.show({
-                    template: data.results.msg,
-                    duration: 3000
-                  })
+
+              wx.chooseWXPay({
+                timestamp: orderdata.results.timestamp,
+                nonceStr: orderdata.results.nonceStr,
+                package: orderdata.results.package,
+                signType: orderdata.results.signType,
+                paySign: orderdata.results.paySign,
+                success: function (res) {
+                  // res.money = orderdata.money / 100
                   defer.resolve(res)
-                  return defer.promise
-                } else {
-                  wx.chooseWXPay({
-                    timestamp: data.results.timestamp,
-                    nonceStr: data.results.nonceStr,
-                    package: data.results.package,
-                    signType: data.results.signType,
-                    paySign: data.results.paySign,
-                    success: function (res) {
-                      res.money = neworder.money / 100
-                      defer.resolve(res)
-                    }
-                  })
                 }
-              }, function (err) {
-                checknetwork.checknetwork(err)
-                defer.reject(err)
               })
 
                   // },function(err){
@@ -2334,7 +2316,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
     return deferred.promise
   }
 
-    self.setMessagesRead = function (params) {
+  self.setMessagesRead = function (params) {
     var deferred = $q.defer()
     Data.Message.setMessagesRead(
             params,
@@ -2420,7 +2402,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
             })
     return deferred.promise
   }
-    self.getNotRead = function (params) {
+  self.getNotRead = function (params) {
     var deferred = $q.defer()
     Data.News.getNotRead(
             params,
@@ -2909,7 +2891,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
     }
   }
 }])
-.factory('QandC', ['$q', 'Order', '$http', 'Storage', '$ionicLoading', '$state', '$ionicPopup', '$ionicHistory', 'Counsels', 'Account', 'CONFIG', 'Expense', 'socket', 'Mywechat', function ($q, Order, $http, Storage, $ionicLoading, $state, $ionicPopup, $ionicHistory, Counsels, Account, CONFIG, Expense, socket, Mywechat) {
+.factory('QandC', ['$q', 'Order', '$http', 'Storage', '$ionicLoading', '$state', '$ionicPopup', '$ionicHistory', 'Counsels', 'Account', 'CONFIG', 'Expense', 'socket', 'Mywechat', 'payment', function ($q, Order, $http, Storage, $ionicLoading, $state, $ionicPopup, $ionicHistory, Counsels, Account, CONFIG, Expense, socket, Mywechat, payment) {
   self = this
   var ionicLoadingshow = function () {
     $ionicLoading.show({
@@ -3153,7 +3135,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                            * @sign       {[type]}
                            * @return   {[type]}
                            */
-                          Wechat.sendPaymentRequest(params, function () {
+                          payment.payment(orderdata, function () {
                           // alert("Success");
                             ionicLoadingshow()
                             $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
@@ -3294,7 +3276,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                       'timestamp': orderdata.results.timestamp, // timestamp
                       'sign': orderdata.results.paySign // signed string
                     }
-                    Wechat.sendPaymentRequest(params, function () {
+                    payment.payment(orderdata, function () {
                       /**
                      * *[用户选择将咨询升级成问诊是调用方法，将咨询的type从1（咨询）转为3（问诊）]
                      * @Author   ZXF
@@ -3455,7 +3437,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                            * @sign       {[type]}
                            * @return   {[type]}
                            */
-                      Wechat.sendPaymentRequest(params, function () {
+                      payment.payment(orderdata, function () {
                           // alert("Success");
                         ionicLoadingshow()
 
@@ -3594,7 +3576,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                       'timestamp': orderdata.results.timestamp, // timestamp
                       'sign': orderdata.results.paySign // signed string
                     }
-                    Wechat.sendPaymentRequest(params, function () {
+                    payment.payment(orderdata, function () {
                       /**
                      * *[用户选择将咨询升级成问诊是调用方法，将咨询的type从1（咨询）转为3（问诊）]
                      * @Author   ZXF
@@ -3768,7 +3750,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                          * @sign       {[type]}
                          * @return   {[type]}
                          */
-                      Wechat.sendPaymentRequest(params, function () {
+                      payment.payment(orderdata, function () {
                           // alert("Success");
                       /**
                        * *[修改患者咨询问诊过程能够询问的次数]count=3表示咨询 count=999表示问诊
