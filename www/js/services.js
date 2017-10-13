@@ -3231,7 +3231,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                                * @sign       {[type]}
                                * @return   {[type]}
                                */
-                              Wechat.sendPaymentRequest(params, function () {
+                              payment.payment(orderdata, function () {
                               // alert("Success");
                                 ionicLoadingshow()
                                 $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
