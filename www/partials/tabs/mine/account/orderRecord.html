@@ -28,7 +28,7 @@
             <p ng-if="order.type==1||order.type==2||order.type==3||order.type==6||order.type==7" class="tag" style="background-color: #FCE38A">{{order.conselObject|filterOrderStatus:'consult'}}</p>
             <p ng-if="order.type==4" class="tag" style="background-color: #FCE38A">{{order.docInChaObject|filterOrderStatus:'incharge'}}</p>
             <p ng-if="order.type==5" class="tag" style="background-color: #FCE38A">{{order.perDiagObject|filterOrderStatus:'appointment'}}</p>
-            <p ng-if="order.perDiagObject" class="tag" style="background-color: #F38181"> 验证码{{order.perDiagObject.code}}</p>
+            <p ng-if="order.perDiagObject" class="tag" style="background-color: #F38181"> 就诊码{{order.perDiagObject.code}}</p>
             <button class="tag" ng-if="order.perDiagObject && order.perDiagObject.diagId && order.perDiagObject===0" ng-click="cancelAppointment(order.perDiagObject,order.doctorName)">取消</br>预约</button>
             <!-- <p style="background-color: #6ac4f8;color: #fff">{{order.orderstatus|orderStatus:'order'}}</p> -->
           </div>

@@ -5,21 +5,19 @@
     
     <ion-content class="padding">
 
-    <div class="card">
-         <div class="item item-thumbnail-left"> 
-            <img style="border-radius: 100%;top: 40%;margin-top: -40px" ng-src="{{doctor.photoUrl  || 'img/DefaultAvatar.jpg'}}">
-            <span>{{doctor.name}}</span>
-            <span style="float: right">{{doctor.department}}</span>
-            <p>{{doctor.workUnit||"无"}}</p>
-            <p>职称:{{doctor.title}}</p>
-            <p>性别：{{{1:"男",2:"女",undefined:"未填写"}[doctor.gender]}}</p>
-            
-        </div>
+    <div class="item item-thumbnail-left" style="border-width: 0px 0px 1px 0px"> 
+        <img style="border-radius: 100%;top: 40%;margin-top: -30px" ng-src="{{doctor.photoUrl  || 'img/DefaultAvatar.jpg'}}">
+        <span>{{doctor.name}}</span>
+        <span style="float: right">{{doctor.department}}</span>
+        <p>{{doctor.workUnit||"无"}}</p>
+        <p>职称:{{doctor.title}}</p>
+        <p>性别：{{{1:"男",2:"女",undefined:"未填写"}[doctor.gender]}}</p>
+        
     </div>
 
-    <div style="color:#aaa">
-        <p><i class="ion-record" style="color:#6ac4f8"></i><span style="padding-left:5px">所有咨询服务都免费开通，不限次数</span></p>
-        <p><i class="ion-record" style="color:#6ac4f8"></i><span style="padding-left:5px">所有加急服务服务都免费开通，不限次数，且主管医生会优先处理绑定患者的加急问题</span></p>
+    <div style="color:#aaa;margin-top: 30px">
+        <p><i class="ion-record" style="color:#6ac4f8"></i><span style="padding-left:5px">主管医生将为您提供全面个性化的健康方案制定和调整，数据分析解读，每月健康报告</span></p>
+        <p><i class="ion-record" style="color:#6ac4f8"></i><span style="padding-left:5px">服务期间主管医生的咨询和问诊服务免费（不包括加急咨询），不限次数</span></p>
     </div>
 
     <label  class="item item-input item-select-custom green-edite-css">
