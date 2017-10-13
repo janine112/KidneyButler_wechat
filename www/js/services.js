@@ -486,7 +486,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
 
   var Mywechat = function () {
     return $resource(CONFIG.baseUrl + ':path/:route', {path: 'wechat'}, {
-      settingConfig: {method: 'GET', skipAuthorization: true, params: {route: 'settingConfig'}, timeout: 100000},
+      settingConfig: {method: 'GET', params: {route: 'settingConfig'}, timeout: 100000},
       messageTemplate: {method: 'POST', params: {route: 'messageTemplate'}, timeout: 100000},
       // gettokenbycode: {method: 'GET', params: {route: 'gettokenbycode'}, timeout: 100000},
       download: {method: 'GET', params: {route: 'download'}, timeout: 100000},
@@ -3096,7 +3096,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                       })
                     }
                   })
-                  } else {
+                } else {
                   // 不是咨询主管医生
                   Account.getCounts({patientId: Storage.get('UID'), doctorId: DoctorId}).then(function (succ) {
                     console.log('没有主管医生！')
