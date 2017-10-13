@@ -2619,6 +2619,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   var self = this
 
   self.settingConfig = function (params) {
+    params.role = 'patient'
     var deferred = $q.defer()
     Data.Mywechat.settingConfig(
             params,
@@ -2658,6 +2659,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   // }
 
   self.download = function (params) {
+    params.role = 'patient'
     var deferred = $q.defer()
     Data.Mywechat.download(
             params,
@@ -2684,6 +2686,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   }
 
   self.getUserInfo = function (params) {
+    params.role = 'patient'
     var deferred = $q.defer()
     Data.Mywechat.getUserInfo(
             params,
