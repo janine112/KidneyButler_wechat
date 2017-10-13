@@ -3497,7 +3497,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
 }])
 
 // 我的 页面--PXY
-.controller('MineCtrl', ['User', '$ionicActionSheet','$interval', 'News', '$scope', '$ionicHistory', '$state', '$ionicPopup', '$resource', 'Storage', 'CONFIG', '$ionicLoading', '$ionicPopover', 'Camera', 'Patient', 'Upload', '$sce', 'mySocket', 'socket', 'Mywechatphoto', 'Mywechat', function (User, $ionicActionSheet,$interval, News, $scope, $ionicHistory, $state, $ionicPopup, $resource, Storage, CONFIG, $ionicLoading, $ionicPopover, Camera, Patient, Upload, $sce, mySocket, socket, Mywechatphoto, Mywechat) {
+.controller('MineCtrl', ['User', '$ionicActionSheet','$interval', 'News', '$scope', '$ionicHistory', '$state', '$ionicPopup', '$resource', 'Storage', 'CONFIG', '$ionicLoading', '$ionicPopover', 'Camera', 'Patient', 'Upload', '$sce', 'mySocket', 'socket', 'Mywechatphoto', 'Mywechat', '$location', function (User, $ionicActionSheet,$interval, News, $scope, $ionicHistory, $state, $ionicPopup, $resource, Storage, CONFIG, $ionicLoading, $ionicPopover, Camera, Patient, Upload, $sce, mySocket, socket, Mywechatphoto, Mywechat, $location) {
   // Storage.set("personalinfobackstate","mine")
 
   var patientId = Storage.get('UID')
@@ -5076,7 +5076,7 @@ $scope.choosePhotos = function() {
 }])
 
 // 健康详情--PXY
-.controller('HealthDetailCtrl', ['otherTask', '$scope', '$state', '$ionicHistory', '$ionicPopup', '$stateParams', '$ionicPopover', '$ionicModal', '$ionicScrollDelegate', '$ionicLoading', '$timeout', 'Dict', 'Health', 'Storage', 'Camera', 'CONFIG', 'Mywechat', function (otherTask, $scope, $state, $ionicHistory, $ionicPopup, $stateParams, $ionicPopover, $ionicModal, $ionicScrollDelegate, $ionicLoading, $timeout, Dict, Health, Storage, Camera, CONFIG, Mywechat) {
+.controller('HealthDetailCtrl', ['otherTask', '$scope', '$state', '$ionicHistory', '$ionicPopup', '$stateParams', '$ionicPopover', '$ionicModal', '$ionicScrollDelegate', '$ionicLoading', '$timeout', 'Dict', 'Health', 'Storage', 'Camera', 'CONFIG', 'Mywechat', '$location', function (otherTask, $scope, $state, $ionicHistory, $ionicPopup, $stateParams, $ionicPopover, $ionicModal, $ionicScrollDelegate, $ionicLoading, $timeout, Dict, Health, Storage, Camera, CONFIG, Mywechat, $location) {
   var patientId = Storage.get('UID')
   // $scope.healthDetailStyle = {'top': '43px'}
   // if (ionic.Platform.isIOS()) {
@@ -10382,7 +10382,7 @@ var patientId = Storage.get('UID')
   }
 }])
 
-.controller('postCtrl', ['$scope', '$state', 'Storage', '$ionicHistory', '$ionicPopover', 'Forum', 'Camera', 'CONFIG' , '$ionicLoading', '$timeout', '$ionicModal','$ionicScrollDelegate', 'Mywechat', function ($scope, $state, Storage, $ionicHistory, $ionicPopover, Forum, Camera, CONFIG, $ionicLoading, $timeout, $ionicModal, $ionicScrollDelegate, Mywechat) {
+.controller('postCtrl', ['$scope', '$state', 'Storage', '$ionicHistory', '$ionicPopover', 'Forum', 'Camera', 'CONFIG' , '$ionicLoading', '$timeout', '$ionicModal','$ionicScrollDelegate', 'Mywechat', '$location', function ($scope, $state, Storage, $ionicHistory, $ionicPopover, Forum, Camera, CONFIG, $ionicLoading, $timeout, $ionicModal, $ionicScrollDelegate, Mywechat, $location) {
   $scope.GoBack = function () {
     $state.go('tab.allposts')
   }
