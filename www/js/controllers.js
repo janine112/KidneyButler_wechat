@@ -5076,7 +5076,7 @@ $scope.choosePhotos = function() {
 }])
 
 // 健康详情--PXY
-.controller('HealthDetailCtrl', ['otherTask', '$scope', '$state', '$ionicHistory', '$ionicPopup', '$stateParams', '$ionicPopover', '$ionicModal', '$ionicScrollDelegate', '$ionicLoading', '$timeout', 'Dict', 'Health', 'Storage', 'Camera', 'CONFIG', 'Mywechat' function (otherTask, $scope, $state, $ionicHistory, $ionicPopup, $stateParams, $ionicPopover, $ionicModal, $ionicScrollDelegate, $ionicLoading, $timeout, Dict, Health, Storage, Camera, CONFIG, Mywechat) {
+.controller('HealthDetailCtrl', ['otherTask', '$scope', '$state', '$ionicHistory', '$ionicPopup', '$stateParams', '$ionicPopover', '$ionicModal', '$ionicScrollDelegate', '$ionicLoading', '$timeout', 'Dict', 'Health', 'Storage', 'Camera', 'CONFIG', 'Mywechat', function (otherTask, $scope, $state, $ionicHistory, $ionicPopup, $stateParams, $ionicPopover, $ionicModal, $ionicScrollDelegate, $ionicLoading, $timeout, Dict, Health, Storage, Camera, CONFIG, Mywechat) {
   var patientId = Storage.get('UID')
   // $scope.healthDetailStyle = {'top': '43px'}
   // if (ionic.Platform.isIOS()) {
