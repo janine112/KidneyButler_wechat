@@ -3057,13 +3057,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                           $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
                         } else {
                           ionicLoadinghide()
-                          var params = {
-                            'partnerid': '1480817392', // merchant id
-                            'prepayid': orderdata.results.prepay_id[0], // prepay id
-                            'noncestr': orderdata.results.nonceStr, // nonce
-                            'timestamp': orderdata.results.timestamp, // timestamp
-                            'sign': orderdata.results.paySign // signed string
-                          }
+                          // var params = {
+                          //   'partnerid': '1480817392', // merchant id
+                          //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                          //   'noncestr': orderdata.results.nonceStr, // nonce
+                          //   'timestamp': orderdata.results.timestamp, // timestamp
+                          //   'sign': orderdata.results.paySign // signed string
+                          // }
                           // alert(JSON.stringify(params));
                           /**
                            * *[微信jssdk方法，拉起微信支付]
@@ -3213,13 +3213,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                               $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
                             } else {
                               ionicLoadinghide()
-                              var params = {
-                                'partnerid': '1480817392', // merchant id
-                                'prepayid': orderdata.results.prepay_id[0], // prepay id
-                                'noncestr': orderdata.results.nonceStr, // nonce
-                                'timestamp': orderdata.results.timestamp, // timestamp
-                                'sign': orderdata.results.paySign // signed string
-                              }
+                              // var params = {
+                              //   'partnerid': '1480817392', // merchant id
+                              //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                              //   'noncestr': orderdata.results.nonceStr, // nonce
+                              //   'timestamp': orderdata.results.timestamp, // timestamp
+                              //   'sign': orderdata.results.paySign // signed string
+                              // }
                               // alert(JSON.stringify(params));
                               /**
                                * *[微信jssdk方法，拉起微信支付]
@@ -3369,13 +3369,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     })
                   } else {
                     ionicLoadinghide()
-                    var params = {
-                      'partnerid': '1480817392', // merchant id
-                      'prepayid': orderdata.results.prepay_id[0], // prepay id
-                      'noncestr': orderdata.results.nonceStr, // nonce
-                      'timestamp': orderdata.results.timestamp, // timestamp
-                      'sign': orderdata.results.paySign // signed string
-                    }
+                    // var params = {
+                    //   'partnerid': '1480817392', // merchant id
+                    //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                    //   'noncestr': orderdata.results.nonceStr, // nonce
+                    //   'timestamp': orderdata.results.timestamp, // timestamp
+                    //   'sign': orderdata.results.paySign // signed string
+                    // }
                     payment.payment(orderdata, function () {
                       /**
                      * *[用户选择将咨询升级成问诊是调用方法，将咨询的type从1（咨询）转为3（问诊）]
@@ -3518,13 +3518,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                       $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 2})
                     } else {
                       ionicLoadinghide()
-                      var params = {
-                        'partnerid': '1480817392', // merchant id
-                        'prepayid': orderdata.results.prepay_id[0], // prepay id
-                        'noncestr': orderdata.results.nonceStr, // nonce
-                        'timestamp': orderdata.results.timestamp, // timestamp
-                        'sign': orderdata.results.paySign // signed string
-                      }
+                      // var params = {
+                      //   'partnerid': '1480817392', // merchant id
+                      //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                      //   'noncestr': orderdata.results.nonceStr, // nonce
+                      //   'timestamp': orderdata.results.timestamp, // timestamp
+                      //   'sign': orderdata.results.paySign // signed string
+                      // }
                           // alert(JSON.stringify(params));
                           /**
                            * *[微信jssdk方法，拉起微信支付]
@@ -3669,13 +3669,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     })
                   } else {
                     ionicLoadinghide()
-                    var params = {
-                      'partnerid': '1480817392', // merchant id
-                      'prepayid': orderdata.results.prepay_id[0], // prepay id
-                      'noncestr': orderdata.results.nonceStr, // nonce
-                      'timestamp': orderdata.results.timestamp, // timestamp
-                      'sign': orderdata.results.paySign // signed string
-                    }
+                    // var params = {
+                    //   'partnerid': '1480817392', // merchant id
+                    //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                    //   'noncestr': orderdata.results.nonceStr, // nonce
+                    //   'timestamp': orderdata.results.timestamp, // timestamp
+                    //   'sign': orderdata.results.paySign // signed string
+                    // }
                     payment.payment(orderdata, function () {
                       /**
                      * *[用户选择将咨询升级成问诊是调用方法，将咨询的type从1（咨询）转为3（问诊）]
@@ -3831,13 +3831,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                       $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 6})
                     } else {
                       ionicLoadinghide()
-                      var params = {
-                        'partnerid': '1480817392', // merchant id
-                        'prepayid': orderdata.results.prepay_id[0], // prepay id
-                        'noncestr': orderdata.results.nonceStr, // nonce
-                        'timestamp': orderdata.results.timestamp, // timestamp
-                        'sign': orderdata.results.paySign // signed string
-                      }
+                      // var params = {
+                      //   'partnerid': '1480817392', // merchant id
+                      //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                      //   'noncestr': orderdata.results.nonceStr, // nonce
+                      //   'timestamp': orderdata.results.timestamp, // timestamp
+                      //   'sign': orderdata.results.paySign // signed string
+                      // }
                         // alert(JSON.stringify(params));
                         /**
                          * *[微信jssdk方法，拉起微信支付]
