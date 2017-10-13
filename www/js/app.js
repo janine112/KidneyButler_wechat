@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kidney.directives', 'kidney.filters', 'ngCordova', 'ngFileUpload', 'btford.socket-io', 'angular-jwt', 'highcharts-ng'])
 
-.run(['Authentication', 'version', '$ionicPlatform', '$state', 'Storage', '$location', '$ionicHistory', '$ionicPopup', '$rootScope', 'CONFIG', 'notify', '$interval', 'socket', 'mySocket', 'session', function (Authentication, version, $ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup, $rootScope, CONFIG, notify, $interval, socket, mySocket, session) {
+.run(['Authentication', 'version', '$ionicPlatform', '$state', 'Storage', '$location', '$ionicHistory', '$ionicPopup', '$rootScope', 'CONFIG', 'notify', '$interval', 'socket', 'mySocket', 'session', 'Mywechat', 'User', 'Patient', function (Authentication, version, $ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup, $rootScope, CONFIG, notify, $interval, socket, mySocket, session, Mywechat, User, Patient) {
   // 主页面显示退出提示框
   $ionicPlatform.registerBackButtonAction(function (e) {
     e.preventDefault()
@@ -91,7 +91,7 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
                           Storage.set('isSignIn',"Yes");
                           Storage.set('UID',data.results.userId);
 
-                          User.getUserId({username:Storage.get('openid')}).then(function(data)
+                          User.getUserID({username:Storage.get('openid')}).then(function(data)
                           {
                               if (angular.isDefined(data.phoneNo) == true)
                               {
@@ -112,7 +112,7 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
                           else if(params.length > 1 && params[0]=='patient'){
                               if(params[1]=='11') 
                               {
-                                $state.go('tab.consult-chat',{chatId:params[3]});
+                                $state.go('consult-chat',{chatId:params[3]});
                               }
                               else
                               {
@@ -125,7 +125,7 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
                                   }, function(err) {
                                       errs.push(err)
                                   }),
-                                  User.setMessageOpenId({ type: 2, userId: Storage.get("UID"), openId: Storage.get('messageopenid') }).then(function(res) {
+                                  User.setOpenId({ type: 2, userId: Storage.get("UID"), openId: Storage.get('messageopenid') }).then(function(res) {
                                       // results.push(res)
                                   }, function(err) {
                                       errs.push(err)
@@ -214,8 +214,8 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
     }
     version.checkUpdate($rootScope)
     // autoLogin.AutoLoginOrNot($rootScope)
-    ionic.Platform.fullScreen(true, true)
-    thisPatient = null
+    // ionic.Platform.fullScreen(true, true)
+    // thisPatient = null
     $rootScope.conversation = {
       type: null,
       id: ''
@@ -224,48 +224,48 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
     var appState = {
       background: false
     }
-    document.addEventListener('pause', onPause, false)
-    document.addEventListener('resume', onResume, false)
+    // document.addEventListener('pause', onPause, false)
+    // document.addEventListener('resume', onResume, false)
 
-    function onPause () {
-      appState.background = true
-    }
-    function onResume () {
-      appState.background = false
-      var id = Storage.get('UID')
-       // name = thisDoctor === null ? '' : thisDoctor.name
-      mySocket.newUserOnce(id)
-    }
-    socket.on('error', function (data) {
-      console.error('socket error')
-      console.log(data)
-    })
-    socket.on('disconnected', function (data) {
-      console.error('disconnected')
-      console.error(data)
-    })
-    socket.on('reconnect', function (attempt) {
-      console.info('reconnect: ' + attempt)
-      var id = Storage.get('UID'),
-        name = thisPatient === null ? '' : thisPatient.name
-      mySocket.newUser(id, name)
-    })
-    socket.on('kick', function () {
-      session.logOut()
-      $ionicPopup.alert({
-        title: '请重新登录'
-      }).then(function () {
-        $state.go('signin')
-      })
-    })
-    socket.on('getMsg', listenGetMsg)
-    function listenGetMsg (data) {
-      console.info('getMsg')
-      console.log(data)
-      if (!appState.background && (($rootScope.conversation.type == 'single' && $rootScope.conversation.id == data.msg.fromID) || ($rootScope.conversation.type == 'group' && $rootScope.conversation.id == data.msg.targetID))) return
-      notify.add(data.msg)
-      socket.emit('gotMsg', {msg: data.msg, userId: Storage.get('UID')})
-    }
+    // function onPause () {
+    //   appState.background = true
+    // }
+    // function onResume () {
+    //   appState.background = false
+    //   var id = Storage.get('UID')
+    //    // name = thisDoctor === null ? '' : thisDoctor.name
+    //   mySocket.newUserOnce(id)
+    // }
+    // socket.on('error', function (data) {
+    //   console.error('socket error')
+    //   console.log(data)
+    // })
+    // socket.on('disconnected', function (data) {
+    //   console.error('disconnected')
+    //   console.error(data)
+    // })
+    // socket.on('reconnect', function (attempt) {
+    //   console.info('reconnect: ' + attempt)
+    //   var id = Storage.get('UID'),
+    //     name = thisPatient === null ? '' : thisPatient.name
+    //   mySocket.newUser(id, name)
+    // })
+    // socket.on('kick', function () {
+    //   session.logOut()
+    //   $ionicPopup.alert({
+    //     title: '请重新登录'
+    //   }).then(function () {
+    //     $state.go('signin')
+    //   })
+    // })
+    // socket.on('getMsg', listenGetMsg)
+    // function listenGetMsg (data) {
+    //   console.info('getMsg')
+    //   console.log(data)
+    //   if (!appState.background && (($rootScope.conversation.type == 'single' && $rootScope.conversation.id == data.msg.fromID) || ($rootScope.conversation.type == 'group' && $rootScope.conversation.id == data.msg.targetID))) return
+    //   notify.add(data.msg)
+    //   socket.emit('gotMsg', {msg: data.msg, userId: Storage.get('UID')})
+    // }
     if (window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -282,16 +282,16 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
 
       // StatusBar.styleDefault();
     }
-    $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
-      $state.go('signin')
-    })
-    $rootScope.$on('$cordovaLocalNotification:click', function (event, note, state) {
-      console.log(arguments)
-      var msg = JSON.parse(note.data)
-      if (msg.newsType == '11') {
-        $state.go('consult-chat', {chatId: msg.fromID})
-      }
-    })
+    // $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+    //   $state.go('signin')
+    // })
+    // $rootScope.$on('$cordovaLocalNotification:click', function (event, note, state) {
+    //   console.log(arguments)
+    //   var msg = JSON.parse(note.data)
+    //   if (msg.newsType == '11') {
+    //     $state.go('consult-chat', {chatId: msg.fromID})
+    //   }
+    // })
 
     window.addEventListener('native.keyboardshow', function (e) {
       $rootScope.$broadcast('keyboardshow', e.keyboardHeight)
@@ -299,6 +299,17 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
     window.addEventListener('native.keyboardhide', function (e) {
       $rootScope.$broadcast('keyboardhide')
     })
+        $rootScope.online = navigator.onLine;
+    $window.addEventListener("offline", function () {
+      $rootScope.$apply(function() {
+        $rootScope.online = false;
+      });
+    }, false);
+    $window.addEventListener("online", function () {
+      $rootScope.$apply(function() {
+        $rootScope.online = true;
+      });
+    }, false);
   })
 }])
 // --------token没过期免登录---------------
