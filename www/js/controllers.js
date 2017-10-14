@@ -8279,7 +8279,7 @@ $scope.choosePhotos = function() {
 
 }])
 
-.controller('appointmentCtrl', ['Service','$ionicPopup','Patient', 'Mywechat','$ionicLoading', '$stateParams', '$scope',  '$state', 'Storage', '$ionicHistory', function (Service,$ionicPopup, Patient, Mywechat, $ionicLoading, $stateParams, $scope, $state, Storage, $ionicHistory) {
+.controller('appointmentCtrl', ['Service','$ionicPopup','Patient', 'Mywechat','$ionicLoading', '$stateParams', '$scope',  '$state', 'Storage', '$ionicHistory', 'payment', function (Service,$ionicPopup, Patient, Mywechat, $ionicLoading, $stateParams, $scope, $state, Storage, $ionicHistory, payment) {
   // 拿前一个页面传参doctor对象绑定页面数据
   $scope.doctor = $stateParams.appointDoc
   // 默认显示7天内的面诊
@@ -8481,7 +8481,7 @@ $scope.choosePhotos = function() {
  
 
 }])
-.controller('applyDocCtrl', ['$ionicPopup','Patient', 'Mywechat','$ionicLoading', '$stateParams', '$scope',  '$state', 'Storage', '$ionicHistory', function ($ionicPopup, Patient, Mywechat, $ionicLoading, $stateParams, $scope, $state, Storage, $ionicHistory) {
+.controller('applyDocCtrl', ['$ionicPopup','Patient', 'Mywechat','$ionicLoading', '$stateParams', '$scope',  '$state', 'Storage', '$ionicHistory', 'payment', function ($ionicPopup, Patient, Mywechat, $ionicLoading, $stateParams, $scope, $state, Storage, $ionicHistory, payment) {
   // 拿前一个页面传参doctor对象绑定页面数据
   $scope.doctor = $stateParams.applyDoc
   // 购买时长选择范围
