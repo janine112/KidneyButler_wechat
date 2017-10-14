@@ -5367,16 +5367,18 @@ $scope.choosePhotos = function() {
           $scope.myAvatar=CONFIG.mediaUrl + "uploads/photos/"+temp_name+'?'+new Date().getTime();
           console.log($scope.myAvatar)
           // $state.reload("tab.mine")
-          Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
-            console.log(r);
-          })
-      },1000)
+          $scope.health.imgurl.push($scope.myAvatar)
+    //       Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
+    //         console.log(r);
+    //       })
+    //   },1000)
       
-    },function(err){
-      console.log(err);
-      reject(err);
-    })
-  };
+    // },function(err){
+    //   console.log(err);
+    //   reject(err);
+        })
+      })
+  }
 // -----------------------上传头像---------------------
       // ionicPopover functions 弹出框的预定义
         // --------------------------------------------
@@ -10396,9 +10398,10 @@ var patientId = Storage.get('UID')
           $scope.myAvatar=CONFIG.mediaUrl + "uploads/photos/"+temp_name+'?'+new Date().getTime();
           console.log($scope.myAvatar)
           // $state.reload("tab.mine")
-          Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
-            console.log(r);
-          })
+          // Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
+          //   console.log(r);
+          // })
+          $scope.post.content[1].image.push($scope.myAvatar)
       },1000)
       
     },function(err){
