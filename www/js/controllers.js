@@ -5319,8 +5319,9 @@ $scope.choosePhotos = function() {
     // },function(err){
     //   console.log(err);
     //   reject(err);
-    // })
-      };
+        })
+      })
+  }
 // -----------------------上传头像---------------------
       // ionicPopover functions 弹出框的预定义
         // --------------------------------------------
