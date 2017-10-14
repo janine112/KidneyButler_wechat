@@ -1048,7 +1048,8 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
   $scope.veritext = '获取验证码'
   $scope.isable = false
   $scope.Register = {}
-
+  var tempuserId = ""
+  
   /**
    * [disable获取验证码按钮1分钟，并改变获取验证码按钮显示的文字]
    * @Author   PXY
@@ -1138,7 +1139,8 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
 
      User.getUserID({username: $scope.Verify.Phone}).then(function(data){
           if(data.results == 0){
-              if(data.roles.indexOf('patient') == -1){
+              tempuserId = data.UserId
+              if(data.roles.indexOf('patient') == -1){  
                   $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或返回登录页面进行注册！";
                   return;
               }else {
@@ -1190,10 +1192,10 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
                           })
                         }
                         else{
-                          User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
+                          User.setUnionId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
                               if(data.results == "success!")
                               {
-                                User.setMessageOpenId({type:2,userId:tempuserId,openId:Storage.get('messageopenid')}).then(function(res){
+                                User.setOpenId({type:2,userId:tempuserId,openId:Storage.get('messageopenid')}).then(function(res){
                                     console.log("setopenid");
                                     $scope.logStatus = "微信绑定手机账号成功，即将返回登录页面"
                                     $timeout($state.go('signin'),2000)
