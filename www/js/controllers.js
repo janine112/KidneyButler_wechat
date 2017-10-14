@@ -121,7 +121,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
     $state.go('phonevalid')
   }
 
-  $scope.bingdwechat = function () 
+  $scope.bindwechat = function () 
   {
     $ionicPopup.show({   
       title: '将您的微信账号与手机账号进行绑定，绑定后在公众号内可以自动登录',
