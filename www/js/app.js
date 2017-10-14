@@ -356,8 +356,14 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
       cache: false,
       url: '/phonevalid',
       templateUrl: 'partials/login/phonevalid.html',
-      controller: 'phonevalidCtrl',
-      params: {last: null}
+      controller: 'phonevalidCtrl'
+    })
+    // 绑定微信
+    .state('bindwechat', {
+      cache: false,
+      url: '/bindwechat',
+      templateUrl: 'partials/login/bindwechat.html',
+      controller: 'bindwechatCtrl'
     })
     // 忘记密码--重置密码
     .state('setpassword', {

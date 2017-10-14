@@ -134,7 +134,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
           text: '確定',
           type: 'button-positive',
           onTap: function(e) {
-              $state.go('phonevalid',{last:"wechat"})
+              $state.go('bindwechat')
           }
         }
       ]
@@ -1040,7 +1040,189 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
 
 }])
 
+// 绑定微信--手机号码验证--TDY
+.controller('phonevalidCtrl', ['$scope', '$state', '$interval', '$stateParams', 'Storage', 'User',  '$timeout', function ($scope, $state, $interval, $stateParams, Storage, User, $timeout) {
+  // Storage.set("personalinfobackstate","register")
 
+  $scope.Verify = {Phone: '', Code: ''}
+  $scope.veritext = '获取验证码'
+  $scope.isable = false
+  $scope.Register = {}
+
+  /**
+   * [disable获取验证码按钮1分钟，并改变获取验证码按钮显示的文字]
+   * @Author   PXY
+   * @DateTime 2017-07-04
+   */
+  var unablebutton = function () {
+     // 验证码BUTTON效果
+    $scope.isable = true
+    $scope.veritext = '60s'
+    var time = 59
+    var timer
+    timer = $interval(function () {
+      if (time == 0) {
+        $interval.cancel(timer)
+        timer = undefined
+        $scope.veritext = '获取验证码'
+        $scope.isable = false
+      } else {
+        $scope.veritext = time + 's'
+        time--
+      }
+    }, 1000)
+  }
+
+   /**
+   * [发送验证码]
+   * @Author   PXY
+   * @DateTime 2017-07-04
+   * @param    phone:String
+   */
+  var sendSMS = function (phone) {
+    /**
+     * [发送验证码,disable按钮一分钟，并根据服务器返回提示用户]
+     * @Author   PXY
+     * @DateTime 2017-07-04
+     * @param    {mobile:String,smsType:Number}  注：写死 1
+     * @return   data:{results:Number,mesg:String} 注：results为0为成功发送
+     *           err
+     */
+    
+    User.sendSMS({mobile: phone, smsType: 1}).then(function (data) {
+      unablebutton()
+      if (data.results == 0) {
+        if (data.mesg.substr(0, 8) == '您的邀请码已发送') {
+          $scope.logStatus = '您的验证码已发送，重新获取请稍后'
+        } else {
+          $scope.logStatus = '验证码发送成功！'
+        }
+      } else {
+        $scope.logStatus = '验证码发送失败，请稍后再试'
+      }
+    }, function (err) {
+      $scope.logStatus = '验证码发送失败！'
+    })
+  }
+
+  var ionicLoadingshow = function(){
+    $ionicLoading.show({
+      template: '<ion-spinner icon="ios"></ion-spinner>', 
+      hideOnStateChange:true  
+    })
+  }
+  $scope.registerMode = null
+
+  /**
+   * [点击获取验证码，如果为注册，注册过的用户不能获取验证码；如果为重置密码，没注册过的用户不能获取验证码]
+   * @Author   PXY
+   * @DateTime 2017-07-04
+   * @param    Verify:{Phone:String,Code:String} 注：Code没用到
+   */
+
+  $scope.getcode = function () { 
+    console.log($scope.Register.Phone)
+    $scope.logStatus = ''
+   
+    if ($scope.Register.Phone == '') {
+
+      $scope.logStatus = '手机号码不能为空！'
+      return
+    }
+    var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+        // 手机正则表达式验证
+    if (!phoneReg.test($scope.Register.Phone)) {
+      $scope.logStatus = '手机号验证失败！'
+      return
+    }
+
+     User.getUserID({username: $scope.Register.Phone}).then(function(data){
+          if(data.results == 0){
+              if(data.roles.indexOf('patient') == -1){
+                  $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或返回登录页面进行注册！";
+                  return;
+              }else {
+                  $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
+                  sendSMS(Verify.Phone);
+              }
+          }else if(data.results == 1){
+              $scope.logStatus = "该用户不存在！请返回登录页面进行注册！"
+              return;
+          }
+      },function(){
+          $scope.logStatus="连接超时！";
+      });
+  }
+
+  $scope.gotoReset = function(Verify){
+
+        $scope.logStatus = '';
+        if(Verify.Phone!="" && Verify.Code!=""){
+        //结果分为三种：(手机号验证失败)1验证成功；2验证码错误；3连接超时，验证失败
+            var phoneReg=/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+            //手机正则表达式验证
+            if(phoneReg.test(Verify.Phone)){ 
+                //测试用
+                // if(Verify.Code==5566){
+                //     $scope.logStatus = "验证成功";
+                //     Storage.set('USERNAME',Verify.Phone);
+                    // if($stateParams.phonevalidType == 'register'){
+                    //     $timeout(function(){$state.go('agreement',{last:'register'});},500);
+                    // }else{
+                    //    $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType});},500); 
+                    // }
+                    
+                // }else{$scope.logStatus = "验证码错误";}
+                var verifyPromise =  User.verifySMS({mobile:Verify.Phone,smsType:1,smsCode:Verify.Code});
+                verifyPromise.then(function(data){
+                    if(data.results==0){
+                        $scope.logStatus = "验证成功";
+                        Storage.set('USERNAME',Verify.Phone)
+                        if (!(Storage.get('openid'))) {
+                          $ionicPopup.show({
+                            title: '退出账号时系统记录被清除，请返回公众号重新进入肾事管家',
+                            buttons: [
+                              {
+                                text: '確定',
+                                type: 'button-positive'
+                              }
+                            ]
+                          })
+                        }
+                        else{
+                          User.setOpenId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
+                              if(data.results == "success!")
+                              {
+                                User.setMessageOpenId({type:2,userId:tempuserId,openId:Storage.get('messageopenid')}).then(function(res){
+                                    console.log("setopenid");
+                                    $scope.logStatus = "微信绑定手机账号成功，即将返回登录页面"
+                                    $timeout($state.go('signin'),2000)
+                                },function(err){
+                                    console.log("连接超时！");
+                                })
+                              }
+                          },function(){
+                              $scope.logStatus = "连接超时！";
+                          })
+                        }
+                            
+                    }else{
+                        $scope.logStatus = data.mesg;
+                        return;
+                    }
+                },function(){
+                    $scope.logStatus = "连接超时！";
+                })
+            }
+            else{$scope.logStatus="手机号验证失败！";}
+      
+     
+    
+        
+        }
+        else{$scope.logStatus = "请输入完整信息！";}
+  }
+}])
 // 设置密码  --PXY
 .controller('setPasswordCtrl', ['$ionicLoading', '$http', '$scope', '$state', '$rootScope', '$timeout', 'Storage',  'User', 'Patient', function ($ionicLoading, $http, $scope, $state, $rootScope, $timeout, Storage,  User, Patient) {
 
