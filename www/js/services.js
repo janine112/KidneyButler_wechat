@@ -486,7 +486,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
 
   var Mywechat = function () {
     return $resource(CONFIG.baseUrl + ':path/:route', {path: 'wechat'}, {
-      settingConfig: {method: 'GET', skipAuthorization: true, params: {route: 'settingConfig'}, timeout: 100000},
+      settingConfig: {method: 'GET', params: {route: 'settingConfig'}, timeout: 100000},
       messageTemplate: {method: 'POST', params: {route: 'messageTemplate'}, timeout: 100000},
       // gettokenbycode: {method: 'GET', params: {route: 'gettokenbycode'}, timeout: 100000},
       download: {method: 'GET', params: {route: 'download'}, timeout: 100000},
@@ -2023,7 +2023,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
 
       var defer = $q.defer()
       var config = ''
-      var path = $location.absUrl().split('#')[0]
+      var path = $location.absUrl().split('?')[0]
 
       Mywechat.settingConfig({url: path}).then(function (data) {
         // alert(data.results.timestamp)
@@ -2033,7 +2033,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
         // alert(config.debug)
         console.log(angular.toJson(config))
         wx.config({
-          debug: false,
+          debug: true,
           appId: config.appId,
           timestamp: config.timestamp,
           nonceStr: config.nonceStr,
@@ -2619,6 +2619,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   var self = this
 
   self.settingConfig = function (params) {
+    params.role = 'patient'
     var deferred = $q.defer()
     Data.Mywechat.settingConfig(
             params,
@@ -2658,6 +2659,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   // }
 
   self.download = function (params) {
+    params.role = 'patient'
     var deferred = $q.defer()
     Data.Mywechat.download(
             params,
@@ -2671,6 +2673,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   }
 
   self.addOrder = function (params) {
+    params.role = 'patient'
     var deferred = $q.defer()
     Data.Mywechat.addOrder(
             params,
@@ -2684,6 +2687,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
   }
 
   self.getUserInfo = function (params) {
+    params.role = 'patient'
     var deferred = $q.defer()
     Data.Mywechat.getUserInfo(
             params,
@@ -3025,13 +3029,14 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                         'type': 1,
                     // 咨询类型为1
                         'userId': Storage.get('UID'),
-                        'role': 'appPatient',
+                        'role': 'patient',
                     // 微信支付以分为单位
                         'money': charge1 * 100,
                         'class': '01',
                         'name': '咨询',
                         'notes': DoctorId,
-                        'trade_type': 'APP',
+                        'trade_type': 'JSAPI',
+                        'openid': Storage.get('messageopenid'),
                         'body_description': '咨询服务'
                       }
                   /**
@@ -3053,13 +3058,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                           $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
                         } else {
                           ionicLoadinghide()
-                          var params = {
-                            'partnerid': '1480817392', // merchant id
-                            'prepayid': orderdata.results.prepay_id[0], // prepay id
-                            'noncestr': orderdata.results.nonceStr, // nonce
-                            'timestamp': orderdata.results.timestamp, // timestamp
-                            'sign': orderdata.results.paySign // signed string
-                          }
+                          // var params = {
+                          //   'partnerid': '1480817392', // merchant id
+                          //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                          //   'noncestr': orderdata.results.nonceStr, // nonce
+                          //   'timestamp': orderdata.results.timestamp, // timestamp
+                          //   'sign': orderdata.results.paySign // signed string
+                          // }
                           // alert(JSON.stringify(params));
                           /**
                            * *[微信jssdk方法，拉起微信支付]
@@ -3096,7 +3101,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                       })
                     }
                   })
-                  } else {
+                } else {
                   // 不是咨询主管医生
                   Account.getCounts({patientId: Storage.get('UID'), doctorId: DoctorId}).then(function (succ) {
                     console.log('没有主管医生！')
@@ -3119,13 +3124,14 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                               // 咨询类型为1
                             'userId': Storage.get('UID'),
 
-                            'role': 'appPatient',
+                            'role': 'patient',
                               // 微信支付以分为单位
                             'money': charge1 * 100,
                             'class': '01',
                             'name': '咨询',
                             'notes': DoctorId,
-                            'trade_type': 'APP',
+                            'trade_type': 'JSAPI',
+                            'openid': Storage.get('messageopenid'),
                             'body_description': '咨询服务'
                           }
                           /**
@@ -3181,13 +3187,14 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                             'type': 1,
                         // 咨询类型为1
                             'userId': Storage.get('UID'),
-                            'role': 'appPatient',
+                            'role': 'patient',
                         // 微信支付以分为单位
                             'money': charge1 * 100,
                             'class': '01',
                             'name': '咨询',
                             'notes': DoctorId,
-                            'trade_type': 'APP',
+                            'trade_type': 'JSAPI',
+                            'openid': Storage.get('messageopenid'),
                             'body_description': '咨询服务'
                           }
                       /**
@@ -3209,13 +3216,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                               $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
                             } else {
                               ionicLoadinghide()
-                              var params = {
-                                'partnerid': '1480817392', // merchant id
-                                'prepayid': orderdata.results.prepay_id[0], // prepay id
-                                'noncestr': orderdata.results.nonceStr, // nonce
-                                'timestamp': orderdata.results.timestamp, // timestamp
-                                'sign': orderdata.results.paySign // signed string
-                              }
+                              // var params = {
+                              //   'partnerid': '1480817392', // merchant id
+                              //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                              //   'noncestr': orderdata.results.nonceStr, // nonce
+                              //   'timestamp': orderdata.results.timestamp, // timestamp
+                              //   'sign': orderdata.results.paySign // signed string
+                              // }
                               // alert(JSON.stringify(params));
                               /**
                                * *[微信jssdk方法，拉起微信支付]
@@ -3228,7 +3235,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                                * @sign       {[type]}
                                * @return   {[type]}
                                */
-                              Wechat.sendPaymentRequest(params, function () {
+                              payment.payment(orderdata, function () {
                               // alert("Success");
                                 ionicLoadingshow()
                                 $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
@@ -3300,13 +3307,14 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                   'type': 3,
                     // 咨询类型为1
                   'userId': Storage.get('UID'),
-                  'role': 'appPatient',
+                  'role': 'patient',
                     // 微信支付以分为单位
                   'money': charge2 * 100 - charge1 * 100,
                   'class': '03',
                   'name': '咨询升级问诊',
                   'notes': DoctorId,
-                  'trade_type': 'APP',
+                  'trade_type': 'JSAPI',
+                  'openid': Storage.get('messageopenid'),
                   'body_description': '咨询升级问诊服务'
                 }
                 /**
@@ -3365,13 +3373,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     })
                   } else {
                     ionicLoadinghide()
-                    var params = {
-                      'partnerid': '1480817392', // merchant id
-                      'prepayid': orderdata.results.prepay_id[0], // prepay id
-                      'noncestr': orderdata.results.nonceStr, // nonce
-                      'timestamp': orderdata.results.timestamp, // timestamp
-                      'sign': orderdata.results.paySign // signed string
-                    }
+                    // var params = {
+                    //   'partnerid': '1480817392', // merchant id
+                    //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                    //   'noncestr': orderdata.results.nonceStr, // nonce
+                    //   'timestamp': orderdata.results.timestamp, // timestamp
+                    //   'sign': orderdata.results.paySign // signed string
+                    // }
                     payment.payment(orderdata, function () {
                       /**
                      * *[用户选择将咨询升级成问诊是调用方法，将咨询的type从1（咨询）转为3（问诊）]
@@ -3484,13 +3492,14 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     'type': 2,
                     // 问诊类型为2
                     'userId': Storage.get('UID'),
-                    'role': 'appPatient',
+                    'role': 'patient',
                     // 微信支付以分为单位
                     'money': charge2 * 100,
                     'class': '02',
                     'name': '问诊',
                     'notes': DoctorId,
-                    'trade_type': 'APP',
+                    'trade_type': 'JSAPI',
+                    'openid': Storage.get('messageopenid'),
                     'body_description': '问诊服务'
                   }
                   /**
@@ -3514,13 +3523,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                       $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 2})
                     } else {
                       ionicLoadinghide()
-                      var params = {
-                        'partnerid': '1480817392', // merchant id
-                        'prepayid': orderdata.results.prepay_id[0], // prepay id
-                        'noncestr': orderdata.results.nonceStr, // nonce
-                        'timestamp': orderdata.results.timestamp, // timestamp
-                        'sign': orderdata.results.paySign // signed string
-                      }
+                      // var params = {
+                      //   'partnerid': '1480817392', // merchant id
+                      //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                      //   'noncestr': orderdata.results.nonceStr, // nonce
+                      //   'timestamp': orderdata.results.timestamp, // timestamp
+                      //   'sign': orderdata.results.paySign // signed string
+                      // }
                           // alert(JSON.stringify(params));
                           /**
                            * *[微信jssdk方法，拉起微信支付]
@@ -3600,13 +3609,14 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                   'type': 7,
                     // 咨询
                   'userId': Storage.get('UID'),
-                  'role': 'appPatient',
+                  'role': 'patient',
                     // 微信支付以分为单位
                   'money': charge3 * 100 - charge1 * 100,
                   'class': '07',
                   'name': '咨询升级加急咨询',
                   'notes': DoctorId,
-                  'trade_type': 'APP',
+                  'trade_type': 'JSAPI',
+                  'openid': Storage.get('messageopenid'),
                   'body_description': '咨询升级加急咨询服务'
                 }
                 /**
@@ -3665,13 +3675,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     })
                   } else {
                     ionicLoadinghide()
-                    var params = {
-                      'partnerid': '1480817392', // merchant id
-                      'prepayid': orderdata.results.prepay_id[0], // prepay id
-                      'noncestr': orderdata.results.nonceStr, // nonce
-                      'timestamp': orderdata.results.timestamp, // timestamp
-                      'sign': orderdata.results.paySign // signed string
-                    }
+                    // var params = {
+                    //   'partnerid': '1480817392', // merchant id
+                    //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                    //   'noncestr': orderdata.results.nonceStr, // nonce
+                    //   'timestamp': orderdata.results.timestamp, // timestamp
+                    //   'sign': orderdata.results.paySign // signed string
+                    // }
                     payment.payment(orderdata, function () {
                       /**
                      * *[用户选择将咨询升级成问诊是调用方法，将咨询的type从1（咨询）转为3（问诊）]
@@ -3789,13 +3799,14 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     'type': 6,
                     // 加急咨询类型为6
                     'userId': Storage.get('UID'),
-                    'role': 'appPatient',
+                    'role': 'patient',
                     // 微信支付以分为单位
                     'money': charge3 * 100,
                     'class': '06',
                     'name': '加急咨询',
                     'notes': DoctorId,
-                    'trade_type': 'APP',
+                    'trade_type': 'JSAPI',
+                    'openid': Storage.get('messageopenid'),
                     'body_description': '加急咨询服务'
                   }
                   /**
@@ -3827,13 +3838,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                       $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 6})
                     } else {
                       ionicLoadinghide()
-                      var params = {
-                        'partnerid': '1480817392', // merchant id
-                        'prepayid': orderdata.results.prepay_id[0], // prepay id
-                        'noncestr': orderdata.results.nonceStr, // nonce
-                        'timestamp': orderdata.results.timestamp, // timestamp
-                        'sign': orderdata.results.paySign // signed string
-                      }
+                      // var params = {
+                      //   'partnerid': '1480817392', // merchant id
+                      //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+                      //   'noncestr': orderdata.results.nonceStr, // nonce
+                      //   'timestamp': orderdata.results.timestamp, // timestamp
+                      //   'sign': orderdata.results.paySign // signed string
+                      // }
                         // alert(JSON.stringify(params));
                         /**
                          * *[微信jssdk方法，拉起微信支付]
