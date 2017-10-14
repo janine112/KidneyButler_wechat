@@ -4199,22 +4199,30 @@ $scope.choosePhotos = function() {
  * @DateTime 2017-07-05
  */
 .controller('ChatCtrl', ['$ionicPlatform', '$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice', 'CONFIG', '$ionicPopup', 'Counsels', 'Storage', 'Mywechat', '$q', 'Communication', 'Account', 'News', '$ionicLoading', 'Patient', 'arrTool', 'socket', 'notify', '$timeout', function ($ionicPlatform, $scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice, CONFIG, $ionicPopup, Counsels, Storage, Mywechat, $q, Communication, Account, News, $ionicLoading, Patient, arrTool, socket, notify, $timeout) {
-  if ($ionicPlatform.is('ios')) cordova.plugins.Keyboard.disableScroll(true)
+  // if ($ionicPlatform.is('ios')) cordova.plugins.Keyboard.disableScroll(true)
   $scope.input = {
     text: ''
   }
   $scope.scrollHandle = $ionicScrollDelegate.$getByHandle('myContentScroll')
+  var path = $location.absUrl().split('#')[0]
+  var config = ''
   /**
    * 拉到底的动画效果
    * @Author   xjz
    * @DateTime 2017-07-05
    */
-  function toBottom (animate, delay) {
-    if (!delay) delay = 100
-    $timeout(function () {
-      $scope.scrollHandle.scrollBottom(animate)
-    }, delay)
-  }
+  function toBottom(animate,delay){
+        if(!delay) delay=100;
+        $timeout(function(){
+            $scope.scrollHandle.scrollBottom(animate);
+            $timeout(function(){
+                $scope.scrollHandle.resize();
+            },500);
+            $timeout(function(){
+                $scope.scrollHandle.resize();
+            },1000);
+        },delay)
+    }
   // 进入页面前：
   $scope.$on('$ionicView.beforeEnter', function () {
     $scope.timer = []
@@ -4286,15 +4294,33 @@ $scope.choosePhotos = function() {
             // 显示头像
     Patient.getDoctorLists({doctorId: $state.params.chatId})
             .then(function (data) {
+              console.log('医生头像',data.results)
               $scope.photoUrls[data.results[0].userId] = data.results[0].photoUrl
             })
     Patient.getPatientDetail({ userId: $scope.params.UID })
         .then(function (response) {
+           console.log('患者头像',response.results)
           thisPatient = response.results
           $scope.photoUrls[response.results.userId] = response.results.photoUrl
         }, function (err) {
 
         })
+    Mywechat.settingConfig({ url: path }).then(function (data) {
+      config = data.results
+      config.jsApiList = ['startRecord', 'stopRecord', 'playVoice', 'chooseImage', 'uploadVoice', 'uploadImage']
+      wx.config({
+        debug: false,
+        appId: config.appId,
+        timestamp: config.timestamp,
+        nonceStr: config.nonceStr,
+        signature: config.signature,
+        jsApiList: config.jsApiList
+      })
+      wx.error(function (res) {
+        console.error(res)
+        alert(res.errMsg)
+      })
+    })
     imgModalInit()
     // 先显示15条
     $scope.getMsg(15).then(function (data) {
@@ -4613,6 +4639,9 @@ $scope.choosePhotos = function() {
 
   $scope.updateMsg = function (msg, pos) {
     console.info('updateMsg')
+    if (msg.contentType == 'image') msg.content.thumb = CONFIG.mediaUrl + msg.content['src_thumb']
+    msg.direct = $scope.msgs[pos].direct
+
     if (pos == 0) {
       msg.diff = true
     } else if (msg.hasOwnProperty('time')) {
@@ -4626,8 +4655,6 @@ $scope.choosePhotos = function() {
         msg.diff = false
       }
     }
-    msg.content.src = $scope.msgs[pos].content.src
-    msg.direct = $scope.msgs[pos].direct
     $scope.msgs[pos] = msg
   }
   $scope.pushMsg = function (msg) {
@@ -4646,7 +4673,7 @@ $scope.choosePhotos = function() {
         }
       }
     }
-        // msg.direct = msg.fromID==$scope.params.UID?'send':'receive';
+    msg.direct = msg.fromID==$scope.params.UID?'send':'receive';
     $scope.params.msgCount++
     $scope.msgs.push(msg)
     toBottom(true, 200)
@@ -4671,17 +4698,20 @@ $scope.choosePhotos = function() {
         text: content
       }
     } else if (type == 'image') {
-      data = {
-        src: content[0],
-        src_thumb: content[1]
+     data = {
+        mediaId: content[0],
+        mediaId_thumb: content[1],
+        src: '',
+        src_thumb: ''
       }
     } else if (type == 'voice') {
       data = {
-        src: content
+        mediaId: content,
+        src: ''
       }
     }
     return {
-      clientType: 'patient',
+      clientType: 'wechatpatient',
       contentType: type,
       fromID: $scope.params.UID,
       fromName: thisPatient.name,
@@ -4711,7 +4741,7 @@ $scope.choosePhotos = function() {
       d.src = msg.content.src
     }
     return {
-      clientType: 'patient',
+      clientType: 'wechatpatient',
       contentType: type,
       fromID: msg.fromID,
       fromName: msg.fromName,
@@ -4781,28 +4811,30 @@ $scope.choosePhotos = function() {
   }
   // 上传图片
   $scope.getImage = function (type) {
-    if ($scope.counselstatus != 1) return nomoney()
     $scope.showMore = false
-    Camera.getPicture(type, true)
-            .then(function (url) {
-              console.log(url)
-              var fm = md5(Date.now(), $scope.params.chatId) + '.jpg',
-                d = [
-                  'uploads/photos/' + fm,
-                  'uploads/photos/resized' + fm
-                ],
-                imgMsg = msgGen(d, 'image'),
-                localMsg = localMsgGen(imgMsg, url)
-              $scope.pushMsg(localMsg)
-              Camera.uploadPicture(url, fm)
-                    .then(function () {
-                      socket.emit('message', { msg: imgMsg, to: $scope.params.chatId, role: 'doctor' })
-                    }, function () {
-                      $ionicLoading.show({ template: '图片上传失败', duration: 2000 })
-                    })
-            }, function (err) {
-              console.error(err)
-            })
+    var ids = ['', '']
+    if (type == 'cam') var st = ['camera']
+    else var st = ['album']
+    wx.chooseImage({
+      count: 1, // 默认9
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: st, // 可以指定来源是相册还是相机，默认二者都有
+      success: function (response) {
+        console.log(response)
+        ids = ids.concat(response.localIds)
+        wx.uploadImage({
+          localId: response.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+          isShowProgressTips: 0, // 默认为1，显示进度提示
+          success: function (res) {
+            console.log(res)
+            ids[0] = res.serverId // 返回图片的服务器端ID
+                        // if(cnt)
+            sendmsg(ids, 'image')
+                        // else cnt++;
+          }
+        })
+      }
+    })
   }
   // 上传语音
   $scope.getVoice = function () {
@@ -5380,13 +5412,13 @@ $scope.choosePhotos = function() {
     //       Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
     //         console.log(r);
     //       })
-    //   },1000)
+      },1000)
       
-    // },function(err){
-    //   console.log(err);
-    //   reject(err);
+    },function(err){
+      console.log(err);
+      reject(err);
         })
-      })
+      
   }
 // -----------------------上传头像---------------------
       // ionicPopover functions 弹出框的预定义
@@ -9719,7 +9751,7 @@ $scope.choosePhotos = function() {
                 targetId: DoctorId
               }
               var msgJson = {
-                clientType: 'patient',
+                clientType: 'wechatpatient',
                 contentType: 'custom',
                 fromName: thisPatient.name,
                 fromID: patientId,
@@ -9735,7 +9767,7 @@ $scope.choosePhotos = function() {
                 targetRole: 'doctor',
                 content: msgContent
               }
-              socket.emit('newUser', {user_name: $scope.BasicInfo.name, user_id: patientId, client: 'patient'})
+              socket.emit('newUser', {user_name: $scope.BasicInfo.name, user_id: patientId, client: 'wechatpatient'})
               socket.emit('message', {msg: msgJson, to: DoctorId, role: 'patient'})
                 // $scope.$on('im:messageRes',function(event,messageRes){
                     // socket.off('messageRes');
