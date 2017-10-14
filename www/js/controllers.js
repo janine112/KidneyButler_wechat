@@ -7725,8 +7725,92 @@ $scope.choosePhotos = function() {
     // $ionicHistory.goBack();
   }
 
-  $scope.openModal = function (DoctorId) {
-     $state.go('tab.DoctorSchedule', {DoctorId: DoctorId})
+  //获取医生排班表
+   function GetMyDoctors () {
+    $scope.HemoTbl=[]
+    var promise = Patient.getDoctorLists({doctorId: $scope.doctor.userId})
+    promise.then(function (data) {
+      if (data.results[0]) {
+        var schedules = data.results[0].schedules
+        console.log(schedules)
+        if (schedules) {
+          for (var i = 0; i < schedules.length; i++) {
+            if (schedules[i].day=='Mon'){
+                if(schedules[i].time=='Morning'){
+                    $scope.HemoTbl[1] = {'background-color': 'red'}
+                }
+                if(schedules[i].time=="Afternoon"){
+                    $scope.HemoTbl[2] = {'background-color': 'red'}
+                }
+            }
+            if (schedules[i].day=='Tue'){
+                if(schedules[i].time=='Morning'){
+                    $scope.HemoTbl[3] = {'background-color': 'red'}
+                }
+                if(schedules[i].time=="Afternoon"){
+                    $scope.HemoTbl[4] = {'background-color': 'red'}
+                }
+            }
+            if (schedules[i].day=='Wed'){
+                if(schedules[i].time=='Morning'){
+                    $scope.HemoTbl[5] = {'background-color': 'red'}
+                }
+                if(schedules[i].time=="Afternoon"){
+                    $scope.HemoTbl[6] = {'background-color': 'red'}
+                }
+            }
+            if (schedules[i].day=='Thu'){
+                if(schedules[i].time=='Morning'){
+                    $scope.HemoTbl[7] = {'background-color': 'red'}
+                }
+                if(schedules[i].time=="Afternoon"){
+                    $scope.HemoTbl[8] = {'background-color': 'red'}
+                }
+            }
+            if (schedules[i].day=='Fri'){
+                if(schedules[i].time=='Morning'){
+                    $scope.HemoTbl[9] = {'background-color': 'red'}
+                }
+                if(schedules[i].time=="Afternoon"){
+                    $scope.HemoTbl[10] = {'background-color': 'red'}
+                }
+            }
+            if (schedules[i].day=='Sat'){
+                if(schedules[i].time=='Morning'){
+                    $scope.HemoTbl[11] = {'background-color': 'red'}
+                }
+                if(schedules[i].time=="Afternoon"){
+                    $scope.HemoTbl[12] = {'background-color': 'red'}
+                }
+            }
+            if (schedules[i].day=='Sun'){
+                if(schedules[i].time=='Morning'){
+                    $scope.HemoTbl[13] = {'background-color': 'red'}
+                }
+                if(schedules[i].time=="Afternoon"){
+                    $scope.HemoTbl[14] = {'background-color': 'red'}
+                }
+            }           
+
+          }
+        }
+      }
+    }, function () {
+    })
+  }
+
+   $ionicModal.fromTemplateUrl('templates/modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function (modal) {
+    $scope.modal = modal
+  })
+  $scope.openModal = function () {
+    GetMyDoctors()
+    $scope.modal.show()
+  }
+  $scope.closeModal = function () {
+    $scope.modal.hide()
   }
 
 
@@ -8221,18 +8305,6 @@ $scope.choosePhotos = function() {
     // Storage.set('doctorId',id)
   }
 
-  $scope.openModal = function (DoctorId) {
-     $state.go('tab.DoctorSchedule', {DoctorId: DoctorId})
-  }
-
-}])
-
-.controller('DoctorScheduleCtrl', ['Comment','Doctor','Service','DoctorService','QandC', '$ionicLoading',  '$http', '$ionicPopup', '$scope', '$state', '$ionicHistory', '$stateParams',  'Counsels', 'Storage', 'Account', 'CONFIG', 'Expense', 'socket', '$q', 'Patient', '$ionicModal', function (Comment, Doctor, Service,DoctorService, QandC, $ionicLoading, $http, $ionicPopup, $scope, $state, $ionicHistory, $stateParams,Counsels, Storage, Account, CONFIG, Expense, socket, $q, Patient, $ionicModal) {
-  $scope.GoBack = function () {
-    $ionicHistory.goBack()
-  }
-  var DoctorId = $stateParams.DoctorId
-  console.log(DoctorId)
   //获取医生排班表
    function GetMyDoctors () {
     $scope.HemoTbl=[]
@@ -8306,7 +8378,21 @@ $scope.choosePhotos = function() {
     }, function () {
     })
   }
-  GetMyDoctors()
+  
+   $ionicModal.fromTemplateUrl('templates/modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function (modal) {
+    $scope.modal = modal
+  })
+  $scope.openModal = function () {
+    GetMyDoctors()
+    $scope.modal.show()
+  }
+  $scope.closeModal = function () {
+    $scope.modal.hide()
+  }
+
 }])
 
 .controller('DoctorCommentCtrl', ['$scope', 'Comment', '$stateParams', function($scope, Comment, $stateParams){
