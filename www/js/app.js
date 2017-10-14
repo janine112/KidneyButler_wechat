@@ -28,11 +28,11 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
     showConfirm()
     return false
   }, 101)
-  if (Authentication.check()) {
-    $state.go('tab.tasklist')
-  } else {
-    $state.go('signin')
-  }
+  // if (Authentication.check()) {
+  //   $state.go('tab.tasklist')
+  // } else {
+  //   $state.go('signin')
+  // }
   $ionicPlatform.ready(function () {
     socket = io.connect(CONFIG.socketUrl)
 

@@ -3029,13 +3029,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                         'type': 1,
                     // 咨询类型为1
                         'userId': Storage.get('UID'),
-                        'role': 'appPatient',
+                        'role': 'patient',
                     // 微信支付以分为单位
                         'money': charge1 * 100,
                         'class': '01',
                         'name': '咨询',
                         'notes': DoctorId,
-                        'trade_type': 'APP',
+                        'trade_type': 'JSAPI',
                         'body_description': '咨询服务'
                       }
                   /**
@@ -3123,13 +3123,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                               // 咨询类型为1
                             'userId': Storage.get('UID'),
 
-                            'role': 'appPatient',
+                            'role': 'patient',
                               // 微信支付以分为单位
                             'money': charge1 * 100,
                             'class': '01',
                             'name': '咨询',
                             'notes': DoctorId,
-                            'trade_type': 'APP',
+                            'trade_type': 'JSAPI',
                             'body_description': '咨询服务'
                           }
                           /**
@@ -3185,13 +3185,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                             'type': 1,
                         // 咨询类型为1
                             'userId': Storage.get('UID'),
-                            'role': 'appPatient',
+                            'role': 'patient',
                         // 微信支付以分为单位
                             'money': charge1 * 100,
                             'class': '01',
                             'name': '咨询',
                             'notes': DoctorId,
-                            'trade_type': 'APP',
+                            'trade_type': 'JSAPI',
                             'body_description': '咨询服务'
                           }
                       /**
@@ -3304,13 +3304,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                   'type': 3,
                     // 咨询类型为1
                   'userId': Storage.get('UID'),
-                  'role': 'appPatient',
+                  'role': 'patient',
                     // 微信支付以分为单位
                   'money': charge2 * 100 - charge1 * 100,
                   'class': '03',
                   'name': '咨询升级问诊',
                   'notes': DoctorId,
-                  'trade_type': 'APP',
+                  'trade_type': 'JSAPI',
                   'body_description': '咨询升级问诊服务'
                 }
                 /**
@@ -3488,13 +3488,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     'type': 2,
                     // 问诊类型为2
                     'userId': Storage.get('UID'),
-                    'role': 'appPatient',
+                    'role': 'patient',
                     // 微信支付以分为单位
                     'money': charge2 * 100,
                     'class': '02',
                     'name': '问诊',
                     'notes': DoctorId,
-                    'trade_type': 'APP',
+                    'trade_type': 'JSAPI',
                     'body_description': '问诊服务'
                   }
                   /**
@@ -3604,13 +3604,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                   'type': 7,
                     // 咨询
                   'userId': Storage.get('UID'),
-                  'role': 'appPatient',
+                  'role': 'patient',
                     // 微信支付以分为单位
                   'money': charge3 * 100 - charge1 * 100,
                   'class': '07',
                   'name': '咨询升级加急咨询',
                   'notes': DoctorId,
-                  'trade_type': 'APP',
+                  'trade_type': 'JSAPI',
                   'body_description': '咨询升级加急咨询服务'
                 }
                 /**
@@ -3793,13 +3793,13 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     'type': 6,
                     // 加急咨询类型为6
                     'userId': Storage.get('UID'),
-                    'role': 'appPatient',
+                    'role': 'patient',
                     // 微信支付以分为单位
                     'money': charge3 * 100,
                     'class': '06',
                     'name': '加急咨询',
                     'notes': DoctorId,
-                    'trade_type': 'APP',
+                    'trade_type': 'JSAPI',
                     'body_description': '加急咨询服务'
                   }
                   /**
