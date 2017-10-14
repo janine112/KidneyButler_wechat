@@ -947,11 +947,18 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
                 User.register({phoneNo:register.Phone,password:register.confirm,name:register.name,role:'patient'}).then(function(res){
                   Storage.set('UID',res.userNo)
                   Storage.set('USERNAME',register.Phone)
-                  User.updateAgree({userId:res.userNo,agreement:'0',role:'patient'}).then(function(succ){
+                  $q.all([
+                    User.updateAgree({userId:res.userNo,agreement:'0',role:'patient'}),
+                    User.setUnionId({phoneNo:register.Phone,openId:Storage.get('openid')}),
+                    //type为4是指患者app端，若为微信则要改为2
+                    User.setOpenId({type:2,openId:Storage.get('messageopenid'),userId:Storage.get('UID')})
+                  ]).then(function(succ){
+                    // alert('$Q返回' + JSON.stringify(succ))
                     $ionicLoading.hide()
                     $ionicLoading.show({
-                      template:"恭喜您，注册成功！",
-                      duration:1000
+                      template:"恭喜您，注册成功！即将返回登录页面，请稍后。",
+                      hideOnStateChange:true,
+                      duration:2000
                     })
                     $timeout(function(){$state.go('signin')},1000)
                     if(Storage.get('agreement')){
@@ -1049,7 +1056,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
   $scope.isable = false
   $scope.Register = {}
   var tempuserId = ""
-  
+
   /**
    * [disable获取验证码按钮1分钟，并改变获取验证码按钮显示的文字]
    * @Author   PXY
