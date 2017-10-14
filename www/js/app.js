@@ -626,18 +626,18 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
       }
 
     })
-    .state('tab.urineDoctor', {
-      cache: false,
-      url: '/mine/urineDoctor',
-      views: {
-        'tab-mine': {
-          templateUrl: 'partials/tabs/mine/urineDoctor.html',
-          controller: 'urineDoctorCtrl'
-        }
+    // .state('tab.urineDoctor', {
+    //   cache: false,
+    //   url: '/mine/urineDoctor',
+    //   views: {
+    //     'tab-mine': {
+    //       templateUrl: 'partials/tabs/mine/urineDoctor.html',
+    //       controller: 'urineDoctorCtrl'
+    //     }
 
-      }
+    //   }
 
-    })
+    // })
     .state('tab.myMoney', {
       url: '/mine/Account',
       views: {
@@ -708,15 +708,15 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
       }
     })
 
-    .state('tab.devices', {
-      url: '/mine/devices/',
-      views: {
-        'tab-mine': {
-          templateUrl: 'partials/tabs/mine/devices.html',
-          controller: 'devicesCtrl'
-        }
-      }
-    })
+    // .state('tab.devices', {
+    //   url: '/mine/devices/',
+    //   views: {
+    //     'tab-mine': {
+    //       templateUrl: 'partials/tabs/mine/devices.html',
+    //       controller: 'devicesCtrl'
+    //     }
+    //   }
+    // })
 
     .state('tab.Reports', {
       url: '/mine/Reports/',

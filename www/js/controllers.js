@@ -3481,10 +3481,10 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
   $scope.GoManagement = function () {
     $state.go('tab.taskSet')
   }
-  $scope.GoDevices = function () {
-    console.log('tab.devices')
-    $state.go('tab.devices')
-  }
+  // $scope.GoDevices = function () {
+  //   console.log('tab.devices')
+  //   $state.go('tab.devices')
+  // }
 
   $scope.GoMoney = function () {
     $state.go('tab.myMoney')
@@ -4944,23 +4944,24 @@ $scope.choosePhotos = function() {
   });
 
   $scope.addHealth = function ($event) {
-    $ionicActionSheet.show({
-     buttons: [
-       { text: '尿液试纸上传' },
-       { text: '其他健康信息' }
-     ],
-     cancelOnStateChange: true,
-     titleText: '上传',
-     buttonClicked: function(index) {
-      if(index===0){
-        $scope.urineUpload()
-      }else{
-        $scope.newHealth()
-      }
-       // return true;
-     }
-   })
-    // $scope.openPopover($event)
+   $scope.newHealth() 
+   //  $ionicActionSheet.show({
+   //   buttons: [
+   //     { text: '尿液试纸上传' },
+   //     { text: '其他健康信息' }
+   //   ],
+   //   cancelOnStateChange: true,
+   //   titleText: '上传',
+   //   buttonClicked: function(index) {
+   //    if(index===0){
+   //      $scope.urineUpload()
+   //    }else{
+   //      $scope.newHealth()
+   //    }
+   //     // return true;
+   //   }
+   // })
+   //  // $scope.openPopover($event)
   }
   // 选择个人信息的点击事件----------------------------
   $scope.openPopover = function($event) {
@@ -4983,29 +4984,29 @@ $scope.choosePhotos = function() {
   });
 
   $scope.newHealth = function () {
-    $scope.closePopover()
+    // $scope.closePopover()
     $state.go('tab.myHealthInfoDetail', {id: null, caneidt: true})
   }
 
-  $scope.urineUpload = function(){
-    $scope.closePopover()
-    $state.go('tab.urineDoctor')
+  // $scope.urineUpload = function(){
+  //   $scope.closePopover()
+  //   $state.go('tab.urineDoctor')
 
-  }
-
-}])
-
-.controller('urineDoctorCtrl', ['$scope', '$state', 'Storage','Devicedata', '$sce', 'CONFIG', function ( $scope, $state, Storage,Devicedata,$sce,CONFIG) {
-  var client = ionic.Platform.isIOS() ? 'iOS' : 'Android'
-  Devicedata.urineConnect({client:client,userbind:Storage.get('UID')}).then(function(data){
-    var urineUrl = CONFIG.NiaodaifuUrl + "?appkey=" + data.results.appkey + "&sign=" + data.results.sign + "&atime=" + data.results.atime + "&userbind=" + Storage.get('UID') + "&mode=1"
-    $scope.navigation = $sce.trustAsResourceUrl(urineUrl)
-    // alert(JSON.stringify(data))
-  },function(err){
-    // alert(JSON.stringify(err))
-  })
+  // }
 
 }])
+
+// .controller('urineDoctorCtrl', ['$scope', '$state', 'Storage','Devicedata', '$sce', 'CONFIG', function ( $scope, $state, Storage,Devicedata,$sce,CONFIG) {
+//   var client = ionic.Platform.isIOS() ? 'iOS' : 'Android'
+//   Devicedata.urineConnect({client:client,userbind:Storage.get('UID')}).then(function(data){
+//     var urineUrl = CONFIG.NiaodaifuUrl + "?appkey=" + data.results.appkey + "&sign=" + data.results.sign + "&atime=" + data.results.atime + "&userbind=" + Storage.get('UID') + "&mode=1"
+//     $scope.navigation = $sce.trustAsResourceUrl(urineUrl)
+//     // alert(JSON.stringify(data))
+//   },function(err){
+//     // alert(JSON.stringify(err))
+//   })
+
+// }])
 
 // 健康详情--PXY
 .controller('HealthDetailCtrl', ['otherTask', '$scope', '$state', '$ionicHistory', '$ionicPopup', '$stateParams', '$ionicPopover', '$ionicModal', '$ionicScrollDelegate', '$ionicLoading', '$timeout', 'Dict', 'Health', 'Storage', 'Camera', 'CONFIG', 'Mywechat', '$location', function (otherTask, $scope, $state, $ionicHistory, $ionicPopup, $stateParams, $ionicPopover, $ionicModal, $ionicScrollDelegate, $ionicLoading, $timeout, Dict, Health, Storage, Camera, CONFIG, Mywechat, $location) {
@@ -11007,117 +11008,117 @@ function imgModalInit () {
   }
 }])
 
-.controller('devicesCtrl', ['$http','$scope', '$ionicPopup', '$cordovaBarcodeScanner', 'Devicedata', 'Storage', 'Mywechat', function ($http,$scope, $ionicPopup, $cordovaBarcodeScanner, Devicedata, Storage, Mywechat) {
-  // console.log('deviceCtrl')
-  $scope.deviceList = [{name: 'n1'}]
-  var refresh = function () {
-    Devicedata.devices({userId: Storage.get('UID')})
-        .then(function (data) {
-          console.log(data)
-          $scope.deviceList = data.results
-        }, function (err) {
-          console.log(err)
-        })
-  }
-  refresh()
-  $scope.deleteDevice = function (index) {
-    console.log('delete')
-    Devicedata.BPDeviceDeBinding({appId: 'ssgj', sn: $scope.deviceList[index].deviceInfo.sn, imei: $scope.deviceList[index].deviceInfo.imei, userId: Storage.get('UID')})
-        .then(function (succ) {
-          console.log(succ)
-          refresh()
-        }, function (err) {
-          console.log(err)
-        })
-  }
+// .controller('devicesCtrl', ['$http','$scope', '$ionicPopup', '$cordovaBarcodeScanner', 'Devicedata', 'Storage', 'Mywechat', function ($http,$scope, $ionicPopup, $cordovaBarcodeScanner, Devicedata, Storage, Mywechat) {
+//   // console.log('deviceCtrl')
+//   $scope.deviceList = [{name: 'n1'}]
+//   var refresh = function () {
+//     Devicedata.devices({userId: Storage.get('UID')})
+//         .then(function (data) {
+//           console.log(data)
+//           $scope.deviceList = data.results
+//         }, function (err) {
+//           console.log(err)
+//         })
+//   }
+//   refresh()
+//   $scope.deleteDevice = function (index) {
+//     console.log('delete')
+//     Devicedata.BPDeviceDeBinding({appId: 'ssgj', sn: $scope.deviceList[index].deviceInfo.sn, imei: $scope.deviceList[index].deviceInfo.imei, userId: Storage.get('UID')})
+//         .then(function (succ) {
+//           console.log(succ)
+//           refresh()
+//         }, function (err) {
+//           console.log(err)
+//         })
+//   }
 
  
 
-  $scope.scanbarcode = function () {
-        // console.log(Storage.get("UID"))
-    // $cordovaBarcodeScanner.scan().then(function (imageData) {
-            // alert(imageData.text);
-      // if (imageData.cancelled) { return }
-    var config = "";
-    var path = $location.absUrl().split('?')[0]
-    //var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
-    Mywechat.settingConfig({url:path}).then(function(data){
-      // alert(data.results.timestamp)
-      config = data.results;
-      config.jsApiList = ['scanQRCode']
-      // alert(config.jsApiList)
-      // alert(config.debug)
-      console.log(angular.toJson(config))
-      wx.config({
-        debug:false,
-        appId:config.appId,
-        timestamp:config.timestamp,
-        nonceStr:config.nonceStr,
-        signature:config.signature,
-        jsApiList:config.jsApiList
-      })
-      wx.ready(function(){
-        wx.checkJsApi({
-            jsApiList: ['scanQRCode'],
-            success: function(res) {
-                wx.scanQRCode({
-                  needResult:1,
-                  scanType: ['qrCode','barCode'],
-                  success: function(res) {
-                    $ionicPopup.show({
-                    title: '确定绑定此设备？',
-                    cssClass: 'popupWithKeyboard',
-                    buttons: [{
-                      text: '确定',
-                      onTap: function (e) {
-                        console.log('ok')
-                    Devicedata.BPDeviceBinding({appId: 'ssgj', twoDimensionalCode: imageData.text, userId: Storage.get('UID')})
-                        .then(function (succ) {
-                          if (succ.results.requestStatus == 'Success') {
-                            $ionicPopup.alert({
-                              title: '绑定成功！',
-                              template: '在设备列表页面向左滑动设备标签可以解除绑定',
-                              okText: '好的'
-                            })
-                            refresh()
-                          } else {
-                            var name = succ.results.substr(0, 1) + '*'
-                            $ionicPopup.alert({
-                              title: '警告',
-                              template: '该血压计已被' + name + '绑定，需要原使用者解除绑定后您才能绑定该设备',
-                              okText: '好的'
-                            })
-                          }
-                          console.log(succ)
-                        }, function (err) {
-                          $ionicPopup.alert({
-                            title: '绑定失败,未知原因',
-                            okText: '好的'
-                          })
-                          console.log(err)
-                        })
-          }
-        }, {
-          text: '取消',
-          onTap: function (e) {
-            console.log('cancle')
-          }
-        }]
-      })
-                  }
-                })
-            }
-        });
-      })
-      wx.error(function(res){
-        alert(res.errMsg)
-      })
+//   $scope.scanbarcode = function () {
+//         // console.log(Storage.get("UID"))
+//     // $cordovaBarcodeScanner.scan().then(function (imageData) {
+//             // alert(imageData.text);
+//       // if (imageData.cancelled) { return }
+//     var config = "";
+//     var path = $location.absUrl().split('?')[0]
+//     //var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
+//     Mywechat.settingConfig({url:path}).then(function(data){
+//       // alert(data.results.timestamp)
+//       config = data.results;
+//       config.jsApiList = ['scanQRCode']
+//       // alert(config.jsApiList)
+//       // alert(config.debug)
+//       console.log(angular.toJson(config))
+//       wx.config({
+//         debug:false,
+//         appId:config.appId,
+//         timestamp:config.timestamp,
+//         nonceStr:config.nonceStr,
+//         signature:config.signature,
+//         jsApiList:config.jsApiList
+//       })
+//       wx.ready(function(){
+//         wx.checkJsApi({
+//             jsApiList: ['scanQRCode'],
+//             success: function(res) {
+//                 wx.scanQRCode({
+//                   needResult:1,
+//                   scanType: ['qrCode','barCode'],
+//                   success: function(res) {
+//                     $ionicPopup.show({
+//                     title: '确定绑定此设备？',
+//                     cssClass: 'popupWithKeyboard',
+//                     buttons: [{
+//                       text: '确定',
+//                       onTap: function (e) {
+//                         console.log('ok')
+//                     Devicedata.BPDeviceBinding({appId: 'ssgj', twoDimensionalCode: imageData.text, userId: Storage.get('UID')})
+//                         .then(function (succ) {
+//                           if (succ.results.requestStatus == 'Success') {
+//                             $ionicPopup.alert({
+//                               title: '绑定成功！',
+//                               template: '在设备列表页面向左滑动设备标签可以解除绑定',
+//                               okText: '好的'
+//                             })
+//                             refresh()
+//                           } else {
+//                             var name = succ.results.substr(0, 1) + '*'
+//                             $ionicPopup.alert({
+//                               title: '警告',
+//                               template: '该血压计已被' + name + '绑定，需要原使用者解除绑定后您才能绑定该设备',
+//                               okText: '好的'
+//                             })
+//                           }
+//                           console.log(succ)
+//                         }, function (err) {
+//                           $ionicPopup.alert({
+//                             title: '绑定失败,未知原因',
+//                             okText: '好的'
+//                           })
+//                           console.log(err)
+//                         })
+//           }
+//         }, {
+//           text: '取消',
+//           onTap: function (e) {
+//             console.log('cancle')
+//           }
+//         }]
+//       })
+//                   }
+//                 })
+//             }
+//         });
+//       })
+//       wx.error(function(res){
+//         alert(res.errMsg)
+//       })
       
-    }, function (error) {
-      console.log('An error happened -> ' + error)
-    })
-  }
-}])
+//     }, function (error) {
+//       console.log('An error happened -> ' + error)
+//     })
+//   }
+// }])
 
 // 选择健康信息
 .controller('healthListCtrl', ['CONFIG', '$scope', '$ionicHistory', 'Health', '$state', 'Storage', '$ionicLoading', function (CONFIG, $scope, $ionicHistory, Health, $state, Storage, $ionicLoading) {
