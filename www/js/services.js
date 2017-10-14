@@ -3036,6 +3036,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                         'name': '咨询',
                         'notes': DoctorId,
                         'trade_type': 'JSAPI',
+                        'openid': Storage.get('messageopenid'),
                         'body_description': '咨询服务'
                       }
                   /**
@@ -3130,6 +3131,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                             'name': '咨询',
                             'notes': DoctorId,
                             'trade_type': 'JSAPI',
+                            'openid': Storage.get('messageopenid'),
                             'body_description': '咨询服务'
                           }
                           /**
@@ -3192,6 +3194,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                             'name': '咨询',
                             'notes': DoctorId,
                             'trade_type': 'JSAPI',
+                            'openid': Storage.get('messageopenid'),
                             'body_description': '咨询服务'
                           }
                       /**
@@ -3311,6 +3314,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                   'name': '咨询升级问诊',
                   'notes': DoctorId,
                   'trade_type': 'JSAPI',
+                  'openid': Storage.get('messageopenid'),
                   'body_description': '咨询升级问诊服务'
                 }
                 /**
@@ -3495,6 +3499,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     'name': '问诊',
                     'notes': DoctorId,
                     'trade_type': 'JSAPI',
+                    'openid': Storage.get('messageopenid'),
                     'body_description': '问诊服务'
                   }
                   /**
@@ -3611,6 +3616,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                   'name': '咨询升级加急咨询',
                   'notes': DoctorId,
                   'trade_type': 'JSAPI',
+                  'openid': Storage.get('messageopenid'),
                   'body_description': '咨询升级加急咨询服务'
                 }
                 /**
@@ -3800,6 +3806,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     'name': '加急咨询',
                     'notes': DoctorId,
                     'trade_type': 'JSAPI',
+                    'openid': Storage.get('messageopenid'),
                     'body_description': '加急咨询服务'
                   }
                   /**
