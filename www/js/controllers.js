@@ -3717,7 +3717,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
   // } // function结束
 $scope.choosePhotos = function() {
     var config = "";
-    var path = $location.absUrl().split('?')[0]
+    var path = $location.absUrl().split('#')[0]
     Mywechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -3782,7 +3782,7 @@ $scope.choosePhotos = function() {
   // } // function结束
   $scope.takePicture = function() {
       var config = "";
-      var path = $location.absUrl().split('?')[0]
+      var path = $location.absUrl().split('#')[0]
       Mywechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -5367,7 +5367,7 @@ $scope.choosePhotos = function() {
   // } // function结束
   $scope.choosePhotos = function() {
     var config = "";
-    var path = $location.absUrl().split('?')[0]
+    var path = $location.absUrl().split('#')[0]
     Mywechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -5433,7 +5433,7 @@ $scope.choosePhotos = function() {
   // } // function结束
   $scope.takePicture = function() {
       var config = "";
-      var path = $location.absUrl().split('?')[0]
+      var path = $location.absUrl().split('#')[0]
       Mywechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -7897,7 +7897,7 @@ $scope.choosePhotos = function() {
     // $cordovaBarcodeScanner.scan().then(function (imageData) {
           // alert(1)
     var config = "";
-    var path = $location.absUrl().split('?')[0]
+    var path = $location.absUrl().split('#')[0]
     //var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     Mywechat.settingConfig({url:path}).then(function(data){
       config = data.results;
@@ -10395,7 +10395,7 @@ var patientId = Storage.get('UID')
   // } // function结束
   $scope.choosePhotos = function() {
     var config = "";
-    var path = $location.absUrl().split('?')[0]
+    var path = $location.absUrl().split('#')[0]
     Mywechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -10461,7 +10461,7 @@ var patientId = Storage.get('UID')
   // } // function结束
   $scope.takePicture = function() {
       var config = "";
-      var path = $location.absUrl().split('?')[0]
+      var path = $location.absUrl().split('#')[0]
       Mywechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -11039,7 +11039,7 @@ function imgModalInit () {
             // alert(imageData.text);
       // if (imageData.cancelled) { return }
     var config = "";
-    var path = $location.absUrl().split('?')[0]
+    var path = $location.absUrl().split('#')[0]
     //var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     Mywechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
