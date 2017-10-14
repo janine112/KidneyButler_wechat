@@ -3717,7 +3717,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
   // } // function结束
 $scope.choosePhotos = function() {
     var config = "";
-    var path = $location.absUrl().split('?')[0]
+    var path = $location.absUrl().split('#')[0]
     Mywechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -3782,7 +3782,7 @@ $scope.choosePhotos = function() {
   // } // function结束
   $scope.takePicture = function() {
       var config = "";
-      var path = $location.absUrl().split('?')[0]
+      var path = $location.absUrl().split('#')[0]
       Mywechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -5368,7 +5368,7 @@ $scope.choosePhotos = function() {
   // } // function结束
   $scope.choosePhotos = function() {
     var config = "";
-    var path = $location.absUrl().split('?')[0]
+    var path = $location.absUrl().split('#')[0]
     Mywechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -5434,7 +5434,7 @@ $scope.choosePhotos = function() {
   // } // function结束
   $scope.takePicture = function() {
       var config = "";
-      var path = $location.absUrl().split('?')[0]
+      var path = $location.absUrl().split('#')[0]
       Mywechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -7898,7 +7898,7 @@ $scope.choosePhotos = function() {
     // $cordovaBarcodeScanner.scan().then(function (imageData) {
           // alert(1)
     var config = "";
-    var path = $location.absUrl().split('?')[0]
+    var path = $location.absUrl().split('#')[0]
     //var path = "http://patient.haihonghospitalmanagement.com/?code=" + Storage.get('code');
     Mywechat.settingConfig({url:path}).then(function(data){
       config = data.results;
@@ -8347,7 +8347,7 @@ $scope.choosePhotos = function() {
           'type':5,
           //面诊类型为5
           'userId': Storage.get('UID'),
-          'role': 'appPatient',
+          'role': 'patient',
           // 微信支付以分为单位
           'money': $scope.doctor.charge5 * 100,
           'class': '05',
@@ -8355,7 +8355,8 @@ $scope.choosePhotos = function() {
           'notes': $scope.doctor.userId,
           // 'paystatus': 0,
           // 'paytime': new Date(),
-          'trade_type': 'APP',
+          'trade_type': 'JSAPI',
+          'openid': Storage.get('messageopenid'),
           'body_description': '预约面诊服务'
         }
         /**
@@ -8368,20 +8369,20 @@ $scope.choosePhotos = function() {
         Mywechat.addOrder(neworder).then(function (orderdata) {
           // alert('orderdata:'+JSON.stringify(orderdata))
           if(orderdata.results.status !== 1){
-            var params = {
-              'partnerid': '1480817392', // merchant id
-              'prepayid': orderdata.results.prepay_id[0], // prepay id
-              'noncestr': orderdata.results.nonceStr, // nonce
-              'timestamp': orderdata.results.timestamp, // timestamp
-              'sign': orderdata.results.paySign // signed string
-            }
+            // var params = {
+            //   'partnerid': '1480817392', // merchant id
+            //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+            //   'noncestr': orderdata.results.nonceStr, // nonce
+            //   'timestamp': orderdata.results.timestamp, // timestamp
+            //   'sign': orderdata.results.paySign // signed string
+            // }
             /**
              * *[微信jssdk方法，拉起微信支付]
              * @Author   PXY
              * @DateTime 2017-07-20
              */
             ionicLoadinghide()
-            Wechat.sendPaymentRequest(params, function (data) {
+            payment.payment(orderdata).then(function (data) {
               // alert('wechat:'+JSON.stringify(data))
              
                 /**
@@ -8545,7 +8546,7 @@ $scope.choosePhotos = function() {
           //主管医生类型为4
           'userId': Storage.get('UID'),
           'month':duration,
-          'role': 'appPatient',
+          'role': 'patient',
           // 微信支付以分为单位
           'money': totalAmount * 100,
           'class': '04',
@@ -8553,7 +8554,8 @@ $scope.choosePhotos = function() {
           'notes': doctorId,
           // 'paystatus': 0,
           // 'paytime': new Date(),
-          'trade_type': 'APP',
+          'trade_type': 'JSAPI',
+          'openid': Storage.get('messageopenid'),
           'body_description': '主管医生服务'
         }
         /**
@@ -8566,20 +8568,20 @@ $scope.choosePhotos = function() {
         Mywechat.addOrder(neworder).then(function (orderdata) {
           // alert('orderdata:'+JSON.stringify(orderdata))
           if(orderdata.results.status !== 1){
-            var params = {
-              'partnerid': '1480817392', // merchant id
-              'prepayid': orderdata.results.prepay_id[0], // prepay id
-              'noncestr': orderdata.results.nonceStr, // nonce
-              'timestamp': orderdata.results.timestamp, // timestamp
-              'sign': orderdata.results.paySign // signed string
-            }
+            // var params = {
+            //   'partnerid': '1480817392', // merchant id
+            //   'prepayid': orderdata.results.prepay_id[0], // prepay id
+            //   'noncestr': orderdata.results.nonceStr, // nonce
+            //   'timestamp': orderdata.results.timestamp, // timestamp
+            //   'sign': orderdata.results.paySign // signed string
+            // }
             /**
              * *[微信jssdk方法，拉起微信支付]
              * @Author   PXY
              * @DateTime 2017-07-20 
              */
             ionicLoadinghide()
-            Wechat.sendPaymentRequest(params, function (data) {
+            payment.payment(orderdata).then(function (data) {
               // alert('wechat:'+JSON.stringify(data))
               // $q.all([
               // /**
@@ -10396,7 +10398,7 @@ var patientId = Storage.get('UID')
   // } // function结束
   $scope.choosePhotos = function() {
     var config = "";
-    var path = $location.absUrl().split('?')[0]
+    var path = $location.absUrl().split('#')[0]
     Mywechat.settingConfig({url:path}).then(function(data){
       // alert(data.results.timestamp)
       config = data.results;
@@ -10462,7 +10464,7 @@ var patientId = Storage.get('UID')
   // } // function结束
   $scope.takePicture = function() {
       var config = "";
-      var path = $location.absUrl().split('?')[0]
+      var path = $location.absUrl().split('#')[0]
       Mywechat.settingConfig({url:path}).then(function(data){
         // alert(data.results.timestamp)
         config = data.results;
@@ -11113,6 +11115,7 @@ function imgModalInit () {
 //       wx.error(function(res){
 //         alert(res.errMsg)
 //       })
+
       
 //     }, function (error) {
 //       console.log('An error happened -> ' + error)

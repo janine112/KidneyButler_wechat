@@ -2023,7 +2023,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
 
       var defer = $q.defer()
       var config = ''
-      var path = $location.absUrl().split('?')[0]
+      var path = $location.absUrl().split('#')[0]
 
       Mywechat.settingConfig({url: path}).then(function (data) {
         // alert(data.results.timestamp)
@@ -2033,7 +2033,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
         // alert(config.debug)
         console.log(angular.toJson(config))
         wx.config({
-          debug: true,
+          debug: false,
           appId: config.appId,
           timestamp: config.timestamp,
           nonceStr: config.nonceStr,
@@ -3077,9 +3077,9 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                            * @sign       {[type]}
                            * @return   {[type]}
                            */
-                          payment.payment(orderdata, function () {
+                          payment.payment(orderdata).then(function () {
                           // alert("Success");
-                            ionicLoadingshow()
+                            // ionicLoadingshow()
                             $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
                           }, function (reason) {
                             if (reason == '发送请求失败') {
@@ -3235,9 +3235,9 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                                * @sign       {[type]}
                                * @return   {[type]}
                                */
-                              payment.payment(orderdata, function () {
+                              payment.payment(orderdata).then(function () {
                               // alert("Success");
-                                ionicLoadingshow()
+                                // ionicLoadingshow()
                                 $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
                               }, function (reason) {
                                 if (reason == '发送请求失败') {
@@ -3380,7 +3380,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     //   'timestamp': orderdata.results.timestamp, // timestamp
                     //   'sign': orderdata.results.paySign // signed string
                     // }
-                    payment.payment(orderdata, function () {
+                    payment.payment(orderdata).then(function () {
                       /**
                      * *[用户选择将咨询升级成问诊是调用方法，将咨询的type从1（咨询）转为3（问诊）]
                      * @Author   ZXF
@@ -3542,9 +3542,9 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                            * @sign       {[type]}
                            * @return   {[type]}
                            */
-                      payment.payment(orderdata, function () {
+                      payment.payment(orderdata).then(function () {
                           // alert("Success");
-                        ionicLoadingshow()
+                        // ionicLoadingshow()
 
                         $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 2})
                       }, function (reason) {
@@ -3682,7 +3682,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     //   'timestamp': orderdata.results.timestamp, // timestamp
                     //   'sign': orderdata.results.paySign // signed string
                     // }
-                    payment.payment(orderdata, function () {
+                    payment.payment(orderdata).then(function () {
                       /**
                      * *[用户选择将咨询升级成问诊是调用方法，将咨询的type从1（咨询）转为3（问诊）]
                      * @Author   ZXF
@@ -3857,7 +3857,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                          * @sign       {[type]}
                          * @return   {[type]}
                          */
-                      payment.payment(orderdata, function () {
+                      payment.payment(orderdata).then(function () {
                           // alert("Success");
                       /**
                        * *[修改患者咨询问诊过程能够询问的次数]count=3表示咨询 count=999表示问诊
@@ -3868,7 +3868,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                        * @modify    {[int]}
                        * @return   {[type]}
                        */
-                        ionicLoadingshow()
+                        // ionicLoadingshow()
                         $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 6})
                       }, function (reason) {
                         if (reason == '发送请求失败') {

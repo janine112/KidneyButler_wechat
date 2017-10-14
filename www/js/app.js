@@ -7,27 +7,27 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
 
 .run(['Authentication', 'version', '$ionicPlatform', '$state', 'Storage', '$location', '$ionicHistory', '$ionicPopup', '$rootScope', 'CONFIG', 'notify', '$interval', 'socket', 'mySocket', 'session', 'Mywechat', 'User', 'Patient', function (Authentication, version, $ionicPlatform, $state, Storage, $location, $ionicHistory, $ionicPopup, $rootScope, CONFIG, notify, $interval, socket, mySocket, session, Mywechat, User, Patient) {
   // 主页面显示退出提示框
-  $ionicPlatform.registerBackButtonAction(function (e) {
-    e.preventDefault()
-    function showConfirm () {
-      var confirmPopup = $ionicPopup.confirm({
-        title: '<strong>退出应用?</strong>',
-        template: '你确定要退出应用吗?',
-        okText: '退出',
-        cancelText: '取消'
-      })
+  // $ionicPlatform.registerBackButtonAction(function (e) {
+  //   e.preventDefault()
+  //   function showConfirm () {
+  //     var confirmPopup = $ionicPopup.confirm({
+  //       title: '<strong>退出应用?</strong>',
+  //       template: '你确定要退出应用吗?',
+  //       okText: '退出',
+  //       cancelText: '取消'
+  //     })
 
-      confirmPopup.then(function (res) {
-        if (res) {
-          ionic.Platform.exitApp()
-        } else {
-          // Don't close
-        }
-      })
-    }
-    showConfirm()
-    return false
-  }, 101)
+  //     confirmPopup.then(function (res) {
+  //       if (res) {
+  //         ionic.Platform.exitApp()
+  //       } else {
+  //         // Don't close
+  //       }
+  //     })
+  //   }
+  //   showConfirm()
+  //   return false
+  // }, 101)
   // if (Authentication.check()) {
   //   $state.go('tab.tasklist')
   // } else {
@@ -35,7 +35,7 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
   // }
   $ionicPlatform.ready(function () {
     socket = io.connect(CONFIG.socketUrl)
-
+    debugger
     // console.log(14)
     var temp = $location.absUrl().split('=')
     // alert(temp)
