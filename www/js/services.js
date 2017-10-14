@@ -2033,7 +2033,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
         // alert(config.debug)
         console.log(angular.toJson(config))
         wx.config({
-          debug: true,
+          debug: false,
           appId: config.appId,
           timestamp: config.timestamp,
           nonceStr: config.nonceStr,
@@ -3079,7 +3079,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                            */
                           payment.payment(orderdata, function () {
                           // alert("Success");
-                            ionicLoadingshow()
+                            // ionicLoadingshow()
                             $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
                           }, function (reason) {
                             if (reason == '发送请求失败') {
@@ -3237,7 +3237,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                                */
                               payment.payment(orderdata, function () {
                               // alert("Success");
-                                ionicLoadingshow()
+                                // ionicLoadingshow()
                                 $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
                               }, function (reason) {
                                 if (reason == '发送请求失败') {
@@ -3544,7 +3544,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                            */
                       payment.payment(orderdata, function () {
                           // alert("Success");
-                        ionicLoadingshow()
+                        // ionicLoadingshow()
 
                         $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 2})
                       }, function (reason) {
@@ -3868,7 +3868,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                        * @modify    {[int]}
                        * @return   {[type]}
                        */
-                        ionicLoadingshow()
+                        // ionicLoadingshow()
                         $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 6})
                       }, function (reason) {
                         if (reason == '发送请求失败') {
