@@ -5359,10 +5359,10 @@ $scope.choosePhotos = function() {
   //   })
   // }
   var photo_upload_display = function(serverId){
-    $ionicLoading.show({
-        template:'头像更新中',
-        duration:5000
-    })
+    // $ionicLoading.show({
+    //     template:'头像更新中',
+    //     duration:5000
+    // })
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" +  "myAvatar.jpg";
     console.log(temp_photoaddress)
@@ -5371,7 +5371,7 @@ $scope.choosePhotos = function() {
     .then(function(res){
       //res.path_resized
       $timeout(function(){
-          $ionicLoading.hide();
+          // $ionicLoading.hide();
           //图片路径
           $scope.myAvatar=CONFIG.mediaUrl + "uploads/photos/"+temp_name+'?'+new Date().getTime();
           console.log($scope.myAvatar)
@@ -10390,10 +10390,10 @@ var patientId = Storage.get('UID')
   //   })
   // }
   var photo_upload_display = function(serverId){
-    $ionicLoading.show({
-        template:'头像更新中',
-        duration:5000
-    })
+    // $ionicLoading.show({
+    //     template:'头像更新中',
+    //     duration:5000
+    // })
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" +  "myAvatar.jpg";
     console.log(temp_photoaddress)
@@ -10402,7 +10402,7 @@ var patientId = Storage.get('UID')
     .then(function(res){
       //res.path_resized
       $timeout(function(){
-          $ionicLoading.hide();
+          // $ionicLoading.hide();
           //图片路径
           $scope.myAvatar=CONFIG.mediaUrl + "uploads/photos/"+temp_name+'?'+new Date().getTime();
           console.log($scope.myAvatar)
