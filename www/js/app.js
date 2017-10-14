@@ -106,11 +106,11 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
                 }
               } else {
                 $q.all([
-                  User.getAgree({ userId: data.results.userId }).then(function (res) {
-                    results.push(res)
-                  }, function (err) {
-                    errs.push(err)
-                  }),
+                  // User.getAgree({ userId: data.results.userId }).then(function (res) {
+                  //   results.push(res)
+                  // }, function (err) {
+                  //   errs.push(err)
+                  // }),
                   User.setOpenId({ type: 2, userId: Storage.get('UID'), openId: Storage.get('messageopenid') }).then(function (res) {
                                       // results.push(res)
                   }, function (err) {
@@ -122,18 +122,18 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
                     errs.push(err)
                   })
                 ]).then(function () {
-                  console.log(results)
-                  var a, b
-                  for (var i in results) {
-                    if (results[i].results.agreement) {
-                      a = i
-                    } else {
-                      b = i
-                    }
-                  }
-                  if (results[a].results.agreement == '0') {
-                    if (results[b].results) {
-                      if (results[b].results.photoUrl == undefined || results[b].results.photoUrl == '') {
+                  // console.log(results)
+                  // var a, b
+                  // for (var i in results) {
+                  //   if (results[i].results.agreement) {
+                  //     a = i
+                  //   } else {
+                  //     b = i
+                  //   }
+                  // }
+                  if (results.results) {
+                    if (results.results.agreement == '0') {
+                      if (results.results.photoUrl == undefined || results[b].results.photoUrl == '') {
                         Patient.editPatientDetail({ userId: Storage.get('UID'), photoUrl: wechatData.headimgurl }).then(function (r) {
                           $state.go('tab.tasklist')
                         }, function (err) {
@@ -143,14 +143,34 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
                         $state.go('tab.tasklist')
                       }
                     } else {
-                      $state.go('tab.tasklist')
+                      $state.go('agreement', { last: 'signin' })
                     }
                                       // else {
                                       //     $state.go('userdetail', { last: 'implement' });
                                       // }
                   } else {
-                    $state.go('agreement', { last: 'signin' })
+                    $state.go('tab.tasklist')
                   }
+                  // if (results[a].results.agreement == '0') {
+                  //   if (results[b].results) {
+                  //     if (results[b].results.photoUrl == undefined || results[b].results.photoUrl == '') {
+                  //       Patient.editPatientDetail({ userId: Storage.get('UID'), photoUrl: wechatData.headimgurl }).then(function (r) {
+                  //         $state.go('tab.tasklist')
+                  //       }, function (err) {
+                  //         $state.go('tab.tasklist')
+                  //       })
+                  //     } else {
+                  //       $state.go('tab.tasklist')
+                  //     }
+                  //   } else {
+                  //     $state.go('tab.tasklist')
+                  //   }
+                  //                     // else {
+                  //                     //     $state.go('userdetail', { last: 'implement' });
+                  //                     // }
+                  // } else {
+                  //   $state.go('agreement', { last: 'signin' })
+                  // }
                 })
               }
             } else {
