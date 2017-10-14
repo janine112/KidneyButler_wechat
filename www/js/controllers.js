@@ -3429,7 +3429,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
 }])
 
 // 我的 页面--PXY
-.controller('MineCtrl', ['User', '$ionicActionSheet','$interval', 'News', '$scope', '$ionicHistory', '$state', '$ionicPopup', '$resource', 'Storage', 'CONFIG', '$ionicLoading', '$ionicPopover', 'Camera', 'Patient', 'Upload', '$sce', 'mySocket', 'socket', 'Mywechatphoto', 'Mywechat', '$location', function (User, $ionicActionSheet,$interval, News, $scope, $ionicHistory, $state, $ionicPopup, $resource, Storage, CONFIG, $ionicLoading, $ionicPopover, Camera, Patient, Upload, $sce, mySocket, socket, Mywechatphoto, Mywechat, $location) {
+.controller('MineCtrl', ['User', '$ionicActionSheet','$interval', 'News', '$scope', '$ionicHistory', '$state', '$ionicPopup', '$resource', 'Storage', 'CONFIG', '$ionicLoading', '$ionicPopover', 'Camera', 'Patient', 'Upload', '$sce', 'mySocket', 'socket', 'Mywechatphoto', 'Mywechat', '$location', '$timeout', function (User, $ionicActionSheet,$interval, News, $scope, $ionicHistory, $state, $ionicPopup, $resource, Storage, CONFIG, $ionicLoading, $ionicPopover, Camera, Patient, Upload, $sce, mySocket, socket, Mywechatphoto, Mywechat, $location, $timeout) {
   // Storage.set("personalinfobackstate","mine")
 
   var patientId = Storage.get('UID')
