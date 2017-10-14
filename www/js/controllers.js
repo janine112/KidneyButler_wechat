@@ -4711,7 +4711,7 @@ $scope.choosePhotos = function() {
       }
     }
     return {
-      clientType: 'patient',
+      clientType: 'wechatpatient',
       contentType: type,
       fromID: $scope.params.UID,
       fromName: thisPatient.name,
@@ -4741,7 +4741,7 @@ $scope.choosePhotos = function() {
       d.src = msg.content.src
     }
     return {
-      clientType: 'patient',
+      clientType: 'wechatpatient',
       contentType: type,
       fromID: msg.fromID,
       fromName: msg.fromName,
@@ -5412,13 +5412,13 @@ $scope.choosePhotos = function() {
     //       Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
     //         console.log(r);
     //       })
-    //   },1000)
+      },1000)
       
-    // },function(err){
-    //   console.log(err);
-    //   reject(err);
+    },function(err){
+      console.log(err);
+      reject(err);
         })
-      })
+      
   }
 // -----------------------上传头像---------------------
       // ionicPopover functions 弹出框的预定义
@@ -9751,7 +9751,7 @@ $scope.choosePhotos = function() {
                 targetId: DoctorId
               }
               var msgJson = {
-                clientType: 'patient',
+                clientType: 'wechatpatient',
                 contentType: 'custom',
                 fromName: thisPatient.name,
                 fromID: patientId,
@@ -9767,7 +9767,7 @@ $scope.choosePhotos = function() {
                 targetRole: 'doctor',
                 content: msgContent
               }
-              socket.emit('newUser', {user_name: $scope.BasicInfo.name, user_id: patientId, client: 'patient'})
+              socket.emit('newUser', {user_name: $scope.BasicInfo.name, user_id: patientId, client: 'wechatpatient'})
               socket.emit('message', {msg: msgJson, to: DoctorId, role: 'patient'})
                 // $scope.$on('im:messageRes',function(event,messageRes){
                     // socket.off('messageRes');
