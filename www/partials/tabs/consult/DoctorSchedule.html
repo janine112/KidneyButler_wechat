@@ -1,0 +1,60 @@
+<ion-view cache-view="false" title="医生详情" show-tabs>
+    <ion-nav-buttons side="left">
+        <my-nav-back-button ng-click="GoBack()"></my-nav-back-button>
+    </ion-nav-buttons>
+            <ion-content class="padding" style="top:63px">
+                <p style="padding-left:4px;text-align: center; ">医生排班表</p>
+                <div ng-show="hasstop" style="padding-left:4px;">
+                    <p >医生停诊中：</p>
+                    <p>当前日期：{{dateC|dateFormat:"YYYY-MM-DD"}}</p>
+
+                    <p>停诊开始：{{begin|dateFormat:"YYYY-MM-DD"}}</p>
+                    <p>停诊结束：{{end|dateFormat:"YYYY-MM-DD"}}</p>
+                </div>
+
+                <div class="row">
+                    <div class="col schedual-border" ><span style="opacity:0">上午</span></div>
+                    <div class="col schedual-border" >一</div>
+                    <div class="col schedual-border" >二</div>
+                    <div class="col schedual-border" >三</div>
+                    <div class="col schedual-border" >四</div>
+                    <div class="col schedual-border" >五</div>
+                    <div class="col schedual-border" >六</div>
+                    <div class="col schedual-border-right">日</div>
+                </div>
+                <div class="row" disabled="true">
+                    <div class="col schedual-border" >上午</div>
+                    <div class="col schedual-border" ng-style="HemoTbl[1]" ></div>
+                    <div class="col schedual-border" ng-style="HemoTbl[3]" ></div>
+                    <div class="col schedual-border" ng-style="HemoTbl[5]" ></div>
+                    <div class="col schedual-border" ng-style="HemoTbl[7]" ></div>
+                    <div class="col schedual-border" ng-style="HemoTbl[9]" ></div>
+                    <div class="col schedual-border" ng-style="HemoTbl[11]" ></div>
+                    <div class="col schedual-border-right" ng-style="HemoTbl[13]" ></div>
+                </div>
+                <div class="row" disabled="true">
+                    <div class="col schedual-border-bottom" >下午</div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[2]" ></div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[4]" ></div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[6]"></div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[8]" ></div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[10]" ></div>
+                    <div class="col schedual-border-bottom" ng-style="HemoTbl[12]" ></div>
+                    <div class="col schedual-border-all" ng-style="HemoTbl[14]" ></div>
+                </div>
+                <div class="row" style="padding:0px;">
+                    <div class='col'>
+                        <div style="width: 20px;height: 20px;background-color: red;border: solid;border-color: #6ac4f8"></div>
+                    </div>
+                    <div class='col'>
+                        <div>工作</div>
+                    </div>
+                    <div class='col'>
+                        <div style="width: 20px;height: 20px;background-color: white;border: solid;border-color: #6ac4f8"></div>
+                    </div>
+                    <div class='col'>
+                        <div>空闲</div>
+                    </div>
+                </div>
+</ion-content>
+      
