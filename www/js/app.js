@@ -356,7 +356,8 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
       cache: false,
       url: '/phonevalid',
       templateUrl: 'partials/login/phonevalid.html',
-      controller: 'phonevalidCtrl'
+      controller: 'phonevalidCtrl',
+      params: {last: null}
     })
     // 忘记密码--重置密码
     .state('setpassword', {
