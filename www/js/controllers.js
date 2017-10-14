@@ -1121,29 +1121,29 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
    */
 
   $scope.getcode = function () { 
-    console.log($scope.Register.Phone)
+    console.log($scope.Verify.Phone)
     $scope.logStatus = ''
    
-    if ($scope.Register.Phone == '') {
+    if ($scope.Verify.Phone == '') {
 
       $scope.logStatus = '手机号码不能为空！'
       return
     }
     var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
         // 手机正则表达式验证
-    if (!phoneReg.test($scope.Register.Phone)) {
+    if (!phoneReg.test($scope.Verify.Phone)) {
       $scope.logStatus = '手机号验证失败！'
       return
     }
 
-     User.getUserID({username: $scope.Register.Phone}).then(function(data){
+     User.getUserID({username: $scope.Verify.Phone}).then(function(data){
           if(data.results == 0){
               if(data.roles.indexOf('patient') == -1){
                   $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或返回登录页面进行注册！";
                   return;
               }else {
                   $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
-                  sendSMS(Verify.Phone);
+                  sendSMS($scope.Verify.Phone);
               }
           }else if(data.results == 1){
               $scope.logStatus = "该用户不存在！请返回登录页面进行注册！"
