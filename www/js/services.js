@@ -3077,7 +3077,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                            * @sign       {[type]}
                            * @return   {[type]}
                            */
-                          payment.payment(orderdata, function () {
+                          payment.payment(orderdata).then(function () {
                           // alert("Success");
                             // ionicLoadingshow()
                             $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
@@ -3235,7 +3235,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                                * @sign       {[type]}
                                * @return   {[type]}
                                */
-                              payment.payment(orderdata, function () {
+                              payment.payment(orderdata).then(function () {
                               // alert("Success");
                                 // ionicLoadingshow()
                                 $state.go('tab.consultQuestionnaire', {DoctorId: DoctorId, counselType: 1})
@@ -3380,7 +3380,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     //   'timestamp': orderdata.results.timestamp, // timestamp
                     //   'sign': orderdata.results.paySign // signed string
                     // }
-                    payment.payment(orderdata, function () {
+                    payment.payment(orderdata).then(function () {
                       /**
                      * *[用户选择将咨询升级成问诊是调用方法，将咨询的type从1（咨询）转为3（问诊）]
                      * @Author   ZXF
@@ -3542,7 +3542,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                            * @sign       {[type]}
                            * @return   {[type]}
                            */
-                      payment.payment(orderdata, function () {
+                      payment.payment(orderdata).then(function () {
                           // alert("Success");
                         // ionicLoadingshow()
 
@@ -3682,7 +3682,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                     //   'timestamp': orderdata.results.timestamp, // timestamp
                     //   'sign': orderdata.results.paySign // signed string
                     // }
-                    payment.payment(orderdata, function () {
+                    payment.payment(orderdata).then(function () {
                       /**
                      * *[用户选择将咨询升级成问诊是调用方法，将咨询的type从1（咨询）转为3（问诊）]
                      * @Author   ZXF
@@ -3857,7 +3857,7 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
                          * @sign       {[type]}
                          * @return   {[type]}
                          */
-                      payment.payment(orderdata, function () {
+                      payment.payment(orderdata).then(function () {
                           // alert("Success");
                       /**
                        * *[修改患者咨询问诊过程能够询问的次数]count=3表示咨询 count=999表示问诊
