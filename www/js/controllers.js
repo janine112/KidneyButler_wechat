@@ -4264,7 +4264,7 @@ $scope.choosePhotos = function() {
     // if ($ionicPlatform.is('ios') == false)document.getElementById('inputbar').removeAttribute('keyboard-attach')
     //   console.log(document.getElementById('inputbar'))
     // $rootScope.conversation.type = 'single'
-    $rootScope.conversation.id = $state.params.chatId
+    // $rootScope.conversation.id = $state.params.chatId
     Counsels.getStatus({doctorId: $state.params.chatId, patientId: Storage.get('UID')})
             .then(function (data) {
               console.log('进入页面getstatus ')
@@ -4335,7 +4335,7 @@ $scope.choosePhotos = function() {
     $scope.msgs = []
     if ($scope.modal)$scope.modal.remove()
     // $rootScope.conversation.type = null
-    $rootScope.conversation.id = ''
+    // $rootScope.conversation.id = ''
   })
   // 显示键盘
   $scope.$on('keyboardshow', function (event, height) {
