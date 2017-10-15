@@ -4198,7 +4198,7 @@ $scope.choosePhotos = function() {
  * @Author   xjz
  * @DateTime 2017-07-05
  */
-.controller('ChatCtrl', ['$ionicPlatform', '$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice', 'CONFIG', '$ionicPopup', 'Counsels', 'Storage', 'Mywechat', '$q', 'Communication', 'Account', 'News', '$ionicLoading', 'Patient', 'arrTool', 'socket', 'notify', '$timeout', function ($ionicPlatform, $scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice, CONFIG, $ionicPopup, Counsels, Storage, Mywechat, $q, Communication, Account, News, $ionicLoading, Patient, arrTool, socket, notify, $timeout) {
+.controller('ChatCtrl', ['$ionicPlatform', '$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice', 'CONFIG', '$ionicPopup', 'Counsels', 'Storage', 'Mywechat', '$q', 'Communication', 'Account', 'News', '$ionicLoading', 'Patient', 'arrTool', 'socket', 'notify', '$timeout', '$location', function ($ionicPlatform, $scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice, CONFIG, $ionicPopup, Counsels, Storage, Mywechat, $q, Communication, Account, News, $ionicLoading, Patient, arrTool, socket, notify, $timeout, $location) {
   // if ($ionicPlatform.is('ios')) cordova.plugins.Keyboard.disableScroll(true)
   $scope.input = {
     text: ''
