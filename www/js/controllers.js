@@ -4261,9 +4261,9 @@ $scope.choosePhotos = function() {
   })
   // 进入页面时：获取咨询状态、剩余次数
   $scope.$on('$ionicView.enter', function () {
-    if ($ionicPlatform.is('ios') == false)document.getElementById('inputbar').removeAttribute('keyboard-attach')
-      console.log(document.getElementById('inputbar'))
-    $rootScope.conversation.type = 'single'
+    // if ($ionicPlatform.is('ios') == false)document.getElementById('inputbar').removeAttribute('keyboard-attach')
+    //   console.log(document.getElementById('inputbar'))
+    // $rootScope.conversation.type = 'single'
     $rootScope.conversation.id = $state.params.chatId
     Counsels.getStatus({doctorId: $state.params.chatId, patientId: Storage.get('UID')})
             .then(function (data) {
@@ -4334,7 +4334,7 @@ $scope.choosePhotos = function() {
     for (var i in $scope.timer) clearTimeout($scope.timer[i])
     $scope.msgs = []
     if ($scope.modal)$scope.modal.remove()
-    $rootScope.conversation.type = null
+    // $rootScope.conversation.type = null
     $rootScope.conversation.id = ''
   })
   // 显示键盘
