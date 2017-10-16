@@ -4326,7 +4326,7 @@ $scope.choosePhotos = function() {
     $scope.getMsg(15).then(function (data) {
       $scope.msgs = data
       $scope.params.loaded = true
-      toBottom(true, 400)
+      toBottom(true, 500)
     })
   })
   // 离开页面时：
@@ -4585,6 +4585,7 @@ $scope.choosePhotos = function() {
   }
   $scope.scrollBottom = function () {
     $scope.scrollHandle.scrollBottom(true)
+    toBottom(true, 500)
   }
 
   // 查看图片
@@ -4824,7 +4825,7 @@ $scope.choosePhotos = function() {
         ids = ids.concat(response.localIds)
         wx.uploadImage({
           localId: response.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
-          isShowProgressTips: 0, // 默认为1，显示进度提示
+          isShowProgressTips: 1, // 默认为1，显示进度提示
           success: function (res) {
             console.log(res)
             ids[0] = res.serverId // 返回图片的服务器端ID
