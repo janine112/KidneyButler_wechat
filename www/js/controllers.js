@@ -4828,6 +4828,7 @@ $scope.choosePhotos = function() {
           success: function (res) {
             console.log(res)
             ids[0] = res.serverId // 返回图片的服务器端ID
+            
                         // if(cnt)
             sendmsg(ids, 'image')
                         // else cnt++;
@@ -4898,8 +4899,9 @@ $scope.choosePhotos = function() {
   }
   $scope.showbigger = function (path) {
     $scope.imageIndex = urlArray.indexOf(path)
-    console.log($scope.imageIndex)
-    var originalfilepath = CONFIG.imgLargeUrl + path.slice(path.lastIndexOf('/') + 1).substr(7)
+    // console.log($scope.imageIndex)
+    var hasResized = path.indexOf('resized')>-1 ? 7:0
+    var originalfilepath = CONFIG.imgLargeUrl + path.slice(path.lastIndexOf('/') + 1).substr(hasResized)
     $scope.imageHandle.zoomTo(1, true)
     $scope.imageUrl = originalfilepath
     $scope.modal.show()
@@ -4954,7 +4956,9 @@ $scope.choosePhotos = function() {
               }
             }
             for (i = 0; i < urlArray.length; i++) {
-              $scope.Images[i] = CONFIG.imgLargeUrl+urlArray[i].slice(urlArray[i].lastIndexOf('/')+1).substr(7)
+              var hasResized = urlArray[i].indexOf('resized')>-1 ? 7:0
+              console.log(urlArray[i].slice(urlArray[i].lastIndexOf('/')+1).substr(hasResized))
+              $scope.Images[i] = CONFIG.imgLargeUrl+urlArray[i].slice(urlArray[i].lastIndexOf('/')+1).substr(hasResized)
             } 
           } else {
             $scope.noHealth = true
@@ -5207,7 +5211,8 @@ $scope.choosePhotos = function() {
                   $scope.health.imgurl = data.results.url
                         // $scope.showflag=true;
                     for (i = 0; i < data.results.url.length; i++) {
-                    $scope.Images[i] = CONFIG.imgLargeUrl+data.results.url[i].slice(data.results.url[i].lastIndexOf('/')+1).substr(7)
+                    var resized = data.results.url[i].indexOf('resized')>-1 ? 7 : 0
+                    $scope.Images[i] = CONFIG.imgLargeUrl+data.results.url[i].slice(data.results.url[i].lastIndexOf('/')+1).substr(resized)
                    } 
                 }
               }
@@ -5608,7 +5613,8 @@ $scope.choosePhotos = function() {
   $scope.showoriginal = function (resizedpath) {
     // $scope.openModal();
     // console.log(resizedpath)
-    var originalfilepath = CONFIG.imgLargeUrl + resizedpath.slice(resizedpath.lastIndexOf('/') + 1).substr(7)
+     var resized = resizedpath.indexOf('resized')>-1? 7 :0
+    var originalfilepath = CONFIG.imgLargeUrl + resizedpath.slice(resizedpath.lastIndexOf('/') + 1).substr(resized)
     // console.log(originalfilepath)
     // $scope.doctorimgurl=originalfilepath;
     $scope.imageHandle.zoomTo(1, true)
@@ -10642,14 +10648,16 @@ var patientId = Storage.get('UID')
   $scope.showoriginal=function(resizedpath){
         // $scope.openModal();
         for (i = 0; i < $scope.post.content[1].image.length; i++) {
-              $scope.Images[i] = CONFIG.imgLargeUrl+$scope.post.content[1].image[i].slice($scope.post.content[1].image[i].lastIndexOf('/')+1).substr(7)
+          var resized = $scope.post.content[1].image[i].indexOf('resized')>-1? 7:0
+          $scope.Images[i] = CONFIG.imgLargeUrl+$scope.post.content[1].image[i].slice($scope.post.content[1].image[i].lastIndexOf('/')+1).substr(resized)
               // console.log('Images',$scope.Images)
               // console.log('images',$scope.image)
         }
         console.log(resizedpath)
         $scope.imageIndex = 0;
         //console.log($scope.imageIndex)
-        var originalfilepath=CONFIG.imgLargeUrl+resizedpath.slice(resizedpath.lastIndexOf('/')+1).substr(7)
+        var orginResized = resizedpath.indexOf('resized')>-1? 7:0
+        var originalfilepath=CONFIG.imgLargeUrl+resizedpath.slice(resizedpath.lastIndexOf('/')+1).substr(orginResized)
         //console.log(originalfilepath)
         // $scope.doctorimgurl=originalfilepath;
         $scope.imageHandle.zoomTo(1, true);
@@ -10742,10 +10750,11 @@ var patientId = Storage.get('UID')
      $scope.anonymous = data.data.anonymous
      $scope.comments = data.data.replies
      for (i = 0; i < data.data.content[1].image.length; i++) {
-              $scope.Images[i] = CONFIG.imgLargeUrl+data.data.content[1].image[i].slice(data.data.content[1].image[i].lastIndexOf('/')+1).substr(7)
-              // console.log('Images',$scope.Images)
-              // console.log('images',$scope.image)
-              }
+      var resized = data.data.content[1].image[i].indexOf('resized')>-1 ? 7:0
+        $scope.Images[i] = CONFIG.imgLargeUrl+data.data.content[1].image[i].slice(data.data.content[1].image[i].lastIndexOf('/')+1).substr(resized)
+      // console.log('Images',$scope.Images)
+      // console.log('images',$scope.image)
+      }
     }, function (err) {
       console.log(err)
     })
@@ -10844,7 +10853,8 @@ function imgModalInit () {
         console.log(resizedpath)
         $scope.imageIndex = 0;
         //console.log($scope.imageIndex)
-        var originalfilepath=CONFIG.imgLargeUrl+resizedpath.slice(resizedpath.lastIndexOf('/')+1).substr(7)
+        var resized = resizedpath.indexOf('resized')>-1? 7 :0
+        var originalfilepath=CONFIG.imgLargeUrl+resizedpath.slice(resizedpath.lastIndexOf('/')+1).substr(resized)
         //console.log(originalfilepath)
         // $scope.doctorimgurl=originalfilepath;
         $scope.imageHandle.zoomTo(1, true);
