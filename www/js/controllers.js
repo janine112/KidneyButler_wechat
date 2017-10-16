@@ -4326,7 +4326,7 @@ $scope.choosePhotos = function() {
     $scope.getMsg(15).then(function (data) {
       $scope.msgs = data
       $scope.params.loaded = true
-      toBottom(true, 500)
+      toBottom(true, 1000)
     })
   })
   // 离开页面时：
@@ -4677,7 +4677,7 @@ $scope.choosePhotos = function() {
     msg.direct = msg.fromID==$scope.params.UID?'send':'receive';
     $scope.params.msgCount++
     $scope.msgs.push(msg)
-    toBottom(true, 200)
+    // toBottom(true, 200)
     toBottom(true, 600)
     $timeout(function () {
       var pos = arrTool.indexOf($scope.msgs, 'createTimeInMillis', msg.createTimeInMillis)
