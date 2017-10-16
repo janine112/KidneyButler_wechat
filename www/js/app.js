@@ -231,36 +231,36 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
     //    // name = thisDoctor === null ? '' : thisDoctor.name
     //   mySocket.newUserOnce(id)
     // }
-    // socket.on('error', function (data) {
-    //   console.error('socket error')
-    //   console.log(data)
-    // })
-    // socket.on('disconnected', function (data) {
-    //   console.error('disconnected')
-    //   console.error(data)
-    // })
-    // socket.on('reconnect', function (attempt) {
-    //   console.info('reconnect: ' + attempt)
-    //   var id = Storage.get('UID'),
-    //     name = thisPatient === null ? '' : thisPatient.name
-    //   mySocket.newUser(id, name)
-    // })
-    // socket.on('kick', function () {
-    //   session.logOut()
-    //   $ionicPopup.alert({
-    //     title: '请重新登录'
-    //   }).then(function () {
-    //     $state.go('signin')
-    //   })
-    // })
-    // socket.on('getMsg', listenGetMsg)
-    // function listenGetMsg (data) {
-    //   console.info('getMsg')
-    //   console.log(data)
-    //   if (!appState.background && (($rootScope.conversation.type == 'single' && $rootScope.conversation.id == data.msg.fromID) || ($rootScope.conversation.type == 'group' && $rootScope.conversation.id == data.msg.targetID))) return
-    //   notify.add(data.msg)
-    //   socket.emit('gotMsg', {msg: data.msg, userId: Storage.get('UID')})
-    // }
+    socket.on('error', function (data) {
+      console.error('socket error')
+      console.log(data)
+    })
+    socket.on('disconnected', function (data) {
+      console.error('disconnected')
+      console.error(data)
+    })
+    socket.on('reconnect', function (attempt) {
+      console.info('reconnect: ' + attempt)
+      var id = Storage.get('UID'),
+        name = thisPatient === null ? '' : thisPatient.name
+      mySocket.newUser(id, name)
+    })
+    socket.on('kick', function () {
+      session.logOut()
+      $ionicPopup.alert({
+        title: '请重新登录'
+      }).then(function () {
+        $state.go('signin')
+      })
+    })
+    socket.on('getMsg', listenGetMsg)
+    function listenGetMsg (data) {
+      console.info('getMsg')
+      console.log(data)
+      if (!appState.background && (($rootScope.conversation.type == 'single' && $rootScope.conversation.id == data.msg.fromID) || ($rootScope.conversation.type == 'group' && $rootScope.conversation.id == data.msg.targetID))) return
+      // notify.add(data.msg)
+      socket.emit('gotMsg', {msg: data.msg, userId: Storage.get('UID')})
+    }
     if (window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -357,6 +357,13 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
       url: '/phonevalid',
       templateUrl: 'partials/login/phonevalid.html',
       controller: 'phonevalidCtrl'
+    })
+    // 绑定微信
+    .state('bindwechat', {
+      cache: false,
+      url: '/bindwechat',
+      templateUrl: 'partials/login/bindwechat.html',
+      controller: 'bindwechatCtrl'
     })
     // 忘记密码--重置密码
     .state('setpassword', {

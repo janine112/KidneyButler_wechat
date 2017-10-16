@@ -1,6 +1,6 @@
 angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 'ionic-datepicker', 'kidney.directives'])//, 'ngRoute'
 
-.controller('SignInCtrl', ['$ionicLoading', '$scope', '$timeout', '$state', 'Storage', '$ionicHistory', 'Data', 'User', '$sce', 'Mywechat', 'Patient', 'mySocket', function ($ionicLoading, $scope, $timeout, $state, Storage, $ionicHistory, Data, User, $sce, Mywechat, Patient, mySocket) {
+.controller('SignInCtrl', ['$ionicLoading', '$scope', '$timeout', '$state', 'Storage', '$ionicHistory', 'Data', 'User', '$sce', 'Mywechat', 'Patient', 'mySocket', '$ionicPopup', function ($ionicLoading, $scope, $timeout, $state, Storage, $ionicHistory, Data, User, $sce, Mywechat, Patient, mySocket, $ionicPopup) {
   /**
    * [从本地存储中取手机号码USERNAME,如果有则显示在登录页面，无则显示空]
    * @Author   PXY
@@ -119,6 +119,26 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
    */
   $scope.toReset = function () {
     $state.go('phonevalid')
+  }
+
+  $scope.bindwechat = function () 
+  {
+    $ionicPopup.show({   
+      title: '将您的微信账号与手机账号进行绑定，绑定后在公众号内可以自动登录',
+      buttons: [
+        { 
+          text: '取消',
+          type: 'button'
+        },
+        {
+          text: '確定',
+          type: 'button-positive',
+          onTap: function(e) {
+              $state.go('bindwechat')
+          }
+        }
+      ]
+    })
   }
 /**
  * *[微信登录点击，获取用户unionid，以及个人基本信息]
@@ -746,12 +766,14 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
     
     User.sendSMS({mobile: phone, smsType: 1}).then(function (data) {
       unablebutton()
-      if (data.results == 1) {
-        $scope.logStatus = '验证码发送失败！'
-      } else if (data.mesg.substr(0, 8) == '您的邀请码已发送'){
-        $scope.logStatus = '您的验证码已发送，重新获取请稍后'
+      if (data.results == 0) {
+        if (data.mesg.substr(0, 8) == '您的邀请码已发送') {
+          $scope.logStatus = '您的验证码已发送，重新获取请稍后'
+        } else {
+          $scope.logStatus = '验证码发送成功！'
+        }
       } else {
-        $scope.logStatus = '验证码发送成功！'
+        $scope.logStatus = '验证码发送失败，请稍后再试'
       }
     }, function (err) {
       $scope.logStatus = '验证码发送失败！'
@@ -925,11 +947,18 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
                 User.register({phoneNo:register.Phone,password:register.confirm,name:register.name,role:'patient'}).then(function(res){
                   Storage.set('UID',res.userNo)
                   Storage.set('USERNAME',register.Phone)
-                  User.updateAgree({userId:res.userNo,agreement:'0',role:'patient'}).then(function(succ){
+                  $q.all([
+                    User.updateAgree({userId:res.userNo,agreement:'0',role:'patient'}),
+                    User.setUnionId({phoneNo:register.Phone,openId:Storage.get('openid')}),
+                    //type为4是指患者app端，若为微信则要改为2
+                    User.setOpenId({type:2,openId:Storage.get('messageopenid'),userId:Storage.get('UID')})
+                  ]).then(function(succ){
+                    // alert('$Q返回' + JSON.stringify(succ))
                     $ionicLoading.hide()
                     $ionicLoading.show({
-                      template:"恭喜您，注册成功！",
-                      duration:1000
+                      template:"恭喜您，注册成功！即将返回登录页面，请稍后。",
+                      hideOnStateChange:true,
+                      duration:2000
                     })
                     $timeout(function(){$state.go('signin')},1000)
                     if(Storage.get('agreement')){
@@ -1017,13 +1046,16 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
   
 
 }])
-// 忘记密码--手机号码验证--PXY
-.controller('phonevalidCtrl', ['$scope', '$state', '$interval', '$stateParams', 'Storage', 'User',  function ($scope, $state, $interval, $stateParams, Storage, User) {
+
+// 绑定微信--手机号码验证--TDY
+.controller('bindwechatCtrl', ['$scope', '$state', '$interval', '$stateParams', 'Storage', 'User',  '$timeout', function ($scope, $state, $interval, $stateParams, Storage, User, $timeout) {
   // Storage.set("personalinfobackstate","register")
 
   $scope.Verify = {Phone: '', Code: ''}
   $scope.veritext = '获取验证码'
   $scope.isable = false
+  $scope.Register = {}
+  var tempuserId = ""
 
   /**
    * [disable获取验证码按钮1分钟，并改变获取验证码按钮显示的文字]
@@ -1049,7 +1081,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
     }, 1000)
   }
 
-  /**
+   /**
    * [发送验证码]
    * @Author   PXY
    * @DateTime 2017-07-04
@@ -1067,19 +1099,27 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
     
     User.sendSMS({mobile: phone, smsType: 1}).then(function (data) {
       unablebutton()
-      if (data.results == 1) {
-        $scope.logStatus = '验证码发送失败！'
-      } else if (data.mesg.substr(0, 8) == '您的邀请码已发送'){
-        $scope.logStatus = '您的验证码已发送，重新获取请稍后'
+      if (data.results == 0) {
+        if (data.mesg.substr(0, 8) == '您的邀请码已发送') {
+          $scope.logStatus = '您的验证码已发送，重新获取请稍后'
+        } else {
+          $scope.logStatus = '验证码发送成功！'
+        }
       } else {
-        $scope.logStatus = '验证码发送成功！'
+        $scope.logStatus = '验证码发送失败，请稍后再试'
       }
     }, function (err) {
       $scope.logStatus = '验证码发送失败！'
     })
   }
 
-
+  var ionicLoadingshow = function(){
+    $ionicLoading.show({
+      template: '<ion-spinner icon="ios"></ion-spinner>', 
+      hideOnStateChange:true  
+    })
+  }
+  $scope.registerMode = null
 
   /**
    * [点击获取验证码，如果为注册，注册过的用户不能获取验证码；如果为重置密码，没注册过的用户不能获取验证码]
@@ -1087,85 +1127,111 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
    * @DateTime 2017-07-04
    * @param    Verify:{Phone:String,Code:String} 注：Code没用到
    */
-  $scope.getcode = function (Verify) { 
-    // console.log('123')
+
+  $scope.getcode = function () { 
+    console.log($scope.Verify.Phone)
     $scope.logStatus = ''
    
-    if (Verify.Phone == '') {
+    if ($scope.Verify.Phone == '') {
+
       $scope.logStatus = '手机号码不能为空！'
       return
     }
     var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
         // 手机正则表达式验证
-    if (!phoneReg.test(Verify.Phone)) {
+    if (!phoneReg.test($scope.Verify.Phone)) {
       $scope.logStatus = '手机号验证失败！'
       return
     }
 
-
-    
-    User.getUserID({username: Verify.Phone}).then(function (data) {
-      if (data.results == 0 && data.roles.toString().indexOf('patient')>-1) {
-        sendSMS(Verify.Phone)
-      }else{
-        $scope.logStatus = '该账户不存在！'
-      }
-    }, function () {
-      $scope.logStatus = '连接超时！'
-    })
+     User.getUserID({username: $scope.Verify.Phone}).then(function(data){
+          if(data.results == 0){
+              tempuserId = data.UserId
+              if(data.roles.indexOf('patient') == -1){  
+                  $scope.logStatus = "该手机号码没有患者权限,请确认手机号码或返回登录页面进行注册！";
+                  return;
+              }else {
+                  $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
+                  sendSMS($scope.Verify.Phone);
+              }
+          }else if(data.results == 1){
+              $scope.logStatus = "该用户不存在！请返回登录页面进行注册！"
+              return;
+          }
+      },function(){
+          $scope.logStatus="连接超时！";
+      });
   }
 
+  $scope.gotoReset = function(Verify){
 
-  /**
-   * [点击验证手机号，通过后跳转设置密码页面]
-   * @Author   PXY
-   * @DateTime 2017-07-04
-   * @param    {[type]}
-   * @return   {[type]}
-   */
-  $scope.gotoReset = function (Verify) {
-    $scope.logStatus = ''
-    if (Verify.Phone != '' && Verify.Code != '') {
-        // 结果分为三种：(手机号验证失败)1验证成功；2验证码错误；3连接超时，验证失败
-      var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
-            // 手机正则表达式验证
-      if (phoneReg.test(Verify.Phone)) {
-        // 测试用
-        // if(Verify.Code==5566){
-        //     $scope.logStatus = "验证成功";
-        //     Storage.set('USERNAME',Verify.Phone);
-        //     if($stateParams.phonevalidType == 'register'){
-        //         $timeout(function(){$state.go('agreement',{last:'register'});},500);
-        //     }else{
-        //        $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType});},500);
-        //     }
-
-        // }else{$scope.logStatus = "验证码错误";}
-        /**
-         * [验证手机号码]
-         * @Author   PXY
-         * @DateTime 2017-07-04
-         * @param    {mobile:String,smsType:Number,smsCode:String} 注：smsType写死1
-         * @return   data:{results:Number,mesg:String}  注：results为0代表验证成功
-         *           err
-         */
-        User.verifySMS({mobile: Verify.Phone, smsType: 1, smsCode:Verify.Code}).then(function (data) {
-          if (data.results == 0) {
-            $scope.logStatus = '验证成功'
-            Storage.set('USERNAME', Verify.Phone)
-            
-            $state.go('setpassword')
-          } else {
-            $scope.logStatus = data.mesg
-          }
-        }, function () {
-          $scope.logStatus = '连接超时！'
-        })
-      } else { $scope.logStatus = '手机号验证失败！' }
-    } else { $scope.logStatus = '请输入完整信息！' }
+        $scope.logStatus = '';
+        if(Verify.Phone!="" && Verify.Code!=""){
+        //结果分为三种：(手机号验证失败)1验证成功；2验证码错误；3连接超时，验证失败
+            var phoneReg=/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+            //手机正则表达式验证
+            if(phoneReg.test(Verify.Phone)){ 
+                //测试用
+                // if(Verify.Code==5566){
+                //     $scope.logStatus = "验证成功";
+                //     Storage.set('USERNAME',Verify.Phone);
+                    // if($stateParams.phonevalidType == 'register'){
+                    //     $timeout(function(){$state.go('agreement',{last:'register'});},500);
+                    // }else{
+                    //    $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType});},500); 
+                    // }
+                    
+                // }else{$scope.logStatus = "验证码错误";}
+                var verifyPromise =  User.verifySMS({mobile:Verify.Phone,smsType:1,smsCode:Verify.Code});
+                verifyPromise.then(function(data){
+                    if(data.results==0){
+                        $scope.logStatus = "验证成功";
+                        Storage.set('USERNAME',Verify.Phone)
+                        if (!(Storage.get('openid'))) {
+                          $ionicPopup.show({
+                            title: '退出账号时系统记录被清除，请返回公众号重新进入肾事管家',
+                            buttons: [
+                              {
+                                text: '確定',
+                                type: 'button-positive'
+                              }
+                            ]
+                          })
+                        }
+                        else{
+                          User.setUnionId({phoneNo:Verify.Phone,openId:Storage.get('openid')}).then(function(data){
+                              if(data.results == "success!")
+                              {
+                                User.setOpenId({type:2,userId:tempuserId,openId:Storage.get('messageopenid')}).then(function(res){
+                                    console.log("setopenid");
+                                    $scope.logStatus = "微信绑定手机账号成功，即将返回登录页面"
+                                    $timeout($state.go('signin'),2000)
+                                },function(err){
+                                    console.log("连接超时！");
+                                })
+                              }
+                          },function(){
+                              $scope.logStatus = "连接超时！";
+                          })
+                        }
+                            
+                    }else{
+                        $scope.logStatus = data.mesg;
+                        return;
+                    }
+                },function(){
+                    $scope.logStatus = "连接超时！";
+                })
+            }
+            else{$scope.logStatus="手机号验证失败！";}
+      
+     
+    
+        
+        }
+        else{$scope.logStatus = "请输入完整信息！";}
   }
 }])
-
 // 设置密码  --PXY
 .controller('setPasswordCtrl', ['$ionicLoading', '$http', '$scope', '$state', '$rootScope', '$timeout', 'Storage',  'User', 'Patient', function ($ionicLoading, $http, $scope, $state, $rootScope, $timeout, Storage,  User, Patient) {
 
@@ -4132,23 +4198,31 @@ $scope.choosePhotos = function() {
  * @Author   xjz
  * @DateTime 2017-07-05
  */
-.controller('ChatCtrl', ['$ionicPlatform', '$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice', 'CONFIG', '$ionicPopup', 'Counsels', 'Storage', 'Mywechat', '$q', 'Communication', 'Account', 'News', '$ionicLoading', 'Patient', 'arrTool', 'socket', 'notify', '$timeout', function ($ionicPlatform, $scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice, CONFIG, $ionicPopup, Counsels, Storage, Mywechat, $q, Communication, Account, News, $ionicLoading, Patient, arrTool, socket, notify, $timeout) {
-  if ($ionicPlatform.is('ios')) cordova.plugins.Keyboard.disableScroll(true)
+.controller('ChatCtrl', ['$ionicPlatform', '$scope', '$state', '$rootScope', '$ionicModal', '$ionicScrollDelegate', '$ionicHistory', 'Camera', 'voice', 'CONFIG', '$ionicPopup', 'Counsels', 'Storage', 'Mywechat', '$q', 'Communication', 'Account', 'News', '$ionicLoading', 'Patient', 'arrTool', 'socket', 'notify', '$timeout', '$location', function ($ionicPlatform, $scope, $state, $rootScope, $ionicModal, $ionicScrollDelegate, $ionicHistory, Camera, voice, CONFIG, $ionicPopup, Counsels, Storage, Mywechat, $q, Communication, Account, News, $ionicLoading, Patient, arrTool, socket, notify, $timeout, $location) {
+  // if ($ionicPlatform.is('ios')) cordova.plugins.Keyboard.disableScroll(true)
   $scope.input = {
     text: ''
   }
   $scope.scrollHandle = $ionicScrollDelegate.$getByHandle('myContentScroll')
+  var path = $location.absUrl().split('#')[0]
+  var config = ''
   /**
    * 拉到底的动画效果
    * @Author   xjz
    * @DateTime 2017-07-05
    */
-  function toBottom (animate, delay) {
-    if (!delay) delay = 100
-    $timeout(function () {
-      $scope.scrollHandle.scrollBottom(animate)
-    }, delay)
-  }
+  function toBottom(animate,delay){
+        if(!delay) delay=100;
+        $timeout(function(){
+            $scope.scrollHandle.scrollBottom(animate);
+            $timeout(function(){
+                $scope.scrollHandle.resize();
+            },500);
+            $timeout(function(){
+                $scope.scrollHandle.resize();
+            },1000);
+        },delay)
+    }
   // 进入页面前：
   $scope.$on('$ionicView.beforeEnter', function () {
     $scope.timer = []
@@ -4187,10 +4261,10 @@ $scope.choosePhotos = function() {
   })
   // 进入页面时：获取咨询状态、剩余次数
   $scope.$on('$ionicView.enter', function () {
-    if ($ionicPlatform.is('ios') == false)document.getElementById('inputbar').removeAttribute('keyboard-attach')
-      console.log(document.getElementById('inputbar'))
-    $rootScope.conversation.type = 'single'
-    $rootScope.conversation.id = $state.params.chatId
+    // if ($ionicPlatform.is('ios') == false)document.getElementById('inputbar').removeAttribute('keyboard-attach')
+    //   console.log(document.getElementById('inputbar'))
+    // $rootScope.conversation.type = 'single'
+    // $rootScope.conversation.id = $state.params.chatId
     Counsels.getStatus({doctorId: $state.params.chatId, patientId: Storage.get('UID')})
             .then(function (data) {
               console.log('进入页面getstatus ')
@@ -4220,15 +4294,33 @@ $scope.choosePhotos = function() {
             // 显示头像
     Patient.getDoctorLists({doctorId: $state.params.chatId})
             .then(function (data) {
+              console.log('医生头像',data.results)
               $scope.photoUrls[data.results[0].userId] = data.results[0].photoUrl
             })
     Patient.getPatientDetail({ userId: $scope.params.UID })
         .then(function (response) {
+           console.log('患者头像',response.results)
           thisPatient = response.results
           $scope.photoUrls[response.results.userId] = response.results.photoUrl
         }, function (err) {
 
         })
+    Mywechat.settingConfig({ url: path }).then(function (data) {
+      config = data.results
+      config.jsApiList = ['startRecord', 'stopRecord', 'playVoice', 'chooseImage', 'uploadVoice', 'uploadImage']
+      wx.config({
+        debug: false,
+        appId: config.appId,
+        timestamp: config.timestamp,
+        nonceStr: config.nonceStr,
+        signature: config.signature,
+        jsApiList: config.jsApiList
+      })
+      wx.error(function (res) {
+        console.error(res)
+        alert(res.errMsg)
+      })
+    })
     imgModalInit()
     // 先显示15条
     $scope.getMsg(15).then(function (data) {
@@ -4242,8 +4334,8 @@ $scope.choosePhotos = function() {
     for (var i in $scope.timer) clearTimeout($scope.timer[i])
     $scope.msgs = []
     if ($scope.modal)$scope.modal.remove()
-    $rootScope.conversation.type = null
-    $rootScope.conversation.id = ''
+    // $rootScope.conversation.type = null
+    // $rootScope.conversation.id = ''
   })
   // 显示键盘
   $scope.$on('keyboardshow', function (event, height) {
@@ -4547,6 +4639,9 @@ $scope.choosePhotos = function() {
 
   $scope.updateMsg = function (msg, pos) {
     console.info('updateMsg')
+    if (msg.contentType == 'image') msg.content.thumb = CONFIG.mediaUrl + msg.content['src_thumb']
+    msg.direct = $scope.msgs[pos].direct
+
     if (pos == 0) {
       msg.diff = true
     } else if (msg.hasOwnProperty('time')) {
@@ -4560,8 +4655,6 @@ $scope.choosePhotos = function() {
         msg.diff = false
       }
     }
-    msg.content.src = $scope.msgs[pos].content.src
-    msg.direct = $scope.msgs[pos].direct
     $scope.msgs[pos] = msg
   }
   $scope.pushMsg = function (msg) {
@@ -4580,7 +4673,7 @@ $scope.choosePhotos = function() {
         }
       }
     }
-        // msg.direct = msg.fromID==$scope.params.UID?'send':'receive';
+    msg.direct = msg.fromID==$scope.params.UID?'send':'receive';
     $scope.params.msgCount++
     $scope.msgs.push(msg)
     toBottom(true, 200)
@@ -4605,17 +4698,20 @@ $scope.choosePhotos = function() {
         text: content
       }
     } else if (type == 'image') {
-      data = {
-        src: content[0],
-        src_thumb: content[1]
+     data = {
+        mediaId: content[0],
+        mediaId_thumb: content[1],
+        src: '',
+        src_thumb: ''
       }
     } else if (type == 'voice') {
       data = {
-        src: content
+        mediaId: content,
+        src: ''
       }
     }
     return {
-      clientType: 'patient',
+      clientType: 'wechatpatient',
       contentType: type,
       fromID: $scope.params.UID,
       fromName: thisPatient.name,
@@ -4645,7 +4741,7 @@ $scope.choosePhotos = function() {
       d.src = msg.content.src
     }
     return {
-      clientType: 'patient',
+      clientType: 'wechatpatient',
       contentType: type,
       fromID: msg.fromID,
       fromName: msg.fromName,
@@ -4715,28 +4811,30 @@ $scope.choosePhotos = function() {
   }
   // 上传图片
   $scope.getImage = function (type) {
-    if ($scope.counselstatus != 1) return nomoney()
     $scope.showMore = false
-    Camera.getPicture(type, true)
-            .then(function (url) {
-              console.log(url)
-              var fm = md5(Date.now(), $scope.params.chatId) + '.jpg',
-                d = [
-                  'uploads/photos/' + fm,
-                  'uploads/photos/resized' + fm
-                ],
-                imgMsg = msgGen(d, 'image'),
-                localMsg = localMsgGen(imgMsg, url)
-              $scope.pushMsg(localMsg)
-              Camera.uploadPicture(url, fm)
-                    .then(function () {
-                      socket.emit('message', { msg: imgMsg, to: $scope.params.chatId, role: 'doctor' })
-                    }, function () {
-                      $ionicLoading.show({ template: '图片上传失败', duration: 2000 })
-                    })
-            }, function (err) {
-              console.error(err)
-            })
+    var ids = ['', '']
+    if (type == 'cam') var st = ['camera']
+    else var st = ['album']
+    wx.chooseImage({
+      count: 1, // 默认9
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: st, // 可以指定来源是相册还是相机，默认二者都有
+      success: function (response) {
+        console.log(response)
+        ids = ids.concat(response.localIds)
+        wx.uploadImage({
+          localId: response.localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+          isShowProgressTips: 0, // 默认为1，显示进度提示
+          success: function (res) {
+            console.log(res)
+            ids[0] = res.serverId // 返回图片的服务器端ID
+                        // if(cnt)
+            sendmsg(ids, 'image')
+                        // else cnt++;
+          }
+        })
+      }
+    })
   }
   // 上传语音
   $scope.getVoice = function () {
@@ -5293,10 +5391,10 @@ $scope.choosePhotos = function() {
   //   })
   // }
   var photo_upload_display = function(serverId){
-    $ionicLoading.show({
-        template:'头像更新中',
-        duration:5000
-    })
+    // $ionicLoading.show({
+    //     template:'头像更新中',
+    //     duration:5000
+    // })
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" +  "myAvatar.jpg";
     console.log(temp_photoaddress)
@@ -5305,21 +5403,23 @@ $scope.choosePhotos = function() {
     .then(function(res){
       //res.path_resized
       $timeout(function(){
-          $ionicLoading.hide();
+          // $ionicLoading.hide();
           //图片路径
           $scope.myAvatar=CONFIG.mediaUrl + "uploads/photos/"+temp_name+'?'+new Date().getTime();
           console.log($scope.myAvatar)
           // $state.reload("tab.mine")
-          Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
-            console.log(r);
-          })
+          $scope.health.imgurl.push($scope.myAvatar)
+    //       Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
+    //         console.log(r);
+    //       })
       },1000)
       
     },function(err){
       console.log(err);
       reject(err);
-    })
-  };
+        })
+      
+  }
 // -----------------------上传头像---------------------
       // ionicPopover functions 弹出框的预定义
         // --------------------------------------------
@@ -9651,7 +9751,7 @@ $scope.choosePhotos = function() {
                 targetId: DoctorId
               }
               var msgJson = {
-                clientType: 'patient',
+                clientType: 'wechatpatient',
                 contentType: 'custom',
                 fromName: thisPatient.name,
                 fromID: patientId,
@@ -9667,7 +9767,7 @@ $scope.choosePhotos = function() {
                 targetRole: 'doctor',
                 content: msgContent
               }
-              socket.emit('newUser', {user_name: $scope.BasicInfo.name, user_id: patientId, client: 'patient'})
+              socket.emit('newUser', {user_name: $scope.BasicInfo.name, user_id: patientId, client: 'wechatpatient'})
               socket.emit('message', {msg: msgJson, to: DoctorId, role: 'patient'})
                 // $scope.$on('im:messageRes',function(event,messageRes){
                     // socket.off('messageRes');
@@ -9676,9 +9776,9 @@ $scope.choosePhotos = function() {
               // alert('counselType'+counselType)
               if(counselType==1||counselType==6||counselType==7){
                 Account.modifyCounts({patientId: Storage.get('UID'), doctorId: DoctorId, modify: 3}).then(function(data){
-                  // alert('modifyCounts'+JSON.stringify(data))
+                  alert('modifyCounts'+JSON.stringify(data))
                 },function(err){
-                  // alert('modifyError'+JSON.stringify(err))
+                  alert('modifyError'+JSON.stringify(err))
                 })
               }
               if (DoctorId == 'U201612291283') {
@@ -10322,10 +10422,10 @@ var patientId = Storage.get('UID')
   //   })
   // }
   var photo_upload_display = function(serverId){
-    $ionicLoading.show({
-        template:'头像更新中',
-        duration:5000
-    })
+    // $ionicLoading.show({
+    //     template:'头像更新中',
+    //     duration:5000
+    // })
    // 给照片的名字加上时间戳
     var temp_photoaddress = Storage.get("UID") + "_" +  "myAvatar.jpg";
     console.log(temp_photoaddress)
@@ -10334,14 +10434,15 @@ var patientId = Storage.get('UID')
     .then(function(res){
       //res.path_resized
       $timeout(function(){
-          $ionicLoading.hide();
+          // $ionicLoading.hide();
           //图片路径
           $scope.myAvatar=CONFIG.mediaUrl + "uploads/photos/"+temp_name+'?'+new Date().getTime();
           console.log($scope.myAvatar)
           // $state.reload("tab.mine")
-          Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
-            console.log(r);
-          })
+          // Patient.editPatientDetail({userId:Storage.get("UID"),photoUrl:$scope.myAvatar}).then(function(r){
+          //   console.log(r);
+          // })
+          $scope.post.content[1].image.push($scope.myAvatar)
       },1000)
       
     },function(err){
