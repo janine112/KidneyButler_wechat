@@ -1173,12 +1173,16 @@ button.doctorBtn{
   background-color: transparent;
   border-width: thin;
   border-style: solid;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 button.docDetailBtn{
   width:25%;
   border:white;
   background-color: white;
   font-size: 11.5px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 button.displayBtn{
   width:100%;
