@@ -9686,6 +9686,7 @@ $scope.choosePhotos = function() {
   }
 
   $scope.submit = function () {
+    $scope.submitable = true
     var userInfo = $.extend(true, {}, $scope.BasicInfo)
     userInfo.gender =userInfo.gender.Type
     userInfo.bloodType = userInfo.bloodType.Type
@@ -9743,7 +9744,7 @@ $scope.choosePhotos = function() {
           function (data) {
             // alert('questionaire'+JSON.stringify(data))
               // 不能重复提交
-              $scope.submitable = true
+              
 
               Storage.rm('tempquestionare')
               Storage.rm('tempimgrul')
@@ -9783,9 +9784,9 @@ $scope.choosePhotos = function() {
               // alert('counselType'+counselType)
               if(counselType==1||counselType==6||counselType==7){
                 Account.modifyCounts({patientId: Storage.get('UID'), doctorId: DoctorId, modify: 3}).then(function(data){
-                  alert('modifyCounts'+JSON.stringify(data))
+                  // alert('modifyCounts'+JSON.stringify(data))
                 },function(err){
-                  alert('modifyError'+JSON.stringify(err))
+                  // alert('modifyError'+JSON.stringify(err))
                 })
               }
               if (DoctorId == 'U201612291283') {
@@ -9839,6 +9840,11 @@ $scope.choosePhotos = function() {
                 // });
           },
         function (err) {
+          $scope.submitable = false
+          $ionicLoading.show({
+            template:'提交失败，请重新提交！',
+            duration:1000
+          })
           console.log(err)
         })
   }

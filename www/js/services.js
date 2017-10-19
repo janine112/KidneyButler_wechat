@@ -265,8 +265,8 @@ angular.module('kidney.services', ['ionic', 'ngResource'])
               }, function (error) {
                 console.log(error)
                 alert('An error has occurred: Code = ' + error.code)
-                alert('upload error source ' + error.source)
-                alert('upload error target ' + error.target)
+                // alert('upload error source ' + error.source)
+                // alert('upload error target ' + error.target)
                 reject(error)
               }, function (progress) {
                 console.log(progress)
