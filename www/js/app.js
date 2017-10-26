@@ -34,7 +34,7 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
   //   $state.go('signin')
   // }
   $ionicPlatform.ready(function () {
-    socket = io.connect(CONFIG.socketUrl)
+    socket = io.connect(CONFIG.socketServer)
     // console.log(14)
     var temp = $location.absUrl().split('=')
     // alert(temp)
