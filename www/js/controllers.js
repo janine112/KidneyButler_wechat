@@ -385,7 +385,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
    * @DateTime 2017-07-04
    * @param    phone:String
    */
-  var sendSMS = function (phone) {
+  var sendSMS = function (phone,count) {
     /**
      * [发送验证码,disable按钮一分钟，并根据服务器返回提示用户]
      * @Author   PXY
@@ -405,7 +405,13 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
         $scope.logStatus = '验证码发送成功！'
       }
     }, function (err) {
-      $scope.logStatus = '验证码发送失败！'
+      count++
+      console.log(count)
+      if (count < 5) {
+        setTimeout(sendSMS(phone, count), 1000)
+      } else {
+        $scope.logStatus = '验证码发送失败！'
+      }
     })
   }
 
@@ -446,7 +452,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
         if (data.results == 0 && data.roles.toString().indexOf('patient')>-1) {
           $scope.logStatus = '该账户已注册！'
         }else{
-          sendSMS($scope.Register.Phone)
+          sendSMS($scope.Register.Phone,0)
         }
       }
       // 如果是微信号注册则分为三种：1：未注册手机号；2：已注册非导入用户（已签协议）；3：导入用户（未签协议）
@@ -454,7 +460,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
         if (data.results == 0 && data.roles.toString().indexOf('patient')>-1) {
           Storage.set('UID',data.AlluserId)
           User.getAgree({userId: data.AlluserId,role:'patient'}).then(function (res) {
-            sendSMS($scope.Register.Phone)
+            sendSMS($scope.Register.Phone,0)
             if (res.results.agreementPat == '0') {
               //签过协议
               $scope.registerMode = 'wechatSigned'
@@ -467,7 +473,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
           
         }else{
           $scope.registerMode = 'wechatUnsigned'
-          sendSMS($scope.Register.Phone)
+          sendSMS($scope.Register.Phone,0)
         }
       }
       
@@ -696,6 +702,362 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
   
 
 }])
+// 忘记密码--手机号码验证--PXY 这个好像跟registerCTRL一样
+// .controller('phonevalidCtrl', ['$scope', '$state', '$interval', '$stateParams', 'Storage', 'User',  function ($scope, $state, $interval, $stateParams, Storage, User) {
+//   // Storage.set("personalinfobackstate","register")
+
+//   $scope.Verify = {Phone: '', Code: ''}
+//   $scope.veritext = '获取验证码'
+//   $scope.isable = false
+//   $scope.Register = {}
+
+//   $scope.$on('$ionicView.beforeEnter', function () {
+//     $scope.wechat = $stateParams.rType === 'openId' ? true : false
+//     if(!$scope.Register.agree){
+//      $scope.Register.agree = Storage.get('agreement') === "yes" ? true : false
+//     }
+//   })
+
+//   $scope.goBack = function(){
+//     if(Storage.get('agreement')){
+//       Storage.rm('agreement')
+//     }
+//     $ionicHistory.goBack()
+//   }
+
+//   $scope.changeAgree = function(agree){
+//     if(!agree&&Storage.get('agreement')){
+//       Storage.rm('agreement')
+//     }
+//   }
+//   /**
+//    * [disable获取验证码按钮1分钟，并改变获取验证码按钮显示的文字]
+//    * @Author   PXY
+//    * @DateTime 2017-07-04
+//    */
+//   var unablebutton = function () {
+//      // 验证码BUTTON效果
+//     $scope.isable = true
+//     $scope.veritext = '60s'
+//     var time = 59
+//     var timer
+//     timer = $interval(function () {
+//       if (time == 0) {
+//         $interval.cancel(timer)
+//         timer = undefined
+//         $scope.veritext = '获取验证码'
+//         $scope.isable = false
+//       } else {
+//         $scope.veritext = time + 's'
+//         time--
+//       }
+//     }, 1000)
+//   }
+
+//    /**
+//    * [发送验证码]
+//    * @Author   PXY
+//    * @DateTime 2017-07-04
+//    * @param    phone:String
+//    */
+//   var sendSMS = function (phone,count) {
+//     /**
+//      * [发送验证码,disable按钮一分钟，并根据服务器返回提示用户]
+//      * @Author   PXY
+//      * @DateTime 2017-07-04
+//      * @param    {mobile:String,smsType:Number}  注：写死 1
+//      * @return   data:{results:Number,mesg:String} 注：results为0为成功发送
+//      *           err
+//      */
+    
+//     User.sendSMS({mobile: phone, smsType: 1}).then(function (data) {
+//       unablebutton()
+//       if (data.results == 0) {
+//         if (data.mesg.substr(0, 8) == '您的邀请码已发送') {
+//           $scope.logStatus = '您的验证码已发送，重新获取请稍后'
+//         } else {
+//           $scope.logStatus = '验证码发送成功！'
+//         }
+//       } else {
+//         $scope.logStatus = '验证码发送失败，请稍后再试'
+//       }
+//     }, function (err) {
+//       count++
+//       console.log(count)
+//       if (count < 5) {
+//         setTimeout(sendSMS(phone, count), 1000)
+//       } else {
+//         $scope.logStatus = '验证码发送失败！'
+//       }
+//     })
+//   }
+
+//   var ionicLoadingshow = function(){
+//     $ionicLoading.show({
+//       template: '<ion-spinner icon="ios"></ion-spinner>', 
+//       hideOnStateChange:true  
+//     })
+//   }
+//   $scope.registerMode = null
+
+//   /**
+//    * [点击获取验证码，如果为注册，注册过的用户不能获取验证码；如果为重置密码，没注册过的用户不能获取验证码]
+//    * @Author   PXY
+//    * @DateTime 2017-07-04
+//    * @param    Verify:{Phone:String,Code:String} 注：Code没用到
+//    */
+
+//   $scope.getcode = function () { 
+//     console.log($scope.Register.Phone)
+//     $scope.logStatus = ''
+   
+//     if ($scope.Register.Phone == '') {
+
+//       $scope.logStatus = '手机号码不能为空！'
+//       return
+//     }
+//     var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+//         // 手机正则表达式验证
+//     if (!phoneReg.test($scope.Register.Phone)) {
+//       $scope.logStatus = '手机号验证失败！'
+//       return
+//     }
+
+
+    
+
+//     User.getUserID({username: $scope.Register.Phone}).then(function (data) {
+//       // alert('getUserID:'+ JSON.stringify(data))
+//       // 如果是手机号码注册则未注册账号才发验证码
+//       if($stateParams.rType === 'phone'){
+//         if (data.results == 0 && data.roles.toString().indexOf('patient')>-1) {
+//           $scope.logStatus = '该账户已注册！'
+//         }else{
+//           sendSMS($scope.Register.Phone,0)
+//         }
+//       }
+//       // 如果是微信号注册则分为三种：1：未注册手机号；2：已注册非导入用户（已签协议）；3：导入用户（未签协议）
+//       else if($stateParams.rType === 'openId'){
+//         if (data.results == 0 && data.roles.toString().indexOf('patient')>-1) {
+//           Storage.set('UID',data.AlluserId)
+//           User.getAgree({userId: data.AlluserId,role:'patient'}).then(function (res) {
+//             sendSMS($scope.Register.Phone,0)
+//             if (res.results.agreementPat == '0') {
+//               //签过协议
+//               $scope.registerMode = 'wechatSigned'
+//             } else {
+//               $scope.registerMode = 'wechatImported'
+//             }
+//           }, function (err) {
+//             $scope.logStatus = '网络错误！'
+//           })
+          
+//         }else{
+//           $scope.registerMode = 'wechatUnsigned'
+//           sendSMS($scope.Register.Phone,0)
+//         }
+//       }
+      
+//     }, function () {
+//       $scope.logStatus = '连接超时！'
+//     })
+//   }
+//   $scope.goAgreement = function(){
+//     $state.go('agreement')
+//   }
+
+//   $scope.wechatPhone = function(phoneNum,phoneCode){
+//     var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+
+//     $scope.logStatus = ''
+//     if(phoneReg.test(phoneNum)){
+//       if(phoneCode){
+//         ionicLoadingshow()
+
+//         User.verifySMS({mobile: phoneNum, smsType: 1, smsCode:phoneCode}).then(function (data) {
+//           // alert('verifySMS'+JSON.stringify(data))
+//           // alert('registerMode'+$scope.registerMode)
+//           if(data.results == 0){
+//             Storage.set('USERNAME',phoneNum)
+
+//             if($scope.registerMode === 'wechatUnsigned'){
+//               // 如果是未注册用户的微信登录，则还需填写密码和姓名（moreWechat动态显示需填写内容）
+//               $scope.moreWechat = true
+//               $ionicLoading.hide()
+//             }else if($scope.registerMode === 'wechatSigned'){
+//               // 如果是已注册但未绑定微信用户的微信登录，则直接绑定微信并登录
+//               $q.all([
+//                 User.setUnionId({phoneNo:phoneNum,openId:Storage.get('patientunionid')}),
+//                 User.setOpenId({type:4,openId:Storage.get('openId'),userId:Storage.get('UID')})
+//               ]).then(function(res){
+//                 // alert('setUnionId'+JSON.stringify(res))
+//                 User.logIn({username: Storage.get('patientunionid'), password: '112233', role: 'patient'}).then(function (succ) {
+//                   // alert("userlogin"+JSON.stringify(succ))
+//                   if (succ.results.mesg == 'login success!') {
+//                     Storage.set('UID', succ.results.userId)// 后续页面必要uid
+//                     Storage.set('TOKEN', succ.results.token)// token作用目前还不明确
+//                     Storage.set('refreshToken', succ.results.refreshToken)
+//                     $state.go('tab.tasklist')
+//                     mySocket.newUser(succ.results.userId)
+                    
+//                   }
+//                 },function(err){
+//                   $ionicLoading.hide()
+//                 })
+//               },function(err){
+//                 $ionicLoading.hide()
+//               })
+//             }else if( $scope.registerMode === 'wechatImported'){
+//               // 如果是导入用户（已注册，未绑定微信但没签协议），则绑定微信后去签协议
+//               $q.all([
+//                 User.setUnionId({phoneNo:phoneNum,openId:Storage.get('patientunionid')}),
+//                 User.setOpenId({type:4,openId:Storage.get('openId'),userId:Storage.get('UID')})
+//               ]).then(function(res){
+//                 // alert('setUnionId'+JSON.stringify(res))
+//                 $state.go('agreement',{delay:true})
+//               },function(err){
+//                 $ionicLoading.hide()
+//               })
+//             }
+//           }else{
+
+//             $scope.logStatus = data.mesg
+//             $ionicLoading.hide()
+//           }
+//         },function(err){
+//           $scope.logStatus = JSON.stringify(err)
+//           $ionicLoading.hide()
+//         })
+
+//       }else{
+//         $scope.logStatus = '验证码不能为空！'
+//       }
+//     }else{
+//       $scope.logStatus = '手机号验证失败！'
+//     }
+//   }
+//   $scope.phoneRegister = function(register){ 
+//     // 结果分为三种：(手机号验证失败)1验证成功；2验证码错误；3连接超时，验证失败
+//     var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+//     $scope.logStatus = ''
+//     if($stateParams.rType === 'phone'){
+//       if(phoneReg.test(register.Phone)){
+//         if(register.Code){
+//           if(register.newPass === register.confirm){
+//             /**
+//              * [验证手机号码]
+//              * @Author   PXY
+//              * @DateTime 2017-07-04
+//              * @param    {mobile:String,smsType:Number,smsCode:String} 注：smsType写死1
+//              * @return   data:{results:Number,mesg:String}  注：results为0代表验证成功
+//              *           err
+//              */
+//             ionicLoadingshow()
+            
+//             User.verifySMS({mobile: register.Phone, smsType: 1, smsCode:register.Code}).then(function (data) {
+//               if (data.results == 0) {
+//                 User.register({phoneNo:register.Phone,password:register.confirm,name:register.name,role:'patient'}).then(function(res){
+//                   Storage.set('UID',res.userNo)
+//                   Storage.set('USERNAME',register.Phone)
+//                   $q.all([
+//                     User.updateAgree({userId:res.userNo,agreement:'0',role:'patient'}),
+//                     User.setUnionId({phoneNo:register.Phone,openId:Storage.get('openid')}),
+//                     //type为4是指患者app端，若为微信则要改为2
+//                     User.setOpenId({type:2,openId:Storage.get('messageopenid'),userId:Storage.get('UID')})
+//                   ]).then(function(succ){
+//                     // alert('$Q返回' + JSON.stringify(succ))
+//                     $ionicLoading.hide()
+//                     $ionicLoading.show({
+//                       template:"恭喜您，注册成功！即将返回登录页面，请稍后。",
+//                       hideOnStateChange:true,
+//                       duration:2000
+//                     })
+//                     $timeout(function(){$state.go('signin')},1000)
+//                     if(Storage.get('agreement')){
+//                       Storage.rm('agreement')
+//                     }
+//                   },function(err){
+//                     $ionicLoading.hide()
+//                   })
+                  
+//                 },function(err){
+//                   $ionicLoading.hide()
+//                 })
+                
+//               } else {
+//                 $ionicLoading.hide()
+//                 $scope.logStatus = data.mesg
+//               }
+//             }, function () {
+//               $ionicLoading.hide()
+//               $scope.logStatus = '连接超时！'
+//             })
+//           }else{
+//             $scope.logStatus = '密码输入不一致！'
+//           }
+//         }else{
+//           $scope.logStatus = '验证码不能为空！'
+//         }
+//       }else{
+//         $scope.logStatus = '手机号验证失败！'
+//       }
+//     }
+
+       
+//   }
+
+//   $scope.wxRegister = function(register){
+//     // alert('register参数是'+JSON.stringify(register))
+//       if(register.newPass === register.confirm){
+//         ionicLoadingshow()
+//         User.register({phoneNo:register.Phone,password:register.confirm,name:register.name,role:'patient'}).then(function(res){
+//           Storage.set('UID',res.userNo)
+//           Storage.set('USERNAME',register.Phone)
+//           $q.all([
+//             User.updateAgree({userId:res.userNo,agreement:'0',role:'patient'}),
+//             User.setUnionId({phoneNo:register.Phone,openId:Storage.get('patientunionid')}),
+//             //type为4是指患者app端，若为微信则要改为2
+//             User.setOpenId({type:4,openId:Storage.get('openId'),userId:Storage.get('UID')})
+//           ]).then(function(succ){
+//             // alert('$Q返回' + JSON.stringify(succ))
+//             $ionicLoading.hide()
+//             $ionicLoading.show({
+//               template:"恭喜您，注册成功！正在登录，请稍后。",
+//               hideOnStateChange:true
+//             })
+//             User.logIn({username: Storage.get('patientunionid'), password: '112233', role: 'patient'}).then(function(data){
+//               // alert("userlogin"+JSON.stringify(data))
+//               if (succ.results.mesg == 'login success!') {
+//                 Storage.set('UID', data.results.userId)// 后续页面必要uid
+//                 Storage.set('TOKEN', data.results.token)// token作用目前还不明确
+//                 Storage.set('refreshToken', data.results.refreshToken)
+//                 mySocket.newUser(data.results.userId)
+//                 $state.go('tab.tasklist')
+//               }
+//             },function(err){
+//               $ionicLoading.hide()
+//               $scope.logStatus = JSON.stringify(err)
+//             })
+            
+//             if(Storage.get('agreement')){
+//               Storage.rm('agreement')
+//             }
+//           },function(err){
+//             $ionicLoading.hide()
+//           })
+          
+//         },function(err){
+//           $ionicLoading.hide()
+//         })
+            
+        
+//       }else{
+//         $scope.logStatus = '密码输入不一致！'
+//       }
+//   }
+  
+
+// }])
 // 忘记密码--手机号码验证--PXY
 .controller('phonevalidCtrl', ['$scope', '$state', '$interval', '$stateParams', 'Storage', 'User',  function ($scope, $state, $interval, $stateParams, Storage, User) {
   // Storage.set("personalinfobackstate","register")
@@ -703,27 +1065,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
   $scope.Verify = {Phone: '', Code: ''}
   $scope.veritext = '获取验证码'
   $scope.isable = false
-  $scope.Register = {}
 
-  $scope.$on('$ionicView.beforeEnter', function () {
-    $scope.wechat = $stateParams.rType === 'openId' ? true : false
-    if(!$scope.Register.agree){
-     $scope.Register.agree = Storage.get('agreement') === "yes" ? true : false
-    }
-  })
-
-  $scope.goBack = function(){
-    if(Storage.get('agreement')){
-      Storage.rm('agreement')
-    }
-    $ionicHistory.goBack()
-  }
-
-  $scope.changeAgree = function(agree){
-    if(!agree&&Storage.get('agreement')){
-      Storage.rm('agreement')
-    }
-  }
   /**
    * [disable获取验证码按钮1分钟，并改变获取验证码按钮显示的文字]
    * @Author   PXY
@@ -748,13 +1090,13 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
     }, 1000)
   }
 
-   /**
+  /**
    * [发送验证码]
    * @Author   PXY
    * @DateTime 2017-07-04
    * @param    phone:String
    */
-  var sendSMS = function (phone) {
+  var sendSMS = function (phone,count) {
     /**
      * [发送验证码,disable按钮一分钟，并根据服务器返回提示用户]
      * @Author   PXY
@@ -766,27 +1108,25 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
     
     User.sendSMS({mobile: phone, smsType: 1}).then(function (data) {
       unablebutton()
-      if (data.results == 0) {
-        if (data.mesg.substr(0, 8) == '您的邀请码已发送') {
-          $scope.logStatus = '您的验证码已发送，重新获取请稍后'
-        } else {
-          $scope.logStatus = '验证码发送成功！'
-        }
+      if (data.results == 1) {
+        $scope.logStatus = '验证码发送失败！'
+      } else if (data.mesg.substr(0, 8) == '您的邀请码已发送'){
+        $scope.logStatus = '您的验证码已发送，重新获取请稍后'
       } else {
-        $scope.logStatus = '验证码发送失败，请稍后再试'
+        $scope.logStatus = '验证码发送成功！'
       }
     }, function (err) {
-      $scope.logStatus = '验证码发送失败！'
+      count++
+      console.log(count)
+      if (count < 5) {
+        setTimeout(sendSMS(phone, count), 1000)
+      } else {
+        $scope.logStatus = '验证码发送失败！'
+      }
     })
   }
 
-  var ionicLoadingshow = function(){
-    $ionicLoading.show({
-      template: '<ion-spinner icon="ios"></ion-spinner>', 
-      hideOnStateChange:true  
-    })
-  }
-  $scope.registerMode = null
+
 
   /**
    * [点击获取验证码，如果为注册，注册过的用户不能获取验证码；如果为重置密码，没注册过的用户不能获取验证码]
@@ -794,257 +1134,83 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
    * @DateTime 2017-07-04
    * @param    Verify:{Phone:String,Code:String} 注：Code没用到
    */
-
-  $scope.getcode = function () { 
-    console.log($scope.Register.Phone)
+  $scope.getcode = function (Verify) { 
+    // console.log('123')
     $scope.logStatus = ''
    
-    if ($scope.Register.Phone == '') {
-
+    if (Verify.Phone == '') {
       $scope.logStatus = '手机号码不能为空！'
       return
     }
     var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
         // 手机正则表达式验证
-    if (!phoneReg.test($scope.Register.Phone)) {
+    if (!phoneReg.test(Verify.Phone)) {
       $scope.logStatus = '手机号验证失败！'
       return
     }
 
 
     
-
-    User.getUserID({username: $scope.Register.Phone}).then(function (data) {
-      // alert('getUserID:'+ JSON.stringify(data))
-      // 如果是手机号码注册则未注册账号才发验证码
-      if($stateParams.rType === 'phone'){
-        if (data.results == 0 && data.roles.toString().indexOf('patient')>-1) {
-          $scope.logStatus = '该账户已注册！'
-        }else{
-          sendSMS($scope.Register.Phone)
-        }
+    User.getUserID({username: Verify.Phone}).then(function (data) {
+      if (data.results == 0 && data.roles.toString().indexOf('patient')>-1) {
+        sendSMS(Verify.Phone,0)
+      }else{
+        $scope.logStatus = '该账户不存在！'
       }
-      // 如果是微信号注册则分为三种：1：未注册手机号；2：已注册非导入用户（已签协议）；3：导入用户（未签协议）
-      else if($stateParams.rType === 'openId'){
-        if (data.results == 0 && data.roles.toString().indexOf('patient')>-1) {
-          Storage.set('UID',data.AlluserId)
-          User.getAgree({userId: data.AlluserId,role:'patient'}).then(function (res) {
-            sendSMS($scope.Register.Phone)
-            if (res.results.agreementPat == '0') {
-              //签过协议
-              $scope.registerMode = 'wechatSigned'
-            } else {
-              $scope.registerMode = 'wechatImported'
-            }
-          }, function (err) {
-            $scope.logStatus = '网络错误！'
-          })
-          
-        }else{
-          $scope.registerMode = 'wechatUnsigned'
-          sendSMS($scope.Register.Phone)
-        }
-      }
-      
     }, function () {
       $scope.logStatus = '连接超时！'
     })
   }
-  $scope.goAgreement = function(){
-    $state.go('agreement')
-  }
 
-  $scope.wechatPhone = function(phoneNum,phoneCode){
-    var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
 
+  /**
+   * [点击验证手机号，通过后跳转设置密码页面]
+   * @Author   PXY
+   * @DateTime 2017-07-04
+   * @param    {[type]}
+   * @return   {[type]}
+   */
+  $scope.gotoReset = function (Verify) {
     $scope.logStatus = ''
-    if(phoneReg.test(phoneNum)){
-      if(phoneCode){
-        ionicLoadingshow()
+    if (Verify.Phone != '' && Verify.Code != '') {
+        // 结果分为三种：(手机号验证失败)1验证成功；2验证码错误；3连接超时，验证失败
+      var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+            // 手机正则表达式验证
+      if (phoneReg.test(Verify.Phone)) {
+        // 测试用
+        // if(Verify.Code==5566){
+        //     $scope.logStatus = "验证成功";
+        //     Storage.set('USERNAME',Verify.Phone);
+        //     if($stateParams.phonevalidType == 'register'){
+        //         $timeout(function(){$state.go('agreement',{last:'register'});},500);
+        //     }else{
+        //        $timeout(function(){$state.go('setpassword',{phonevalidType:$stateParams.phonevalidType});},500);
+        //     }
 
-        User.verifySMS({mobile: phoneNum, smsType: 1, smsCode:phoneCode}).then(function (data) {
-          // alert('verifySMS'+JSON.stringify(data))
-          // alert('registerMode'+$scope.registerMode)
-          if(data.results == 0){
-            Storage.set('USERNAME',phoneNum)
-
-            if($scope.registerMode === 'wechatUnsigned'){
-              // 如果是未注册用户的微信登录，则还需填写密码和姓名（moreWechat动态显示需填写内容）
-              $scope.moreWechat = true
-              $ionicLoading.hide()
-            }else if($scope.registerMode === 'wechatSigned'){
-              // 如果是已注册但未绑定微信用户的微信登录，则直接绑定微信并登录
-              $q.all([
-                User.setUnionId({phoneNo:phoneNum,openId:Storage.get('patientunionid')}),
-                User.setOpenId({type:4,openId:Storage.get('openId'),userId:Storage.get('UID')})
-              ]).then(function(res){
-                // alert('setUnionId'+JSON.stringify(res))
-                User.logIn({username: Storage.get('patientunionid'), password: '112233', role: 'patient'}).then(function (succ) {
-                  // alert("userlogin"+JSON.stringify(succ))
-                  if (succ.results.mesg == 'login success!') {
-                    Storage.set('UID', succ.results.userId)// 后续页面必要uid
-                    Storage.set('TOKEN', succ.results.token)// token作用目前还不明确
-                    Storage.set('refreshToken', succ.results.refreshToken)
-                    $state.go('tab.tasklist')
-                    mySocket.newUser(succ.results.userId)
-                    
-                  }
-                },function(err){
-                  $ionicLoading.hide()
-                })
-              },function(err){
-                $ionicLoading.hide()
-              })
-            }else if( $scope.registerMode === 'wechatImported'){
-              // 如果是导入用户（已注册，未绑定微信但没签协议），则绑定微信后去签协议
-              $q.all([
-                User.setUnionId({phoneNo:phoneNum,openId:Storage.get('patientunionid')}),
-                User.setOpenId({type:4,openId:Storage.get('openId'),userId:Storage.get('UID')})
-              ]).then(function(res){
-                // alert('setUnionId'+JSON.stringify(res))
-                $state.go('agreement',{delay:true})
-              },function(err){
-                $ionicLoading.hide()
-              })
-            }
-          }else{
-
+        // }else{$scope.logStatus = "验证码错误";}
+        /**
+         * [验证手机号码]
+         * @Author   PXY
+         * @DateTime 2017-07-04
+         * @param    {mobile:String,smsType:Number,smsCode:String} 注：smsType写死1
+         * @return   data:{results:Number,mesg:String}  注：results为0代表验证成功
+         *           err
+         */
+        User.verifySMS({mobile: Verify.Phone, smsType: 1, smsCode:Verify.Code}).then(function (data) {
+          if (data.results == 0) {
+            $scope.logStatus = '验证成功'
+            Storage.set('USERNAME', Verify.Phone)
+            
+            $state.go('setpassword')
+          } else {
             $scope.logStatus = data.mesg
-            $ionicLoading.hide()
           }
-        },function(err){
-          $scope.logStatus = JSON.stringify(err)
-          $ionicLoading.hide()
+        }, function () {
+          $scope.logStatus = '连接超时！'
         })
-
-      }else{
-        $scope.logStatus = '验证码不能为空！'
-      }
-    }else{
-      $scope.logStatus = '手机号验证失败！'
-    }
+      } else { $scope.logStatus = '手机号验证失败！' }
+     } else { $scope.logStatus = '请输入完整信息！' }
   }
-  $scope.phoneRegister = function(register){ 
-    // 结果分为三种：(手机号验证失败)1验证成功；2验证码错误；3连接超时，验证失败
-    var phoneReg = /^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
-    $scope.logStatus = ''
-    if($stateParams.rType === 'phone'){
-      if(phoneReg.test(register.Phone)){
-        if(register.Code){
-          if(register.newPass === register.confirm){
-            /**
-             * [验证手机号码]
-             * @Author   PXY
-             * @DateTime 2017-07-04
-             * @param    {mobile:String,smsType:Number,smsCode:String} 注：smsType写死1
-             * @return   data:{results:Number,mesg:String}  注：results为0代表验证成功
-             *           err
-             */
-            ionicLoadingshow()
-            
-            User.verifySMS({mobile: register.Phone, smsType: 1, smsCode:register.Code}).then(function (data) {
-              if (data.results == 0) {
-                User.register({phoneNo:register.Phone,password:register.confirm,name:register.name,role:'patient'}).then(function(res){
-                  Storage.set('UID',res.userNo)
-                  Storage.set('USERNAME',register.Phone)
-                  $q.all([
-                    User.updateAgree({userId:res.userNo,agreement:'0',role:'patient'}),
-                    User.setUnionId({phoneNo:register.Phone,openId:Storage.get('openid')}),
-                    //type为4是指患者app端，若为微信则要改为2
-                    User.setOpenId({type:2,openId:Storage.get('messageopenid'),userId:Storage.get('UID')})
-                  ]).then(function(succ){
-                    // alert('$Q返回' + JSON.stringify(succ))
-                    $ionicLoading.hide()
-                    $ionicLoading.show({
-                      template:"恭喜您，注册成功！即将返回登录页面，请稍后。",
-                      hideOnStateChange:true,
-                      duration:2000
-                    })
-                    $timeout(function(){$state.go('signin')},1000)
-                    if(Storage.get('agreement')){
-                      Storage.rm('agreement')
-                    }
-                  },function(err){
-                    $ionicLoading.hide()
-                  })
-                  
-                },function(err){
-                  $ionicLoading.hide()
-                })
-                
-              } else {
-                $ionicLoading.hide()
-                $scope.logStatus = data.mesg
-              }
-            }, function () {
-              $ionicLoading.hide()
-              $scope.logStatus = '连接超时！'
-            })
-          }else{
-            $scope.logStatus = '密码输入不一致！'
-          }
-        }else{
-          $scope.logStatus = '验证码不能为空！'
-        }
-      }else{
-        $scope.logStatus = '手机号验证失败！'
-      }
-    }
-
-       
-  }
-
-  $scope.wxRegister = function(register){
-    // alert('register参数是'+JSON.stringify(register))
-      if(register.newPass === register.confirm){
-        ionicLoadingshow()
-        User.register({phoneNo:register.Phone,password:register.confirm,name:register.name,role:'patient'}).then(function(res){
-          Storage.set('UID',res.userNo)
-          Storage.set('USERNAME',register.Phone)
-          $q.all([
-            User.updateAgree({userId:res.userNo,agreement:'0',role:'patient'}),
-            User.setUnionId({phoneNo:register.Phone,openId:Storage.get('patientunionid')}),
-            //type为4是指患者app端，若为微信则要改为2
-            User.setOpenId({type:4,openId:Storage.get('openId'),userId:Storage.get('UID')})
-          ]).then(function(succ){
-            // alert('$Q返回' + JSON.stringify(succ))
-            $ionicLoading.hide()
-            $ionicLoading.show({
-              template:"恭喜您，注册成功！正在登录，请稍后。",
-              hideOnStateChange:true
-            })
-            User.logIn({username: Storage.get('patientunionid'), password: '112233', role: 'patient'}).then(function(data){
-              // alert("userlogin"+JSON.stringify(data))
-              if (succ.results.mesg == 'login success!') {
-                Storage.set('UID', data.results.userId)// 后续页面必要uid
-                Storage.set('TOKEN', data.results.token)// token作用目前还不明确
-                Storage.set('refreshToken', data.results.refreshToken)
-                mySocket.newUser(data.results.userId)
-                $state.go('tab.tasklist')
-              }
-            },function(err){
-              $ionicLoading.hide()
-              $scope.logStatus = JSON.stringify(err)
-            })
-            
-            if(Storage.get('agreement')){
-              Storage.rm('agreement')
-            }
-          },function(err){
-            $ionicLoading.hide()
-          })
-          
-        },function(err){
-          $ionicLoading.hide()
-        })
-            
-        
-      }else{
-        $scope.logStatus = '密码输入不一致！'
-      }
-  }
-  
-
 }])
 
 // 绑定微信--手机号码验证--TDY
@@ -1087,7 +1253,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
    * @DateTime 2017-07-04
    * @param    phone:String
    */
-  var sendSMS = function (phone) {
+  var sendSMS = function (phone,count) {
     /**
      * [发送验证码,disable按钮一分钟，并根据服务器返回提示用户]
      * @Author   PXY
@@ -1109,7 +1275,14 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
         $scope.logStatus = '验证码发送失败，请稍后再试'
       }
     }, function (err) {
-      $scope.logStatus = '验证码发送失败！'
+      count++
+      console.log(count)
+      if (count < 5) {
+        setTimeout(sendSMS(phone, count), 1000)
+      } else {
+        $scope.logStatus = '验证码发送失败！'
+      }
+     
     })
   }
 
@@ -1152,7 +1325,7 @@ angular.module('kidney.controllers', ['ionic', 'kidney.services', 'ngResource', 
                   return;
               }else {
                   $scope.logStatus = "该手机号码已经注册,请验证手机号绑定微信";
-                  sendSMS($scope.Verify.Phone);
+                  sendSMS($scope.Verify.Phone,0);
               }
           }else if(data.results == 1){
               $scope.logStatus = "该用户不存在！请返回登录页面进行注册！"
@@ -7451,7 +7624,7 @@ $scope.choosePhotos = function() {
     //console.log('destroy')
     //$interval.cancel(RefreshUnread)
   //})
-  console.log('aaa')
+  // console.log('aaa')
   $scope.Goback = function () {
     $state.go('tab.myDoctors')
     // console.log($ionicHistory.backView())
@@ -7505,6 +7678,7 @@ $scope.choosePhotos = function() {
   $scope.moredata = true
 
   var pagecontrol = {skip: 0, limit: 10}
+  var params = {province: '', city: '', workUnit: '', name: ''}
   var alldoctors = new Array()
 
   Dict.getDistrict({level: 1}).then(
@@ -7516,21 +7690,18 @@ $scope.choosePhotos = function() {
         }
     )
 
-  $scope.loadMore = function (params) {
-    console.log('i am  loadMore')
-    if (!params) 
-      {
-         params = {province: '', city: '', workUnit: '', name: ''}
-      }
+  $scope.loadMore = function () {
+    // console.log('i am  loadMore')
+    
         
     Patient.getDoctorLists({skip: pagecontrol.skip, limit: pagecontrol.limit, province: params.province, city: params.city, workUnit: params.workUnit, name: params.name}).then(function (data) {
-      console.log(data)
+      // console.log(data)
       $scope.$broadcast('scroll.infiniteScrollComplete')
       alldoctors = alldoctors.concat(data.results)
       $scope.doctors = alldoctors
       
       if (alldoctors.length == 0) {
-        console.log('aaa')
+        // console.log('aaa')
         $ionicLoading.show({
           template: '没有医生', duration: 1000
         })
@@ -7557,13 +7728,13 @@ $scope.choosePhotos = function() {
         // console.log($scope.Hospital);
     var _hospital = ($scope.Hospital && $scope.Hospital.hospitalName) ? $scope.Hospital.hospitalName.hospitalName : ''
     console.log(_hospital)
-    var params = {province: _province, city: _city, workUnit: _hospital, name: ($scope.searchCont.t || '')}
-    $scope.loadMore(params)
+    params = {province: _province, city: _city, workUnit: _hospital, name: ($scope.searchCont.t || '')}
+    $scope.loadMore()
   }
 
   $scope.search = function () {
         // console.log("清空了");
-        console.log($scope.searchCont.t)
+        // console.log($scope.searchCont.t)
     ChangeSearch()
   }
 
