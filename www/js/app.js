@@ -34,7 +34,7 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
   //   $state.go('signin')
   // }
   $ionicPlatform.ready(function () {
-    socket = io.connect(CONFIG.socketUrl)
+    //socket = io.connect(CONFIG.socketServer)
     // console.log(14)
     var temp = $location.absUrl().split('=')
     // alert(temp)
@@ -827,7 +827,7 @@ angular.module('kidney', ['ionic', 'kidney.services', 'kidney.controllers', 'kid
 .config(['$httpProvider', 'jwtOptionsProvider', function ($httpProvider, jwtOptionsProvider) {
   // 下面的getter可以注入各种服务, service, factory, value, constant, provider等, constant, provider可以直接在.config中注入, 但是前3者不行
   jwtOptionsProvider.config({
-    whiteListedDomains: ['docker2.haihonghospitalmanagement.com', '121.196.221.44', '121.43.107.106', 'testpatient.haihonghospitalmanagement.com', 'patient.haihonghospitalmanagement.com', 'localhost'],
+    whiteListedDomains: ['application.haihonghospitalmanagement.com', '121.196.221.44', '121.43.107.106', 'testpatient.haihonghospitalmanagement.com', 'patient.haihonghospitalmanagement.com', 'localhost'],
     tokenGetter: ['options', 'jwtHelper', '$http', 'CONFIG', 'Storage', '$state', '$ionicPopup', function (options, jwtHelper, $http, CONFIG, Storage, $state, $ionicPopup) {
          // console.log(config);
         // console.log(CONFIG.baseUrl);
