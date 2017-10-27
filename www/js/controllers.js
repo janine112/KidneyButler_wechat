@@ -8782,7 +8782,7 @@ $scope.choosePhotos = function() {
    * @param    charge:Number     [主管医生每月收费]
    */
   $scope.changeTotal = function(duration,charge){
-    $scope.ChargeTotal = duration.Value * charge
+    $scope.ChargeTotal = duration.Value *(charge*100)/100
   }
   /**
    * [加载蒙层，阻止用户交互，防止提交多次]
